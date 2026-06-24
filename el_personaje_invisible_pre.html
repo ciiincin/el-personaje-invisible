@@ -1,0 +1,3040 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Personaje Invisible</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+<style>
+
+/* ═══════════════════════════════════════════════════════
+   RESET & BASE — Blade Runner 2049 terminal aesthetic
+═══════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: auto; background: #060d0f; }
+body {
+  background: #060d0f;
+  color: #7ec8d4;
+  font-family: 'Press Start 2P', monospace;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ═══════════════════════════════════════════════════════
+   VARIABLES — teal/cyan sobre casi-negro
+═══════════════════════════════════════════════════════ */
+:root {
+  --cyan:         #7ec8d4;
+  --cyan-bright:  #aee8f0;
+  --cyan-dim:     #3a7a85;
+  --cyan-dark:    #0d2a30;
+  --cyan-glow:    rgba(126,200,212,0.25);
+  --cyan-glow-s:  rgba(126,200,212,0.08);
+  --bg:           #060d0f;
+  --bg-card:      #080f12;
+  --bg-panel:     #0a1518;
+  --border:       rgba(126,200,212,0.3);
+  --border-bright:rgba(126,200,212,0.7);
+  /* femenino: blanco puro para máximo contraste */
+  --color-female: #e8f4f6;
+  --color-samus:  #e8f4f6;
+  --color-lara:   #ffffff;
+  --pixel:        'Press Start 2P', monospace;
+  --vt:           'VT323', monospace;
+}
+
+/* ═══════════════════════════════════════════════════════
+   NOISE / GRAIN
+═══════════════════════════════════════════════════════ */
+#noise {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 96px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   PANTALLA 1 — TÍTULO FULLSCREEN
+   Estilo: ficha de identificación LAPD / Wallace Corp
+═══════════════════════════════════════════════════════ */
+#title-screen {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+#bg-layer-title {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(10,30,38,0.95) 0%, #060d0f 100%);
+  z-index: 0;
+}
+/* dot matrix teal muy sutil */
+#bg-layer-title::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(126,200,212,0.04) 1px, transparent 1px);
+  background-size: 4px 4px;
+}
+/* scanlines */
+#bg-layer-title::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent, transparent 2px,
+    rgba(0,0,0,0.45) 2px, rgba(0,0,0,0.45) 4px
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+#vignette-title {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 35%, rgba(3,8,10,0.98) 100%);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ── contenido ── */
+#title-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 clamp(24px, 6vw, 80px);
+  width: 100%;
+  max-width: 900px;
+}
+
+/* barra superior estilo LAPD */
+#title-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+  margin-bottom: 28px;
+}
+.topbar-org {
+  font-family: var(--pixel);
+  font-size: 7px;
+  color: var(--cyan);
+  letter-spacing: 0.2em;
+  text-shadow: 0 0 10px var(--cyan-glow);
+}
+.topbar-org .kanji {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 11px;
+  color: var(--cyan-dim);
+  margin-right: 4px;
+}
+.topbar-signal {
+  font-family: var(--pixel);
+  font-size: 6px;
+  color: var(--cyan-dim);
+  letter-spacing: 0.15em;
+}
+.signal-bars {
+  display: inline-flex;
+  gap: 2px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.signal-bars span {
+  display: inline-block;
+  width: 4px;
+  background: var(--cyan-dim);
+  opacity: 0.5;
+}
+.signal-bars span:nth-child(1) { height: 4px; opacity: 1; }
+.signal-bars span:nth-child(2) { height: 6px; opacity: 0.8; }
+.signal-bars span:nth-child(3) { height: 8px; opacity: 0.4; }
+.signal-bars span:nth-child(4) { height: 10px; opacity: 0.2; }
+
+/* OFFICER / label */
+#title-label {
+  font-family: var(--pixel);
+  font-size: 6px;
+  color: var(--cyan-dim);
+  letter-spacing: 0.3em;
+  margin-bottom: 8px;
+}
+
+/* heading principal */
+#title-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  line-height: 1;
+  font-family: var(--pixel);
+  font-weight: 400;
+  margin-bottom: 36px;
+}
+.line1 {
+  font-size: clamp(20px, 3.8vw, 48px);
+  color: var(--cyan);
+  text-shadow: 0 0 8px var(--cyan), 0 0 24px var(--cyan-glow);
+  letter-spacing: 0.3em;
+}
+.line2 {
+  font-size: clamp(32px, 6.5vw, 82px);
+  color: var(--cyan-bright);
+  text-shadow: 0 0 12px var(--cyan-bright), 0 0 35px rgba(174,232,240,0.3);
+  letter-spacing: 0.15em;
+}
+.line3 {
+  font-size: clamp(24px, 5vw, 62px);
+  color: var(--cyan-dim);
+  text-shadow: 0 0 8px rgba(58,122,133,0.5);
+  letter-spacing: 0.12em;
+}
+
+/* regla divisoria */
+#title-rule {
+  width: min(500px, 85vw);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-bright), transparent);
+  margin-bottom: 24px;
+}
+
+/* créditos — estilo ficha */
+#title-credits {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+.credit-by {
+  font-family: var(--pixel);
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  color: var(--cyan-dim);
+}
+.credit-names {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 20px;
+  font-family: var(--vt);
+  font-size: clamp(17px, 2.4vw, 26px);
+  letter-spacing: 0.18em;
+}
+.cname {
+  color: var(--cyan);
+  text-shadow: 0 0 6px var(--cyan-glow);
+}
+.cdot {
+  color: var(--border);
+  font-size: 9px;
+}
+
+/* access code — detalle decorativo */
+#title-access {
+  margin-top: 24px;
+  font-family: var(--pixel);
+  font-size: 5px;
+  color: rgba(126,200,212,0.22);
+  letter-spacing: 0.2em;
+  line-height: 2;
+  text-align: center;
+}
+
+/* scroll hint */
+#title-scroll-hint {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.sh-label {
+  font-family: var(--pixel);
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  color: rgba(126,200,212,0.28);
+  animation: pulse-label 2s ease-in-out infinite;
+}
+@keyframes pulse-label { 0%,100%{opacity:0.28;} 50%{opacity:0.65;} }
+.sh-chevrons { display:flex; flex-direction:column; gap:3px; align-items:center; }
+.sh-chevrons span {
+  display: block;
+  width: 8px; height: 8px;
+  border-right: 1.5px solid rgba(126,200,212,0.3);
+  border-bottom: 1.5px solid rgba(126,200,212,0.3);
+  transform: rotate(45deg);
+  animation: fade-down 1.3s ease infinite;
+}
+.sh-chevrons span:nth-child(2) { animation-delay:0.2s; }
+.sh-chevrons span:nth-child(3) { animation-delay:0.4s; }
+@keyframes fade-down { 0%,100%{opacity:0.1;} 50%{opacity:0.6;} }
+
+/* ═══════════════════════════════════════════════════════
+   PANTALLA 2 — STICKY SCENE
+═══════════════════════════════════════════════════════ */
+#sticky-scene {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+#bg-layer {
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  z-index: 0;
+}
+#bg-layer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(126,200,212,0.04) 1px, transparent 1px);
+  background-size: 4px 4px;
+}
+#bg-layer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(0,0,0,0.45) 2px, rgba(0,0,0,0.45) 4px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}
+#vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(4,9,12,0.95) 100%);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ─── HUD TOP — estilo barra LAPD ─── */
+#top-hud {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 32px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(6,13,15,0.95);
+  flex-shrink: 0;
+}
+#top-hud .hud-left {
+  font-family: var(--pixel);
+  font-size: 5px;
+  color: var(--cyan-dim);
+  letter-spacing: 0.12em;
+  line-height: 2;
+  text-shadow: 0 0 6px var(--cyan-glow);
+}
+.hud-sub { color: rgba(126,200,212,0.22); }
+#top-hud .hud-center {
+  font-family: var(--pixel);
+  font-size: 7.5px;
+  letter-spacing: 0.22em;
+  color: var(--cyan);
+  text-shadow: 0 0 10px var(--cyan), 0 0 20px var(--cyan-glow);
+}
+#top-hud .hud-right {
+  font-family: var(--vt);
+  font-size: 15px;
+  color: rgba(126,200,212,0.35);
+  letter-spacing: 0.15em;
+}
+@keyframes blink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+.blink { animation: blink 1s infinite; color: var(--cyan-dim); }
+
+/* ─── CHARACTER GRID ─── */
+#char-grid-wrap {
+  flex: 1;
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 8px 28px 4px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+#char-grid-wrap::-webkit-scrollbar { display: none; }
+#char-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 4px 5px;
+  width: 100%;
+  max-width: 1100px;
+}
+
+/* ── CARD ── estilo ficha de identificación */
+.char-card {
+  position: relative;
+  aspect-ratio: 3/4;
+  background: var(--bg-card);
+  border: 1px solid rgba(126,200,212,0.12);
+  border-radius: 0;
+  overflow: visible;
+  transition:
+    border-color 0.4s ease,
+    box-shadow 0.4s ease,
+    opacity 0.5s ease,
+    transform 0.4s ease;
+}
+.char-card::before, .char-card::after {
+  content: '';
+  position: absolute;
+  width: 5px; height: 5px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 4;
+}
+.char-card::before { top:-1px; left:-1px; border-top:2px solid var(--color-female); border-left:2px solid var(--color-female); }
+.char-card::after  { bottom:-1px; right:-1px; border-bottom:2px solid var(--color-female); border-right:2px solid var(--color-female); }
+
+.char-card svg { width:100%; height:100%; display:block; }
+.char-card .sh { transition: fill 0.4s ease, opacity 0.4s ease; }
+.char-card .dt { transition: fill 0.4s ease, opacity 0.4s ease; opacity:0; }
+.char-card .sk { transition: fill 0.4s ease, opacity 0.4s ease; opacity:0; }
+.char-card .hi { transition: fill 0.4s ease, opacity 0.4s ease; opacity:0; }
+.char-card .ac { transition: fill 0.4s ease, opacity 0.4s ease; opacity:0; }
+
+.char-card .card-label {
+  position: absolute;
+  bottom: -15px;
+  left: 50%; transform: translateX(-50%);
+  font-family: var(--pixel);
+  font-size: 4px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  color: transparent;
+  transition: color 0.4s ease;
+  pointer-events: none;
+}
+.char-card .flash {
+  position: absolute;
+  inset: 0;
+  background: rgba(126,200,212,0.18);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 6;
+}
+@keyframes unlock-male {
+  0%{opacity:0} 15%{opacity:1} 30%{opacity:0} 50%{opacity:0.5} 100%{opacity:0}
+}
+@keyframes unlock-female {
+  0%{opacity:0} 10%{opacity:1} 25%{opacity:0.2} 40%{opacity:0.8} 60%{opacity:0.2} 80%{opacity:0.6} 100%{opacity:0}
+}
+.char-card.unlocking-m .flash { animation: unlock-male   0.3s ease forwards; }
+.char-card.unlocking-f .flash { animation: unlock-female 0.65s ease forwards; }
+
+.char-card .badge {
+  position: absolute;
+  top: 2px; right: 2px;
+  font-family: var(--pixel);
+  font-size: 4px;
+  color: rgba(126,200,212,0.18);
+  transition: color 0.4s ease;
+}
+
+/* ── ESTADOS ── */
+/* male: teal monocromático como dithering foto BR */
+.char-card.lit-m {
+  border-color: rgba(126,200,212,0.45);
+  box-shadow: 0 0 8px rgba(126,200,212,0.15), inset 0 0 10px rgba(126,200,212,0.04);
+}
+.char-card.lit-m .sh { fill: #071820 !important; }
+.char-card.lit-m .dt { opacity:1 !important; fill: #1a6070 !important; }
+.char-card.lit-m .sk { opacity:1 !important; fill: #2a8898 !important; }
+.char-card.lit-m .hi { opacity:1 !important; fill: #7ec8d4 !important; }
+.char-card.lit-m .ac { opacity:1 !important; fill: #0e3a44 !important; }
+.char-card.lit-m .card-label { color: rgba(126,200,212,0.5); }
+.char-card.lit-m .badge { color: rgba(126,200,212,0.38); }
+
+
+/* female samus: blanco/plata — contraste total sobre teal */
+.char-card.lit-samus {
+  border-color: rgba(232,244,246,0.85);
+  box-shadow:
+    0 0 16px rgba(232,244,246,0.3),
+    0 0 40px rgba(232,244,246,0.1),
+    inset 0 0 12px rgba(232,244,246,0.05);
+}
+.char-card.lit-samus::before, .char-card.lit-samus::after { opacity:1; }
+.char-card.lit-samus .sh { fill: #1a2830 !important; }
+.char-card.lit-samus .dt { opacity:1 !important; fill: #c0d8dc !important; }
+.char-card.lit-samus .sk { opacity:1 !important; fill: #e0eff2 !important; }
+.char-card.lit-samus .hi { opacity:1 !important; fill: #ffffff !important; }
+.char-card.lit-samus .ac { opacity:1 !important; fill: #8aaeb5 !important; }
+.char-card.lit-samus .card-label { color: var(--color-female); font-size: 5px; }
+
+/* female lara: mismo blanco */
+.char-card.lit-lara {
+  border-color: rgba(255,255,255,0.75);
+  box-shadow:
+    0 0 16px rgba(255,255,255,0.25),
+    0 0 40px rgba(200,240,244,0.1),
+    inset 0 0 12px rgba(255,255,255,0.04);
+}
+/* imágenes con filtro teal dithering */
+.char-card .char-img {
+  filter: brightness(0) sepia(1) hue-rotate(155deg) saturate(2) brightness(0.5);
+  opacity: 0.55;
+  transition: filter 0.5s ease, opacity 0.5s ease;
+}
+/* Se activa cuando la tarjeta recibe CUALQUIERA de estas clases */
+.char-card.lit-m .char-img,       /* ← todos los masculinos */
+.char-card.lit-lara .char-img,    /* ← Lara */
+.char-card.lit-samus .char-img {  /* ← Samus */
+  filter: brightness(1);
+  opacity: 1;
+}
+.char-card.lit-lara::before, .char-card.lit-lara::after { opacity:1; border-color:var(--color-lara); }
+.char-card.lit-lara .sh { fill: #1a2830 !important; }
+.char-card.lit-lara .dt { opacity:1 !important; fill: #d8edf0 !important; }
+.char-card.lit-lara .sk { opacity:1 !important; fill: #eef7f9 !important; }
+.char-card.lit-lara .hi { opacity:1 !important; fill: #ffffff !important; }
+.char-card.lit-lara .ac { opacity:1 !important; fill: #8aaeb5 !important; }
+.char-card.lit-lara .card-label { color: var(--color-lara); font-size: 5px; }
+
+.char-card.zoomed { transform: scale(1.3); z-index: 30; }
+.char-card.dimmed { opacity: 0.07; filter: saturate(0); }
+
+/* ocultar primera fila (cards 1–10) */
+.char-card:nth-child(-n+10) {
+  display: none;
+}
+
+/* ─── DIALOG BOX — estilo texto autorización LAPD ─── */
+#dialog-area {
+  position: relative;
+  z-index: 20;
+  flex-shrink: 0;
+  padding: 0 20px 8px;
+}
+#dialog-box {
+  position: relative;
+  background: rgba(6,13,15,0.97);
+  border: 1px solid var(--border);
+  border-radius: 0;
+  padding: 12px 20px 10px;
+  min-height: 68px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  box-shadow: 0 0 16px rgba(126,200,212,0.08), inset 0 0 20px rgba(126,200,212,0.02);
+  /* línea superior de acento como en la ficha */
+  border-top: 2px solid var(--cyan);
+}
+#dialog-box::before, #dialog-box::after {
+  content: '';
+  position: absolute;
+  width: 8px; height: 8px;
+}
+#dialog-box::before { top:-2px; left:-1px; border-top:2px solid var(--cyan); border-left:2px solid var(--cyan); }
+#dialog-box::after  { bottom:-1px; right:-1px; border-bottom:1px solid var(--border); border-right:1px solid var(--border); }
+
+#dialog-avatar {
+  flex-shrink: 0;
+  width: 38px; height: 38px;
+  border: 1px solid var(--border);
+  background: var(--bg-panel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--vt);
+  font-size: 20px;
+  color: var(--cyan);
+  position: relative;
+  overflow: hidden;
+  text-shadow: 0 0 8px var(--cyan);
+}
+#dialog-avatar::after {
+  content: '';
+  position: absolute;
+  bottom:0; left:0; right:0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  opacity: 0.4;
+}
+#dialog-content { flex:1; display:flex; flex-direction:column; gap:3px; }
+#dialog-speaker {
+  font-family: var(--vt);
+  font-size: 18px;
+  color: var(--cyan);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+  text-shadow: 0 0 8px var(--cyan-glow);
+}
+#dialog-text {
+  font-family: var(--vt);
+  font-size: 21px;
+  line-height: 1.3;
+  color: var(--cyan);
+  letter-spacing: 0.03em;
+  min-height: 40px;
+  text-shadow: 0 0 5px rgba(126,200,212,0.3);
+}
+#dialog-text.female-reveal {
+  color: var(--cyan-bright);
+  text-shadow: 0 0 10px rgba(174,232,240,0.45);
+}
+#dialog-arrow {
+  position: absolute;
+  bottom: 8px; right: 14px;
+  font-family: var(--vt);
+  font-size: 16px;
+  color: rgba(126,200,212,0.45);
+  animation: bounce-arrow 0.8s ease-in-out infinite;
+  text-shadow: 0 0 6px var(--cyan);
+}
+@keyframes bounce-arrow {
+  0%,100%{transform:translateY(0);opacity:0.4;} 50%{transform:translateY(3px);opacity:1;}
+}
+
+/* ─── SCROLL STEPS ─── */
+#scroll-spacer { position:relative; z-index:0; }
+.step {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* ─── STAT COUNTER ─── */
+#stat-counter {
+  position: absolute;
+  top: 8px; right: 16px;
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: var(--vt);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+}
+.stat-row { display:flex; align-items:center; gap:5px; }
+.stat-dot { width:6px; height:6px; border-radius:0; flex-shrink:0; }
+.stat-dot.m { background:var(--cyan); box-shadow:0 0 5px var(--cyan-glow); }
+.stat-dot.f { background:var(--color-female); box-shadow:0 0 5px rgba(232,244,246,0.4); }
+.stat-num { min-width:22px; text-align:right; color:rgba(126,200,212,0.6); }
+.stat-lbl { color:rgba(126,200,212,0.3); font-size:12px; }
+
+#scroll-hint { display:none; }
+
+
+
+/* ═══════════════════════════════════════════════════════
+   POST-PROLOG: texto de cierre
+═══════════════════════════════════════════════════════ */
+#prolog-close {
+  position: relative;
+  z-index: 20;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 80px 32px;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+  isolation: isolate;
+}
+#prolog-close.visible { opacity: 1; }
+#prolog-close::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.5) 2px,rgba(0,0,0,.5) 4px);
+  pointer-events: none;
+  z-index: 0;
+}
+.pc-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 760px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;
+}
+.pc-status {
+  font-family: var(--pixel);
+  font-size: 6px;
+  letter-spacing: 0.35em;
+  color: rgba(126,200,212,0.35);
+  border-left: 2px solid rgba(126,200,212,0.25);
+  padding-left: 14px;
+  line-height: 2.2;
+}
+.pc-status span { display: block; }
+.pc-status .ok { color: rgba(126,200,212,0.65); }
+.pc-headline {
+  font-family: var(--pixel);
+  font-size: clamp(9px, 1.8vw, 15px);
+  color: var(--cyan-bright);
+  letter-spacing: 0.18em;
+  line-height: 1.9;
+  text-shadow: 0 0 14px var(--cyan-glow), 0 0 40px rgba(126,200,212,0.1);
+}
+.pc-sub {
+  font-family: var(--vt);
+  font-size: clamp(22px, 3vw, 30px);
+  color: rgba(126,200,212,0.55);
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  border-top: 1px solid rgba(126,200,212,0.12);
+  padding-top: 28px;
+  width: 100%;
+}
+.pc-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border-bright), transparent);
+}
+
+/* ═══════════════════════════════════════════════════════
+   PARALLAX BRIDGE SECTION
+═══════════════════════════════════════════════════════ */
+#parallax-bridge {
+  position: relative;
+  min-height: 200vh;
+  overflow: hidden;
+  z-index: 20;
+  background: var(--bg);
+}
+#parallax-bg {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+#parallax-bg::before {
+  content: '';
+  position: absolute;
+  inset: -40%;
+  background:
+    radial-gradient(ellipse 60% 60% at 20% 50%, rgba(0,204,160,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 70% at 80% 30%, rgba(126,200,212,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 50% 80%, rgba(80,120,200,0.04) 0%, transparent 60%),
+    linear-gradient(rgba(126,200,212,.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(126,200,212,.018) 1px, transparent 1px);
+  background-size: auto, auto, auto, 48px 48px, 48px 48px;
+  animation: grid-drift 18s linear infinite;
+}
+@keyframes grid-drift { 0% { transform: translate(0,0); } 100% { transform: translate(48px,48px); } }
+#parallax-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.52) 2px,rgba(0,0,0,.52) 4px);
+  z-index: 1;
+}
+
+/* glitch lines */
+.glitch-line {
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(126,200,212,0.3), transparent);
+  animation: glitch-move 4s ease-in-out infinite;
+  opacity: 0;
+}
+.glitch-line:nth-child(1) { top: 28%; animation-delay: 0s; animation-duration: 3.5s; }
+.glitch-line:nth-child(2) { top: 55%; animation-delay: 1.2s; animation-duration: 5s; }
+.glitch-line:nth-child(3) { top: 72%; animation-delay: 2.4s; animation-duration: 4.2s; }
+@keyframes glitch-move {
+  0%   { opacity:0; transform:scaleX(0) translateX(-10%); }
+  20%  { opacity:0.8; transform:scaleX(1) translateX(0); }
+  80%  { opacity:0.4; transform:scaleX(1) translateX(0); }
+  100% { opacity:0; transform:scaleX(0) translateX(10%); }
+}
+
+#parallax-content {
+  position: relative;
+  z-index: 10;
+  margin-top: -100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200vh;
+  padding: 80px 32px;
+}
+.pb-block {
+  max-width: 720px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  background: rgba(6,13,15,0.92);
+  border: 1px solid rgba(126,200,212,0.14);
+  border-top: 2px solid var(--cyan);
+  padding: 36px 40px 32px;
+  position: relative;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+.pb-block.visible { opacity: 1; transform: translateY(0); }
+.pb-block::before, .pb-block::after {
+  content: ''; position: absolute; width: 9px; height: 9px;
+}
+.pb-block::before { top:-2px; left:-1px; border-top:2px solid var(--cyan); border-left:2px solid var(--cyan); }
+.pb-block::after  { bottom:-1px; right:-1px; border-bottom:1px solid rgba(126,200,212,0.2); border-right:1px solid rgba(126,200,212,0.2); }
+
+.pb-eyebrow {
+  font-family: var(--pixel);
+  font-size: 5.5px;
+  letter-spacing: 0.35em;
+  color: var(--cyan-dim);
+}
+.pb-title {
+  font-family: var(--pixel);
+  font-size: clamp(8px, 1.6vw, 13px);
+  letter-spacing: 0.15em;
+  color: var(--cyan-bright);
+  line-height: 1.8;
+  text-shadow: 0 0 10px var(--cyan-glow);
+}
+.pb-body {
+  font-family: var(--vt);
+  font-size: 21px;
+  line-height: 1.6;
+  color: var(--cyan-dim);
+  letter-spacing: 0.03em;
+}
+
+/* pictogram placeholder */
+.pb-pictogram {
+  border: 1px dashed rgba(126,200,212,0.25);
+  padding: 48px 32px;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 180px;
+}
+.pb-pictogram-label {
+  font-family: var(--pixel);
+  font-size: 6px;
+  letter-spacing: 0.2em;
+  color: rgba(126,200,212,0.3);
+  text-align: center;
+  line-height: 2;
+}
+
+/* gender ratio visual inside placeholder */
+.ratio-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 460px;
+}
+.ratio-label {
+  font-family: var(--pixel);
+  font-size: 5px;
+  color: var(--cyan-dim);
+  width: 24px;
+  flex-shrink: 0;
+}
+.ratio-track {
+  flex: 1;
+  height: 8px;
+  background: rgba(126,200,212,0.06);
+  position: relative;
+  overflow: hidden;
+}
+.ratio-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0;
+  transition: width 1.4s cubic-bezier(.2,.8,.3,1);
+}
+.ratio-fill.male  { background: var(--cyan); box-shadow: 0 0 8px var(--cyan-glow); }
+.ratio-fill.female { background: var(--color-female); box-shadow: 0 0 8px rgba(232,244,246,0.3); }
+.ratio-pct {
+  font-family: var(--vt);
+  font-size: 16px;
+  color: var(--cyan-dim);
+  width: 36px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+/* ═══════════════════════════════════════════════════════
+   CAPÍTULO 1 — SCROLLYTELLING 50/50
+═══════════════════════════════════════════════════════ */
+#cap1-section {
+  position: relative;
+  z-index: 20;
+  background: var(--bg);
+}
+#cap1-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.4) 2px,rgba(0,0,0,.4) 4px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* cap1 header */
+#cap1-header {
+  position: relative;
+  z-index: 5;
+  padding: 40px 40px 28px;
+  border-bottom: 1px solid rgba(126,200,212,0.1);
+  background: rgba(6,13,15,0.95);
+  text-align: center;
+}
+.cap1-eyebrow {
+  font-family: var(--pixel);
+  font-size: 5.5px;
+  letter-spacing: 0.3em;
+  color: var(--cyan-dim);
+  display: block;
+  margin-bottom: 12px;
+}
+.cap1-h1 {
+  font-family: var(--pixel);
+  font-size: clamp(10px, 2vw, 16px);
+  letter-spacing: 0.2em;
+  color: var(--cyan);
+  text-shadow: 0 0 12px var(--cyan-glow);
+  line-height: 1.6;
+}
+
+/* scrollytelling layout */
+#cap1-scroll-wrap {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: flex-start;
+}
+
+/* LEFT: sticky frame */
+#cap1-sticky {
+  position: sticky;
+  top: 0;
+  width: 45%;
+  height: 100vh;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 28px;
+  border-right: 1px solid rgba(126,200,212,0.08);
+  background: rgba(4,10,12,0.7);
+  overflow: hidden;
+}
+
+.char-frame {
+  position: relative;
+  width: 220px;
+  height: 293px;
+  border: 1px solid rgba(126,200,212,0.2);
+  border-top: 2px solid var(--cyan);
+  background: rgba(6,13,15,0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.char-frame::before, .char-frame::after {
+  content: ''; position: absolute; width: 9px; height: 9px;
+}
+.char-frame::before { top:-2px; left:-1px; border-top:2px solid var(--cyan); border-left:2px solid var(--cyan); }
+.char-frame::after  { bottom:-1px; right:-1px; border-bottom:1px solid rgba(126,200,212,0.2); border-right:1px solid rgba(126,200,212,0.2); }
+
+.char-frame svg,
+.char-frame img {
+  position: absolute !important; /* Se despegan del flujo y se superponen en el mismo eje */
+  top: 50% !important;
+  left: 50% !important;
+  width: 140px;
+  height: 186px;
+  object-fit: contain;
+  opacity: 0;
+  
+  
+  transform: translate(-50%, -50%) translateY(10px) scale(0.95);
+  
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  filter: drop-shadow(0 0 14px var(--cyan));
+}
+.char-frame svg.active,
+.char-frame img.active {
+  opacity: 1 !important;
+  /* Mantiene el translate(-50%, -50%) del centrado y resetea solo la animación */
+  transform: translate(-53%, -50%) translateY(0) scale(1) !important;
+}
+.char-frame svg.female-active,
+.char-frame img.female-active {
+  filter: drop-shadow(0 0 18px rgba(232,244,246,0.7)) !important;
+}
+
+.frame-label {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--pixel);
+  font-size: 5px;
+  letter-spacing: 0.2em;
+  color: rgba(126,200,212,0.45);
+  white-space: nowrap;
+}
+.frame-year {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-family: var(--vt);
+  font-size: 14px;
+  color: rgba(126,200,212,0.3);
+  letter-spacing: 0.1em;
+}
+
+/* scan animation on active frame */
+.char-frame::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  animation: scan-line 3s linear infinite;
+  opacity: 0.25;
+  bottom: auto;
+  top: 0;
+  border: none;
+}
+@keyframes scan-line {
+  0%   { top: 0;    opacity: 0; }
+  5%   { opacity: 0.25; }
+  95%  { opacity: 0.15; }
+  100% { top: 100%; opacity: 0; }
+}
+
+.frame-hud {
+  width: 220px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding: 0 4px;
+}
+.frame-hud-label {
+  font-family: var(--pixel);
+  font-size: 4.5px;
+  color: rgba(126,200,212,0.3);
+  letter-spacing: 0.15em;
+}
+.frame-hud-status {
+  font-family: var(--pixel);
+  font-size: 4.5px;
+  color: rgba(126,200,212,0.5);
+  animation: blink 1.2s step-end infinite;
+}
+
+/* RIGHT: scrollable text */
+#cap1-text-col {
+  flex: 1;
+  padding: 0;
+}
+
+.c1-node {
+  min-height: 90vh;
+  padding: 80px 48px 80px 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  border-bottom: 1px solid rgba(126,200,212,0.06);
+  opacity: 0.25;
+  transition: opacity 0.6s ease;
+}
+.c1-node.active { opacity: 1; }
+
+.c1-year {
+  font-family: var(--pixel);
+  font-size: 7px;
+  color: var(--cyan-dim);
+  letter-spacing: 0.3em;
+}
+.c1-slash {
+  font-family: var(--pixel);
+  font-size: 6px;
+  color: rgba(126,200,212,0.2);
+  letter-spacing: 0.25em;
+  display: block;
+  margin-top: 4px;
+}
+.c1-title {
+  font-family: var(--pixel);
+  font-size: clamp(8px, 1.5vw, 12px);
+  color: var(--cyan-bright);
+  letter-spacing: 0.14em;
+  line-height: 1.8;
+  text-shadow: 0 0 10px var(--cyan-glow);
+}
+.c1-title.female { color: var(--color-female); text-shadow: 0 0 10px rgba(232,244,246,0.4); }
+
+.c1-quote {
+  font-family: var(--vt);
+  font-size: 22px;
+  color: var(--cyan);
+  letter-spacing: 0.05em;
+  line-height: 1.4;
+  border-left: 2px solid var(--cyan);
+  padding-left: 18px;
+  margin: 4px 0;
+}
+.c1-quote.female {
+  color: var(--color-female);
+  border-left-color: var(--color-female);
+  text-shadow: 0 0 8px rgba(232,244,246,0.25);
+}
+
+.c1-body {
+  font-family: var(--vt);
+  font-size: 20px;
+  line-height: 1.65;
+  color: rgba(126,200,212,0.52);
+  letter-spacing: 0.03em;
+}
+.c1-body p { margin-bottom: 12px; }
+.c1-body p:last-child { margin-bottom: 0; }
+
+.c1-tag {
+  display: inline-block;
+  font-family: var(--pixel);
+  font-size: 4.5px;
+  letter-spacing: 0.18em;
+  color: var(--cyan-dim);
+  border: 1px solid rgba(126,200,212,0.2);
+  padding: 4px 8px;
+  margin-top: 8px;
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   CAPÍTULO 2 — TRANSICIÓN BRIDGE
+═══════════════════════════════════════════════════════ */
+#cap2-bridge {
+  position: relative;
+  z-index: 10;
+  background: var(--bg);
+  overflow: hidden;
+}
+#cap2-bridge::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.48) 2px,rgba(0,0,0,.15) 4px);
+  pointer-events: none;
+  z-index: 1;
+}
+#cap2-bridge-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+}
+.cap2-bridge-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 55% 55% at 15% 60%, rgba(255,40,80,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 55% at 85% 30%, rgba(126,200,212,0.04) 0%, transparent 60%);
+  animation: bridge2-pulse 8s ease-in-out infinite alternate;
+}
+@keyframes bridge2-pulse {
+  0%   { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+.cap2-bridge-text {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 28px;
+  max-width: 720px;
+  padding: 0 40px;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 1.1s ease, transform 1.1s ease;
+}
+.cap2-bridge-text.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.cap2-bridge-label {
+  font-family: var(--pixel);
+  font-size: 5.5px;
+  letter-spacing: 0.38em;
+  color: rgba(126,200,212,0.35);
+  border-left: 2px solid rgba(126,200,212,0.2);
+  padding-left: 14px;
+  line-height: 2.4;
+}
+.cap2-bridge-headline {
+  font-family: var(--pixel);
+  font-size: clamp(9px, 1.7vw, 14px);
+  letter-spacing: 0.18em;
+  line-height: 2;
+  color: var(--cyan-bright);
+  text-shadow: 0 0 14px var(--cyan-glow);
+}
+.cap2-bridge-sub {
+  font-family: var(--vt);
+  font-size: clamp(20px, 2.8vw, 28px);
+  color: rgba(126,200,212,0.5);
+  line-height: 1.55;
+  letter-spacing: 0.04em;
+  border-top: 1px solid rgba(126,200,212,0.1);
+  padding-top: 24px;
+  width: 100%;
+}
+.cap2-bridge-sub em {
+  color: var(--cyan);
+  font-style: normal;
+}
+#cap2-bridge-scroll {
+  position: relative;
+  z-index: 10;
+  margin-top: -100vh;
+  min-height: 130vh;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════
+   CAP2 PORTADA — COVER 100vh
+═══════════════════════════════════════════════════════ */
+#cap2-cover {
+  position: relative;
+  z-index: 10;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  overflow: hidden;
+  text-align: center;
+  padding: 0 32px;
+}
+#cap2-cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 50%, rgba(10,28,36,0.9) 0%, #060d0f 100%),
+    radial-gradient(circle, rgba(126,200,212,0.03) 1px, transparent 1px);
+  background-size: auto, 4px 4px;
+  z-index: 0;
+}
+#cap2-cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.5) 2px,rgba(0,0,0,.15) 4px);
+  pointer-events: none;
+  z-index: 1;
+}
+.c2-cover-inner {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-width: 860px;
+  width: 100%;
+}
+.c2-cover-tag {
+  font-family: var(--vt);
+  font-size: 20px;
+  letter-spacing: 0.25em;
+  color: rgba(126,200,212,0.45);
+  text-transform: uppercase;
+}
+.c2-cover-title {
+  font-family: var(--pixel);
+  font-size: clamp(16px, 4vw, 42px);
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  color: #fff;
+  text-shadow:
+    -2px -2px 0 rgba(0,229,255,0.5),
+     2px  2px 0 rgba(255,40,80,0.5),
+     0 0 30px rgba(126,200,212,0.25),
+     0 0 60px rgba(255,40,80,0.1);
+}
+.c2-cover-subtitle {
+  font-family: var(--pixel);
+  font-size: clamp(6px, 1.2vw, 9px);
+  letter-spacing: 0.28em;
+  color: #00e5ff;
+  text-shadow: 0 0 10px rgba(0,229,255,0.5);
+  margin-top: 4px;
+}
+.c2-cover-rule {
+  width: min(420px, 80vw);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(126,200,212,0.4), transparent);
+}
+.c2-cover-intro {
+  font-family: var(--vt);
+  font-size: clamp(17px, 2.2vw, 22px);
+  color: rgba(126,200,212,0.45);
+  line-height: 1.65;
+  letter-spacing: 0.03em;
+  max-width: 680px;
+}
+.c2-press-start {
+  font-family: var(--pixel);
+  font-size: 7px;
+  letter-spacing: 0.25em;
+  color: rgba(126,200,212,0.35);
+  margin-top: 12px;
+  animation: blink 1s step-end infinite;
+  cursor: pointer;
+}
+
+/* ═══════════════════════════════════════════════════════
+   CAP2 SECCIONES COMUNES
+═══════════════════════════════════════════════════════ */
+.c2-section {
+  position: relative;
+  z-index: 20;
+  background: var(--bg);
+  padding: 80px 40px;
+  border-top: 1px solid rgba(126,200,212,0.06);
+}
+.c2-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.38) 2px,rgba(0,0,0,.38) 4px);
+  pointer-events: none;
+  z-index: 0;
+}
+.c2-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 820px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.c2-sec-head {
+  font-family: var(--pixel);
+  font-size: 6px;
+  letter-spacing: 0.3em;
+  color: var(--cyan-dim);
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(126,200,212,0.1);
+}
+.c2-body {
+  font-family: var(--vt);
+  font-size: 22px;
+  color: rgba(126,200,212,0.55);
+  line-height: 1.6;
+  letter-spacing: 0.03em;
+}
+.c2-body-close {
+  font-family: var(--vt);
+  font-size: 20px;
+  color: rgba(126,200,212,0.4);
+  line-height: 1.6;
+  letter-spacing: 0.03em;
+  border-top: 1px solid rgba(126,200,212,0.08);
+  padding-top: 20px;
+}
+
+/* amber highlight box */
+.c2-amber-box {
+  border: 1px solid rgba(212,168,32,0.4);
+  border-left: 3px solid #d4a820;
+  background: rgba(212,168,32,0.04);
+  padding: 20px 24px;
+  font-family: var(--vt);
+  font-size: 26px;
+  color: #d4a820;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  text-shadow: 0 0 12px rgba(212,168,32,0.25);
+  position: relative;
+}
+.c2-amber-box::before {
+  content: '"';
+  position: absolute;
+  top: -8px; left: 10px;
+  font-size: 60px;
+  color: rgba(212,168,32,0.1);
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+
+/* data cards grid */
+.c2-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px;
+}
+.c2-card {
+  border: 1px solid rgba(126,200,212,0.16);
+  border-top: 2px solid var(--cyan);
+  background: rgba(6,13,15,0.95);
+  padding: 20px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+.c2-card.amber {
+  border-top-color: #d4a820;
+  border-color: rgba(212,168,32,0.2);
+}
+.c2-card-score {
+  font-family: var(--pixel);
+  font-size: clamp(20px, 4vw, 32px);
+  color: var(--cyan);
+  text-shadow: 0 0 12px var(--cyan-glow);
+  line-height: 1;
+}
+.c2-card.amber .c2-card-score {
+  color: #d4a820;
+  text-shadow: 0 0 12px rgba(212,168,32,0.3);
+}
+.c2-card-meta {
+  font-family: var(--pixel);
+  font-size: 4.5px;
+  color: var(--cyan-dim);
+  letter-spacing: 0.12em;
+  line-height: 1.9;
+}
+.c2-card-game {
+  font-family: var(--vt);
+  font-size: 17px;
+  color: rgba(126,200,212,0.65);
+  letter-spacing: 0.05em;
+  margin-top: 4px;
+}
+
+/* flourish embed placeholder */
+.flourish-embed {
+  width: 100%;
+  min-height: 500px;
+  border: 1px dashed rgba(126,200,212,0.18);
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.flourish-placeholder-label {
+  font-family: var(--pixel);
+  font-size: 5.5px;
+  color: rgba(126,200,212,0.22);
+  letter-spacing: 0.2em;
+  text-align: center;
+  line-height: 2.5;
+}
+
+/* game list */
+#game-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.game-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: rgba(6,13,15,0.9);
+  border: 1px solid rgba(126,200,212,0.08);
+  overflow: hidden;
+  cursor: default;
+  transition: border-color 0.3s ease;
+}
+.game-row:hover { border-color: rgba(126,200,212,0.22); }
+.game-row-bg {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0;
+  transition: width 1.4s cubic-bezier(.2,.8,.3,1);
+  z-index: 0;
+  opacity: 0.07;
+}
+.game-row-rank {
+  position: relative;
+  z-index: 2;
+  font-family: var(--pixel);
+  font-size: 5px;
+  color: rgba(126,200,212,0.25);
+  width: 20px;
+  flex-shrink: 0;
+}
+.game-row-name {
+  position: relative;
+  z-index: 2;
+  font-family: var(--vt);
+  font-size: 20px;
+  color: rgba(126,200,212,0.7);
+  letter-spacing: 0.04em;
+  flex: 1;
+}
+.game-row-year {
+  position: relative;
+  z-index: 2;
+  font-family: var(--pixel);
+  font-size: 5px;
+  color: rgba(126,200,212,0.25);
+  letter-spacing: 0.1em;
+}
+.game-row-score {
+  position: relative;
+  z-index: 2;
+  font-family: var(--pixel);
+  font-size: 12px;
+  min-width: 28px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.score-green  { color: #4cff80; text-shadow: 0 0 8px rgba(76,255,128,0.4); }
+.score-cyan   { color: var(--cyan); text-shadow: 0 0 8px var(--cyan-glow); }
+.score-amber  { color: #d4a820; text-shadow: 0 0 8px rgba(212,168,32,0.35); }
+
+/* covers bar */
+#covers-bar-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.covers-track {
+  width: 100%;
+  height: 36px;
+  background: rgba(20,35,40,0.6);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(126,200,212,0.08);
+}
+.covers-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0;
+  background: linear-gradient(90deg, rgba(255,40,80,0.6), rgba(255,80,100,0.4));
+  transition: width 1.6s cubic-bezier(.2,.8,.3,1);
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  overflow: hidden;
+}
+.covers-fill-label {
+  font-family: var(--pixel);
+  font-size: 5px;
+  color: rgba(255,255,255,0.7);
+  white-space: nowrap;
+  letter-spacing: 0.1em;
+}
+.covers-remainder {
+  position: absolute;
+  right: 12px; top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--pixel);
+  font-size: 5px;
+  color: rgba(126,200,212,0.22);
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+.covers-legend {
+  display: flex;
+  gap: 24px;
+  font-family: var(--vt);
+  font-size: 17px;
+  color: rgba(126,200,212,0.4);
+}
+.covers-legend span { letter-spacing: 0.05em; }
+.covers-legend .fem { color: rgba(255,80,100,0.7); }
+
+/* SEC 06: La pregunta */
+#cap2-question {
+  position: relative;
+  z-index: 10;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  padding: 80px 32px;
+  text-align: center;
+  gap: 40px;
+  overflow: hidden;
+  border-top: 1px solid rgba(126,200,212,0.06);
+}
+#cap2-question::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.45) 2px,rgba(0,0,0,.45) 4px);
+  pointer-events: none;
+  z-index: 0;
+}
+.c2q-main {
+  position: relative;
+  z-index: 2;
+  font-family: var(--pixel);
+  font-size: clamp(9px, 2vw, 16px);
+  letter-spacing: 0.16em;
+  line-height: 2;
+  color: rgba(255,40,80,0.85);
+  text-shadow:
+    0 0 12px rgba(255,40,80,0.4),
+    0 0 40px rgba(255,40,80,0.15);
+  max-width: 760px;
+}
+.c2q-answer {
+  position: relative;
+  z-index: 2;
+  border: 1px solid rgba(255,40,80,0.25);
+  border-left: 3px solid rgba(255,40,80,0.6);
+  padding: 24px 32px;
+  background: rgba(255,40,80,0.03);
+  max-width: 640px;
+  width: 100%;
+}
+.c2q-answer p {
+  font-family: var(--vt);
+  font-size: clamp(20px, 3vw, 28px);
+  color: rgba(255,40,80,0.65);
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+}
+
+</style>
+</head>
+<body>
+
+<div id="noise"></div>
+
+<div id="noise"></div>
+
+<!-- ══ PANTALLA 1: TÍTULO — ficha LAPD/Wallace Corp ═══ -->
+<section id="title-screen">
+  <div id="bg-layer-title"></div>
+  <div id="vignette-title"></div>
+
+  <div id="title-content">
+
+    <!-- barra top -->
+    <div id="title-topbar">
+      <div class="topbar-org">
+        <span class="kanji">警察</span>VISUALIZACIÓN DE DATOS
+      </div>
+      <div class="topbar-signal">
+        ENTREGA FINAL
+        <span class="signal-bars">
+          <span></span><span></span><span></span><span></span>
+        </span>
+      </div>
+    </div>
+
+    <!-- HEADING PRINCIPAL -->
+    <h1 id="title-heading">
+      <span class="line1">EL</span>
+      <span class="line2">PERSONAJE</span>
+      <span class="line3">INVISIBLE</span>
+    </h1>
+
+    <div id="title-rule"></div>
+
+    <!-- créditos -->
+    <div id="title-credits">
+      <div class="credit-by">UN ANÁLISIS DE</div>
+      <div class="credit-names">
+        <span class="cname">ELIAN MORGENSTERIN</span>
+        <span class="cdot">·</span>
+        <span class="cname">VICTORIA RODRIGUEZ SUEIRO</span>
+        <span class="cdot">·</span>
+        <span class="cname">MIRANDA GALVAN OROZCO</span>
+        <span class="cdot">·</span>
+        <span class="cname">CINDY VELAZQUEZ</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="title-scroll-hint">
+    <span class="sh-label">SCROLL</span>
+    <div class="sh-chevrons">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PANTALLA 2: STICKY SCENE ══════════════════════ -->
+<div id="sticky-scene">
+  <div id="bg-layer"></div>
+  <div id="vignette"></div>
+
+  <div id="top-hud">
+    <div class="hud-left">
+      PRÓLOGO<br>
+      <span class="hud-sub">EL PERSONAJE INVISIBLE</span>
+    </div>
+    <div class="hud-center">SELECT CHARACTER</div>
+    <div class="hud-right">1985 — 2015 <span class="blink">█</span></div>
+  </div>
+
+  <div id="char-grid-wrap">
+    <div id="char-grid"></div>
+  </div>
+
+  <div id="dialog-area">
+    <div id="dialog-box">
+      <div id="dialog-avatar">▶</div>
+      <div id="dialog-content">
+        <div id="dialog-speaker">NARRADOR</div>
+        <div id="dialog-text">_</div>
+      </div>
+      <div id="dialog-arrow">▼</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCROLL STEPS ══════════════════════════════════ -->
+<div id="scroll-spacer">
+  <div class="step" data-step="0"></div>
+  <div class="step" data-step="1"></div>
+  <div class="step" data-step="2"></div>
+  <div class="step" data-step="3"></div>
+  <div class="step" data-step="4"></div>
+  <div class="step" data-step="5"></div>
+  <div class="step" data-step="6"></div>
+  <div class="step" data-step="7"></div>
+  <div class="step" data-step="8"></div>
+</div>
+
+<div id="scroll-hint"></div>
+
+
+<!-- ══ POST-PROLOG: CIERRE NARRATIVO ══════════════════════ -->
+<div id="prolog-close">
+  <div class="pc-inner">
+    <div class="pc-status">
+      <span class="ok">▶ PRÓLOGO COMPLETO — INICIANDO ANÁLISIS</span>
+      <span>SEC CODE 19850-K-2015 ··· OK</span>
+      <span>GENDER RATIO SCAN ··· COMPLETE</span>
+    </div>
+    <div class="pc-divider"></div>
+    <div class="pc-headline">
+      LA PREGUNTA YA NO ERA QUIÉN PROTAGONIZABA LOS VIDEOJUEGOS.
+    </div>
+    <div class="pc-sub">
+      La pregunta pasó a ser: <span style="color:var(--cyan-bright)">¿por qué siempre era el mismo?</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PARALLAX BRIDGE + PICTOGRAMA ═══════════════════════ -->
+<div id="parallax-bridge">
+
+  <div id="parallax-bg">
+    <div class="glitch-line"></div>
+    <div class="glitch-line"></div>
+    <div class="glitch-line"></div>
+  </div>
+
+  <div id="parallax-content">
+    <div class="pb-block" id="pb-intro">
+      <span class="pb-eyebrow">// CAPÍTULO 1: EL MAPA DE ARQUETIPOS</span>
+      <span class="pb-title">PARA ENTENDER EL PRESENTE DE LA INDUSTRIA,<br>ES IMPERATIVO MAPEAR LAS ESTRUCTURAS Y ROLES<br>HISTÓRICOS QUE CONFINARON A LAS PROTAGONISTAS.</span>
+      <p class="pb-body">
+        La evolución no fue lineal: fue una constante tensión entre el diseño comercial y la presión cultural. Cada arquetipo que encontrarás a continuación no es solo un personaje — es una categoría, un molde que la industria repitió durante años.
+      </p>
+      <div class="pc-divider"></div>
+      <div class="pb-pictogram" id="ratio-pictogram">
+        <div class="pb-pictogram-label">
+          // DATA VISUAL: DISTRIBUCIÓN DE PROTAGONISTAS (1985–2020)<br>
+          MUESTRA: 500 JUEGOS · FUENTE: IGDB / GFG REPORT
+        </div>
+
+        <!-- CONTENEDOR RESPONSIVO PARA TU EMBED DE FLOURISH -->
+        <div class="flourish-embed" style="width: 100%; min-height: 300px; position: relative; background: transparent; overflow: hidden;">
+          
+          <iframe src="https://public.flourish.studio/visualisation/29355296/embed" 
+            frameborder="0" 
+            scrolling="no" 
+            style="width: 100%; height: 300px; display: block; border: none;" 
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div style="font-family:var(--vt);font-size:17px;color:rgba(126,200,212,0.35);letter-spacing:0.05em;text-align:center;margin-top:8px">
+          De cada 10 protagonistas, menos de 2 son mujeres. Esa es la línea de base.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CAPÍTULO 1: SCROLLYTELLING ═════════════════════════ -->
+<section id="cap1-section">
+
+  <div id="cap1-header">
+    <span class="cap1-eyebrow">CAPÍTULO 1</span>
+    <h2 class="cap1-h1">LA EVOLUCIÓN CRONOLÓGICA DEL PERSONAJE FEMENINO</h2>
+  </div>
+
+  <div id="cap1-scroll-wrap">
+
+    <!-- IZQUIERDA: frame sticky con personaje activo -->
+    <div id="cap1-sticky">
+      <div class="char-frame" id="char-display">
+        <!-- Peach SVG (default) -->
+        <img id="svg-peach" src="assets/peachEncerrada.png" 
+          loading="eager" decoding="sync"
+          style="object-position: 60% center;">
+
+        <!-- Lara SVG -->
+        <img id="svg-lara" src="assets/cuerpoPerf.png" 
+          loading="eager" decoding="sync"
+          style="object-position: 60% center;">
+          
+        <!-- Zelda/Sheik SVG -->
+        <img id="svg-zelda" src="assets/sheik.png" 
+          loading="eager" decoding="sync"
+          style="object-position: 60% center;">
+
+        <!-- Ellie SVG -->
+        <img id="svg-ellie" src="assets/ellie.png" 
+          loading="eager" decoding="sync"
+          style="object-position: 60% center;">
+
+        <div class="frame-year" id="frame-year">1985</div>
+        <div class="frame-label" id="frame-label">PRINCESS PEACH</div>
+      </div>
+      <div class="frame-hud">
+        <span class="frame-hud-label">// RENDER MODE: DITHER</span>
+        <span class="frame-hud-status">LOCKED ON ██</span>
+      </div>
+    </div>
+
+    <!-- DERECHA: texto scrollable -->
+    <div id="cap1-text-col">
+
+      <!-- NODE 1: Peach 1985 -->
+      <div class="c1-node active" data-char="peach" data-year="1985" data-label="PRINCESS PEACH">
+        <div>
+          <div class="c1-year">1985 // EL PREMIO</div>
+          <span class="c1-slash">Super Mario Bros. — Nintendo</span>
+        </div>
+        <h3 class="c1-title female">PRINCESS PEACH — LA PRINCESA ENCERRADA</h3>
+        <blockquote class="c1-quote female">
+          "THANK YOU MARIO! BUT OUR PRINCESS IS IN ANOTHER CASTLE."
+        </blockquote>
+        <div class="c1-body">
+          <p>En 1985, el personaje femenino más influyente de la historia de los videojuegos no tenía agencia. No tomaba decisiones. No actuaba. Existía como el horizonte del deseo masculino: siempre un castillo más lejos, siempre a rescatar.</p>
+          <p>Peach no era un personaje — era una función narrativa. El motor que ponía a Mario en movimiento sin necesitar moverse ella misma. Su ausencia era el plot. Su presencia, la recompensa.</p>
+          <p>Este patrón — la "Damsel in Distress" — no fue inventado por Nintendo. Fue importado directamente de siglos de narrativa patriarcal y codificado en el lenguaje interactivo más nuevo del mundo.</p>
+          <p>Lo que se jugaba no era solo un videojuego. Se jugaba, sin saberlo, una norma cultural.</p>
+        </div>
+        <span class="c1-tag">ARQUETIPO: DAMSEL IN DISTRESS · SIN AGENCIA · ROL PASIVO</span>
+      </div>
+
+      <!-- NODE 2: Lara 1996 -->
+      <div class="c1-node" data-char="lara" data-year="1996" data-label="LARA CROFT">
+        <div>
+          <div class="c1-year">1996 // ACCIÓN E HIPERSEXUALIZACIÓN</div>
+          <span class="c1-slash">Tomb Raider — Core Design / Eidos</span>
+        </div>
+        <h3 class="c1-title female">LARA CROFT — LA REVOLUCIÓN Y LA MIRADA</h3>
+        <blockquote class="c1-quote female">
+          "I'M LARA CROFT. I CAN HANDLE IT."
+        </blockquote>
+        <div class="c1-body">
+          <p>Once años después de Peach, Lara Croft rompió el molde — y creó uno nuevo. Era protagonista, arqueóloga, acróbata y asesina. Tomaba decisiones. Sobrevivía. Ganaba.</p>
+          <p>Pero su cuerpo fue diseñado para la mirada masculina: proporciones imposibles, ropa mínima, movimientos sexualizados. El jugador controlaba a una mujer poderosa mientras la industria la convertía en objeto de marketing.</p>
+          <p>La paradoja de Lara Croft es la paradoja de la representación superficial: puedes tener una protagonista y seguir objectificándola. La agencia mecánica no equivale a la dignidad narrativa.</p>
+          <p>Aun así, Lara abrió una puerta. Demostró que las mujeres podían vender videojuegos. El problema era el precio que cobraban por esa demostración.</p>
+        </div>
+        <span class="c1-tag">ARQUETIPO: PROTAGONISTA SEXUALIZADA · AGENCIA MECÁNICA · OBJETO VISUAL</span>
+      </div>
+
+      <!-- NODE 3: Zelda/Sheik 2002 -->
+      <div class="c1-node" data-char="zelda" data-year="2002" data-label="ZELDA / SHEIK">
+        <div>
+          <div class="c1-year">2002 // AGENCIA OCULTA</div>
+          <span class="c1-slash">The Legend of Zelda: Ocarina of Time — Nintendo</span>
+        </div>
+        <h3 class="c1-title" style="color:var(--cyan)">ZELDA / SHEIK — LA IDENTIDAD COMO ESTRATEGIA</h3>
+        <blockquote class="c1-quote" style="color:var(--cyan);border-left-color:var(--cyan)">
+          "AS SHEIK, I COULD MOVE FREELY. AS ZELDA, I WAS ALWAYS THE TARGET."
+        </blockquote>
+        <div class="c1-body">
+          <p>Zelda encontró una solución radical a la trampa del personaje femenino: dejar de ser femenina en apariencia. Como Sheik — andrógina, misteriosa, tácticamente brillante — podía operar en el mundo sin ser reducida a su género.</p>
+          <p>Es un análisis incómodo: ¿por qué el único camino hacia el poder era el camuflaje? ¿Por qué la identidad femenina tenía que esconderse para ser tomada en serio?</p>
+          <p>La saga de Zelda repitió este patrón durante décadas: la princesa cautiva que en secreto lo sabe todo, que actúa en las sombras, que guía al héroe sin poder serlo.</p>
+          <p>La agencia oculta es agencia a medias. Y a medias no alcanza.</p>
+        </div>
+        <span class="c1-tag">ARQUETIPO: DISFRAZ DE GÉNERO · AGENCIA ENCUBIERTA · PODER SUBORDINADO</span>
+      </div>
+
+      <!-- NODE 4: Ellie 2013 -->
+      <div class="c1-node" data-char="ellie" data-year="2013" data-label="ELLIE">
+        <div>
+          <div class="c1-year">2013 // REALISMO TRIDIMENSIONAL</div>
+          <span class="c1-slash">The Last of Us — Naughty Dog / Sony</span>
+        </div>
+        <h3 class="c1-title female">ELLIE — LA COMPLEJIDAD COMO NORMA</h3>
+        <blockquote class="c1-quote female">
+          "I'M NOT HER, YOU KNOW. I NEVER WILL BE."
+        </blockquote>
+        <div class="c1-body">
+          <p>Ellie no es heroína porque sea fuerte. Es heroína porque es humana. Tiene miedo. Falla. Se equivoca moralmente. Ama de maneras que la destruyen. Mata cuando no quiere. Sobrevive cuando no sabe por qué.</p>
+          <p>The Last of Us marcó un punto de inflexión: demostró que un personaje femenino no necesitaba ser deseable ni perfecto ni simbólico para ser protagonista. Solo necesitaba ser real.</p>
+          <p>La desvinculación de la gratificación visual fue total: el diseño de Ellie fue deliberadamente no sexualizado. Su cuerpo existía para sobrevivir, no para ser mirado.</p>
+          <p>De Peach a Ellie hay 28 años. Es mucho tiempo para un cambio que debería haber sido obvio desde el principio.</p>
+        </div>
+        <span class="c1-tag">ARQUETIPO: PROTAGONISTA COMPLEJA · TRAUMA REAL · DISEÑO NO SEXUALIZADO</span>
+      </div>
+
+    </div><!-- /cap1-text-col -->
+  </div><!-- /cap1-scroll-wrap -->
+</section>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/scrollama/3.2.0/scrollama.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+/* ══════════════════════════════════════════════
+   SVG SILHOUETTE LIBRARY
+   Each character has a unique, recognizable shape
+   viewBox: 0 0 48 64
+══════════════════════════════════════════════ */
+
+const SVG_CHARS = {
+
+  // ─── MARIO ─────────────────────────────────────
+  mario: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/mario.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── LINK ──────────────────────────────────────
+  link: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/link.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── SOLID SNAKE ───────────────────────────────
+  snake: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/solidsnake.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── KRATOS ────────────────────────────────────
+  kratos: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/kratos.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── MASTER CHIEF ──────────────────────────────
+  chief: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/masterchief.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── GORDON FREEMAN ────────────────────────────
+  gordon: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/gordon.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── ARTHUR MORGAN ──────────────────────────────
+  arthur: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/arthur.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── NATHAN DRAKE ─────────────────────────────────────
+  nathan: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/nathan.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── SAMUS ARAN ─────────────────────────────────
+  samus: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/samuscasco.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── LARA CROFT ────────────────────────────────
+  lara: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/lara.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── LEON KENNEDY ────────────────────────────────
+  leon: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/leon.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── SONIC ────────────────────────────────
+  sonic: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/sonic.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── JOEL MILLER ────────────────────────────────
+  joel: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/joel.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── PHANTOM ────────────────────────────────
+  phantom: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/phantom.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── DANTE  ────────────────────────────────
+  dante: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/dante.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── CONNOR  ────────────────────────────────
+  connor: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/connor.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── CLOUD STRUFE  ────────────────────────────────
+  cloud: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/cloud.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── SUB-ZERO  ────────────────────────────────
+  subzero: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/subzero.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── MARCUS FENIX  ────────────────────────────────
+  marcus: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/marcus.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── SPIDERMAN  ────────────────────────────────
+  spiderman: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/spiderman.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── DELSIN ROWE  ────────────────────────────────
+  delsin: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/delsin.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── ZAGREUS  ────────────────────────────────
+  zagreus: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/zagreus.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── ISAAC CLARKE  ────────────────────────────────
+  isaac: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/isaac.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── CALL OF DUTY  ────────────────────────────────
+  cod: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/cod.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── COLE  ────────────────────────────────
+  cole: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/cole.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── JIN SAKAI  ────────────────────────────────
+  jin: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/jin.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── CHRIS REDFIELD  ────────────────────────────────
+  chris: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/chris.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── AGENT 47  ────────────────────────────────
+  agent47: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/agent47.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── TREVOR PHILLIPS  ────────────────────────────────
+  trevor: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/trevor.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── EZIO  ────────────────────────────────
+  ezio: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/ezio.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // ─── RAIDEN  ────────────────────────────────
+  raiden: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <!-- Silueta de fondo (estado oscuro inicial) -->
+    <rect class="sh" x="0" y="0" width="48" height="64" rx="3" fill="#1a1a2e"/>
+
+    <!-- Imagen real con filtro controlado por clase -->
+    <image
+      href="assets/raiden.png"
+      x="0" y="0"
+      width="48" height="64"
+      preserveAspectRatio="xMidYMid slice"
+      class="char-img"
+    />
+  </svg>`,
+
+  // Generic fallback
+  default: `<svg viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+    <circle class="sh" cx="24" cy="16" r="12" fill="#1a1a2e"/>
+    <circle class="sk" cx="24" cy="18" r="9" fill="#c09060"/>
+    <rect class="hi" x="18" y="15" width="4" height="3" rx="1" fill="#fff"/>
+    <rect class="hi" x="26" y="15" width="4" height="3" rx="1" fill="#fff"/>
+    <rect class="sh" x="11" y="28" width="26" height="22" rx="5" fill="#1a1a2e"/>
+    <rect class="dt" x="11" y="28" width="26" height="22" rx="5" fill="#2a4a7a"/>
+    <rect class="sh" x="3" y="28" width="10" height="16" rx="5" fill="#1a1a2e"/>
+    <rect class="dt" x="3" y="28" width="10" height="16" rx="5" fill="#2a4a7a"/>
+    <rect class="sh" x="35" y="28" width="10" height="16" rx="5" fill="#1a1a2e"/>
+    <rect class="dt" x="35" y="28" width="10" height="16" rx="5" fill="#2a4a7a"/>
+    <rect class="sh" x="13" y="50" width="10" height="14" rx="5" fill="#1a1a2e"/>
+    <rect class="dt" x="13" y="50" width="10" height="14" rx="5" fill="#2a4a7a"/>
+    <rect class="sh" x="25" y="50" width="10" height="14" rx="5" fill="#1a1a2e"/>
+    <rect class="dt" x="25" y="50" width="10" height="14" rx="5" fill="#2a4a7a"/>
+  </svg>`,
+};
+
+/* ══════════════════════════════════════════════
+   CHARACTER ROSTER
+══════════════════════════════════════════════ */
+const roster = [
+  // Named males with unique SVGs
+  { name:'Master Chief',   svgKey:'chief',   g:'m' },
+  { name:'Duke Nukem',     svgKey:'cop',     g:'m' },
+  { name:'Cloud Strife',   svgKey:'cloud',   g:'m' },
+  { name:'Sam Fisher',     svgKey:'agent',   g:'m' },
+  { name:'Fox McCloud',    svgKey:'scifi',   g:'m' },
+  { name:'Tidus',          svgKey:'warrior', g:'m' },
+  { name:'Rayman',         svgKey:'default', g:'m' },
+  { name:'Crash B.',       svgKey:'default', g:'m' },
+  { name:'Spyro',          svgKey:'default', g:'m' }, 
+  
+  // Males with shared SVG types
+  { name:'Kirby',          svgKey:'default', g:'m' },
+  { name:'Mario',          svgKey:'mario',   g:'m' },
+  { name:'Link',           svgKey:'link',    g:'m' },
+  { name:'Solid Snake',    svgKey:'snake',   g:'m' },
+  { name:'Kratos',         svgKey:'kratos',  g:'m' },
+  { name:'Nathan Drake',   svgKey:'nathan',  g:'m' },
+  { name:'Leon Kennedy',   svgKey:'leon',    g:'m' },
+  { name:'Arthur Morgan',  svgKey:'arthur',  g:'m' },
+  { name:'Gordon Freeman', svgKey:'gordon',  g:'m' },
+  { name:'Sonic',          svgKey:'sonic',   g:'m' },
+  { name:'Joel',           svgKey:'joel',    g:'m' },
+  { name:'Phantom',        svgKey:'phantom', g:'m' },
+  { name:'Dante',          svgKey:'dante',   g:'m' },
+  { name:'Connor',         svgKey:'connor',  g:'m' },
+  { name:'Cloud Strife',   svgKey:'cloud',   g:'m' },
+  { name:'Sub-zero',       svgKey:'subzero', g:'m' },
+  { name:'Marcus Fenix',   svgKey:'marcus',  g:'m' },
+  { name:'Spider-man',     svgKey:'spiderman', g:'m' },
+  { name:'Delsin Rowe',    svgKey:'delsin',  g:'m' },
+  { name:'Zagreus',        svgKey:'zagreus', g:'m' },
+  { name:'',               svgKey:'isaac',   g:'m' },
+  { name:'',               svgKey:'cod',     g:'m' },
+  { name:'',               svgKey:'cole',    g:'m' },
+  { name:'',               svgKey:'jin',     g:'m' },
+  { name:'',               svgKey:'chris',   g:'m' },
+  { name:'',               svgKey:'agent47', g:'m' },
+  { name:'',               svgKey:'trevor',  g:'m' },
+  { name:'',               svgKey:'ezio',    g:'m' },
+  { name:'',               svgKey:'raiden',  g:'m' },
+  // FEMALES — positioned to be found
+  { name:'Samus Aran',     svgKey:'samus',   g:'f', id:'samus' },
+  { name:'Lara Croft',     svgKey:'lara',    g:'f', id:'lara'  },
+];
+
+/* ══════════════════════════════════════════════
+   SCATTER FEMALES INTO GRID
+   Place them NOT adjacent and NOT at edges
+══════════════════════════════════════════════ */
+function buildGrid(chars) {
+  const males = chars.filter(c => c.g === 'm');
+  const females = chars.filter(c => c.g === 'f');
+  const total = males.length + females.length; // 50
+  // Insert Samus at ~row 4 col 7 (index ~37) and Lara at ~row 4 col 2 (index ~32)
+  // Use 10 columns: row 5 = indices 40-49
+  // Insert at 37 and 44 so they're in different parts of the 5th row area
+  males.splice(22, 0, females[0]);
+  males.splice(36, 0, females[1]);
+  return males;
+}
+
+const orderedRoster = buildGrid(roster);
+
+/* ══════════════════════════════════════════════
+   BUILD DOM
+══════════════════════════════════════════════ */
+const grid = document.getElementById('char-grid');
+const cards = [];
+let maleCount = 0, femaleCount = 0;
+
+orderedRoster.forEach((char, i) => {
+  const card = document.createElement('div');
+  card.className = 'char-card';
+  card.dataset.gender = char.g;
+  if (char.id) card.dataset.id = char.id;
+  card.dataset.idx = i;
+
+  const svgKey = char.svgKey || 'default';
+  const svgContent = SVG_CHARS[svgKey] || SVG_CHARS.default;
+
+  const badge = document.createElement('div');
+  badge.className = 'badge';
+  badge.textContent = String(i - 9).padStart(2, '0');
+
+  const label = document.createElement('div');
+  label.className = 'card-label';
+  label.textContent = char.name;
+
+  const flash = document.createElement('div');
+  flash.className = 'flash';
+
+  card.innerHTML = svgContent;
+  card.appendChild(badge);
+  card.appendChild(label);
+  card.appendChild(flash);
+
+  grid.appendChild(card);
+  cards.push({ el: card, char });
+});
+
+/* ══════════════════════════════════════════════
+   UNLOCK ANIMATION
+══════════════════════════════════════════════ */
+function unlockCard(card, isFemale, id) {
+  if (card.classList.contains('lit-m') ||
+      card.classList.contains('lit-samus') ||
+      card.classList.contains('lit-lara')) return;
+
+  const flashClass = isFemale ? 'unlocking-f' : 'unlocking-m';
+  card.classList.add(flashClass);
+
+  setTimeout(() => {
+    card.classList.remove(flashClass);
+    if (!isFemale) {
+      card.classList.add('lit-m');
+      maleCount++;
+      document.getElementById('cnt-m').textContent = maleCount;
+    } else if (id === 'samus') {
+      card.classList.add('lit-samus');
+      femaleCount++;
+      document.getElementById('cnt-f').textContent = femaleCount;
+      document.getElementById('stat-f-row').style.opacity = '1';
+    } else {
+      card.classList.add('lit-lara');
+      femaleCount++;
+      document.getElementById('cnt-f').textContent = femaleCount;
+    }
+  }, isFemale ? 120 : 60);
+}
+
+function unlockRange(startIdx, endIdx) {
+  const subset = cards.slice(startIdx, endIdx).filter(c => c.char.g === 'm');
+  subset.forEach((c, i) => {
+    setTimeout(() => unlockCard(c.el, false, null),
+      i * 60 + Math.random() * 40);
+  });
+}
+
+/* ══════════════════════════════════════════════
+   DIALOG TYPEWRITER
+══════════════════════════════════════════════ */
+let typeTimer = null;
+let currentText = '';
+
+function typeText(text, highlight, onDone) {
+  const el = document.getElementById('dialog-text');
+  if (typeTimer) { clearInterval(typeTimer); }
+  el.textContent = '';
+  el.classList.toggle('female-reveal', !!highlight);
+  let i = 0;
+  typeTimer = setInterval(() => {
+    el.textContent += text[i];
+    i++;
+    if (i >= text.length) {
+      clearInterval(typeTimer);
+      typeTimer = null;
+      if (onDone) onDone();
+    }
+  }, 28);
+}
+
+/* ══════════════════════════════════════════════
+   STEP HANDLERS
+══════════════════════════════════════════════ */
+let currentStep = -1;
+let samusRevealed = false;
+let laraRevealed = false;
+let femalesZoomed = false;
+
+const steps = {
+  0: () => {
+    typeText('Durante años, el héroe de los videojuegos tenía una apariencia bastante definida.');
+  },
+  1: () => {
+    typeText('Mario. Link. Snake. Kratos.');
+    unlockRange(0, 14);
+  },
+  2: () => {
+    typeText('La lista parecía interminable.');
+    unlockRange(14, 32);
+  },
+  3: () => {
+    typeText('Podías recorrerlos uno por uno...');
+    unlockRange(32, 48);
+  },
+  4: () => {
+    typeText('... y sentir que todos compartían algo.');
+    // Light remaining males
+    cards.forEach((c, i) => {
+      if (c.char.g === 'm' && !c.el.classList.contains('lit-m')) {
+        setTimeout(() => unlockCard(c.el, false, null), Math.random() * 300);
+      }
+    });
+  },
+  5: () => {
+    typeText('Las mujeres existían.', false, () => {
+      setTimeout(() => typeText('Pero encontrarlas no era tan sencillo.', false), 1200);
+    });
+  },
+  6: () => {
+    if (samusRevealed) return;
+    samusRevealed = true;
+    const samusCard = cards.find(c => c.char.id === 'samus');
+    if (samusCard) {
+      samusCard.el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+      setTimeout(() => unlockCard(samusCard.el, true, 'samus'), 300);
+    }
+    setTimeout(() => typeText('SAMUS ARAN. Metroid, 1986.', true), 800);
+    setTimeout(() => typeText('La primera. Casi la única.', true), 2800);
+  },
+  7: () => {
+    if (laraRevealed) return;
+    laraRevealed = true;
+    const laraCard = cards.find(c => c.char.id === 'lara');
+    if (laraCard) {
+      setTimeout(() => unlockCard(laraCard.el, true, 'lara'), 200);
+    }
+    setTimeout(() => typeText('LARA CROFT. Tomb Raider, 1996.', true), 600);
+    setTimeout(() => typeText('Una más. Entre cincuenta.', true), 2400);
+  },
+  8: () => {
+    if (!femalesZoomed) {
+      femalesZoomed = true;
+      cards.forEach(c => {
+        const isFemale = c.char.g === 'f';
+        if (!isFemale) c.el.classList.add('dimmed');
+        else c.el.classList.add('zoomed');
+      });
+    }
+    setTimeout(() => typeText('A veces había que buscarlas entre cientos de héroes.', true), 200);
+    
+  },
+};
+
+function goToStep(idx) {
+  if (idx === currentStep) return;
+  currentStep = idx;
+  if (steps[idx]) steps[idx]();
+}
+
+/* ══════════════════════════════════════════════
+   SCROLLAMA
+══════════════════════════════════════════════ */
+const scroller = scrollama();
+
+scroller
+  .setup({
+    step: '.step',
+    offset: 0.5,
+    debug: false,
+  })
+  .onStepEnter(({ index }) => {
+    goToStep(index);
+    if (index > 0) document.getElementById('scroll-hint').classList.add('gone');
+  });
+
+// init
+goToStep(0);
+window.addEventListener('resize', scroller.resize);
+
+</script>
+
+
+<script>
+/* ═══════════════════════════════════════════════════
+   POST-PROLOG REVEAL
+═══════════════════════════════════════════════════ */
+const prologCloseObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.25 });
+prologCloseObs.observe(document.getElementById('prolog-close'));
+
+/* ═══════════════════════════════════════════════════
+   PARALLAX BRIDGE
+═══════════════════════════════════════════════════ */
+const pbObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      // animate ratio bars
+      e.target.querySelectorAll('.ratio-fill').forEach(bar => {
+        if (!bar.dataset.animated) {
+          bar.dataset.animated = '1';
+          setTimeout(() => { bar.style.width = bar.dataset.w + '%'; }, 200);
+        }
+      });
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.pb-block').forEach(b => pbObs.observe(b));
+
+/* ═══════════════════════════════════════════════════
+   CAP1 SCROLLYTELLING — Intersection Observer
+═══════════════════════════════════════════════════ */
+const charMap = {
+  peach: { svgId: 'svg-peach', year: '1985', label: 'PRINCESS PEACH', female: true },
+  lara:  { svgId: 'svg-lara',  year: '1996', label: 'LARA CROFT',     female: true },
+  zelda: { svgId: 'svg-zelda', year: '2002', label: 'ZELDA / SHEIK',  female: false },
+  ellie: { svgId: 'svg-ellie', year: '2013', label: 'ELLIE',          female: true },
+};
+
+let currentChar = null;
+
+function activateChar(key) {
+  if (key === currentChar) return;
+  currentChar = key;
+  const cfg = charMap[key];
+  if (!cfg) return;
+
+  // fade out all girls pngs
+  document.querySelectorAll('#char-display svg, #char-display img').forEach(svg => {
+    svg.classList.remove('active', 'female-active');
+  });
+  // fade in target
+  setTimeout(() => {
+    const target = document.getElementById(cfg.svgId);
+    if (target) {
+      target.classList.add('active');
+      if (cfg.female) target.classList.add('female-active');
+    }
+    document.getElementById('frame-year').textContent  = cfg.year;
+    document.getElementById('frame-label').textContent = cfg.label;
+  }, 80);
+}
+
+const nodeObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting && e.intersectionRatio > 0.3) {
+      // deactivate all
+      document.querySelectorAll('.c1-node').forEach(n => n.classList.remove('active'));
+      // activate this one
+      e.target.classList.add('active');
+      activateChar(e.target.dataset.char);
+    }
+  });
+}, { threshold: [0.3, 0.6] });
+
+document.querySelectorAll('.c1-node').forEach(n => nodeObs.observe(n));
+
+/* patch step 8 to also prepare prolog-close */
+const _origStep8 = steps[8];
+steps[8] = () => {
+  _origStep8();
+  // after a delay, allow prolog-close to be seen
+  setTimeout(() => {
+    document.getElementById('prolog-close').style.opacity = '0';
+  }, 100);
+};
+</script>
+
+
+
+<!-- ══════════════════════════════════════════════════════
+     CAP2 BRIDGE — TRANSICIÓN DESDE CAP1
+══════════════════════════════════════════════════════ -->
+<div id="cap2-bridge">
+  <div id="cap2-bridge-sticky">
+    <div class="cap2-bridge-bg"></div>
+    <div class="cap2-bridge-text" id="cap2-bridge-txt">
+      <div class="cap2-bridge-label">
+        <span style="color:rgba(126,200,212,0.6)">▶ CAPÍTULO 1 — COMPLETADO</span>
+        <span>CARGANDO MÓDULO DE ANÁLISIS ··· OK</span>
+        <span>DATASET: METACRITIC 2000–2024 ··· LISTO</span>
+      </div>
+      <div class="cap2-bridge-headline">
+        LOS ARQUETIPOS FUERON EL PUNTO DE PARTIDA.<br>
+        AHORA LLEGAN LOS DATOS.
+      </div>
+      <div class="cap2-bridge-sub">
+        La industria construyó sus decisiones sobre una creencia.
+        <em> Los datos estuvieron siempre ahí para refutarla.</em>
+      </div>
+    </div>
+  </div>
+  <div id="cap2-bridge-scroll"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CAP2 PORTADA — COVER
+══════════════════════════════════════════════════════ -->
+<section id="cap2-cover">
+  <div class="c2-cover-inner">
+    <div class="c2-cover-tag">CAPÍTULO 02 · DATOS &amp; MITOS</div>
+    <h2 class="c2-cover-title">¿LAS HEROÍNAS<br>FUNCIONAN?</h2>
+    <div class="c2-cover-subtitle">USER SCORE · 2000—2024</div>
+    <div class="c2-cover-rule"></div>
+    <p class="c2-cover-intro">
+      Durante décadas, los pasillos de la industria repitieron un axioma comercial como si fuera una ley de la física. Una verdad manufacturada que dictó presupuestos, limitó creatividades y justificó la ausencia.<br><br>
+      <span style="color:rgba(126,200,212,0.35)">Iniciando escaneo de mitos corporativos...</span>
+    </p>
+    <div class="c2-press-start" onclick="document.getElementById('c2s01').scrollIntoView({behavior:'smooth'})">▼ PRESS START ▼</div>
+  </div>
+</section>
+
+<!-- SEC 01 -->
+<div class="c2-section" id="c2s01">
+  <div class="c2-inner">
+    <div class="c2-sec-head">SEC_01 // LA CREENCIA INCUESTIONABLE</div>
+    <p class="c2-body">Durante años existió una creencia casi incuestionable dentro de la industria:</p>
+    <div class="c2-amber-box">
+      Los juegos protagonizados por mujeres venden menos.
+    </div>
+    <p class="c2-body-close">
+      Era tan aceptada que afectó portadas, marketing y decisiones de desarrollo durante décadas. Pero los datos cuentan una historia distinta.
+    </p>
+  </div>
+</div>
+
+<!-- SEC 02 -->
+<div class="c2-section" id="c2s02">
+  <div class="c2-inner">
+    <div class="c2-sec-head">SEC_02 // LOS NÚMEROS NO MIENTEN</div>
+    <p class="c2-body">Los títulos con protagonistas femeninas se encuentran entre los mejor valorados de la última década.</p>
+    <div class="c2-cards">
+      <div class="c2-card">
+        <div class="c2-card-score">88/100</div>
+        <div class="c2-card-meta">METACRITIC · 2021</div>
+        <div class="c2-card-game">Metroid Dread</div>
+      </div>
+      <div class="c2-card">
+        <div class="c2-card-score">93/100</div>
+        <div class="c2-card-meta">METACRITIC · 2017</div>
+        <div class="c2-card-game">Horizon Zero Dawn</div>
+      </div>
+      <div class="c2-card">
+        <div class="c2-card-score">93/100</div>
+        <div class="c2-card-meta">METACRITIC · 2009</div>
+        <div class="c2-card-game">Bayonetta</div>
+      </div>
+    </div>
+    
+    <p class="c2-body-close">
+      La calidad no disminuye. La recepción tampoco. Y aun así, las portadas siguen actuando como si el riesgo existiera.
+    </p>
+  </div>
+</div>
+
+<!-- SEC 03 -->
+<div class="c2-section" id="c2s04">
+  <div class="c2-inner">
+    <div class="c2-sec-head">SEC_03 // LOS MEJORES VALORADOS</div>
+    <p class="c2-body">Estos son algunos de los títulos mejor recibidos con protagonistas femeninas:</p>
+    <div id="game-list"></div>
+  </div>
+</div>
+
+<!-- SEC 04 -->
+<div class="c2-section" id="c2s03">
+  <div class="c2-inner">
+    <div class="c2-sec-head">SEC_04 // USER SCORE POR EMPRESA · JUEGOS CON PROTAGONISTAS FEMENINAS</div>
+    <p class="c2-body">
+      La recepción del público no es uniforme. Al filtrar exclusivamente por títulos con liderazgo femenino, la valoración de los usuarios (User Score) revela curvas drásticamente distintas según el estudio de desarrollo detrás del proyecto.
+    </p>
+
+    <div class="pb-pictogram" id="metacritic-container" style="width: 100%; max-width: 900px; margin: 20px auto; box-sizing: border-box;">
+      
+      <div class="pb-pictogram-label" style="text-align: center; margin-bottom: 15px;">
+        
+      </div>
+
+      <div class="flourish-embed" style="width: 100%; min-height: 500px; position: relative; background: transparent; overflow: hidden;">
+        
+        <iframe src="https://public.flourish.studio/visualisation/29429653/embed" 
+                frameborder="0" 
+                scrolling="no" 
+                style="width: 100%; height: 500px; display: block; border: none;" 
+                allowfullscreen>
+        </iframe>
+        
+      </div>
+
+    </div> 
+  </div> 
+</div>
+
+
+<!-- SEC 05 -->
+<div class="c2-section" id="c2s05">
+  <div class="c2-inner">
+    <div class="c2-sec-head">SEC_05 // EL PROBLEMA DE LAS PORTADAS</div>
+    <p class="c2-body">Solo el <span style="color:rgba(255,80,100,0.8)">17.78%</span> de las portadas muestran exclusivamente a una mujer protagonista.</p>
+    <div id="covers-bar-wrap">
+      <div class="covers-track" id="covers-track">
+        <div class="covers-fill" id="covers-fill">
+          <span class="covers-fill-label">♀ 17.78%</span>
+        </div>
+        <span class="covers-remainder">82.22% — SIN PROTAGONISTA FEMENINA EXCLUSIVA</span>
+      </div>
+      <div class="covers-legend">
+        <span class="fem">■ Portada con solo protagonista ♀</span>
+        <span>■ Resto de portadas</span>
+      </div>
+    </div>
+    <p class="c2-body-close">
+      Los datos de calidad muestran que la heroína no es el problema. La resistencia a mostrarla en portada sí lo es.
+    </p>
+  </div>
+</div>
+
+<!-- SEC 06: LA PREGUNTA -->
+<div id="cap2-question">
+  <p class="c2q-main">
+    LA PREGUNTA YA NO ES SI LAS HEROÍNAS FUNCIONAN.
+  </p>
+  <div class="c2q-answer">
+    <p>La pregunta es por qué seguimos actuando como si no funcionaran.</p>
+  </div>
+</div>
+
+
+<script>
+/* ═══════════════════════════════════════════════════
+   CAP2 BRIDGE REVEAL
+═══════════════════════════════════════════════════ */
+const cap2BridgeObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      setTimeout(() => document.getElementById('cap2-bridge-txt').classList.add('visible'), 300);
+    }
+  });
+}, { threshold: 0.2 });
+cap2BridgeObs.observe(document.getElementById('cap2-bridge'));
+
+/* ═══════════════════════════════════════════════════
+   GAME LIST — render dinámico
+═══════════════════════════════════════════════════ */
+const games = [
+  { name:'Metroid Dread',              year:2021, score:88, color:'green'  },
+  { name:'Bayonetta',                  year:2009, score:93, color:'green'  },
+  { name:'The Last of Us Parte II',    year:2020, score:93, color:'green'  },
+  { name:'Horizon Zero Dawn',          year:2017, score:89, color:'cyan'   },
+  { name:'Tomb Raider',                year:2013, score:86, color:'cyan'   },
+  { name:'Alien: Isolation',           year:2014, score:79, color:'amber'  },
+  { name:'Resident Evil 3 Remake',     year:2020, score:79, color:'amber'  },
+];
+
+const bgColors = { green:'rgba(76,255,128,1)', cyan:'rgba(126,200,212,1)', amber:'rgba(212,168,32,1)' };
+const listEl = document.getElementById('game-list');
+
+games.forEach((g, i) => {
+  const row = document.createElement('div');
+  row.className = 'game-row';
+  row.dataset.score = g.score;
+  row.innerHTML = `
+    <div class="game-row-bg" data-color="${bgColors[g.color]}" style="background:${bgColors[g.color]}"></div>
+    <div class="game-row-rank">${String(i+1).padStart(2,'0')}</div>
+    <div class="game-row-name">${g.name}</div>
+    <div class="game-row-year">${g.year}</div>
+    <div class="game-row-score score-${g.color}">${g.score}</div>
+  `;
+  listEl.appendChild(row);
+});
+
+/* animate bars on scroll */
+const gameListObs = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting) {
+    document.querySelectorAll('.game-row-bg').forEach((bg, i) => {
+      const row   = bg.parentElement;
+      const score = parseInt(row.dataset.score);
+      setTimeout(() => { bg.style.width = score + '%'; }, i * 80);
+    });
+    gameListObs.disconnect();
+  }
+}, { threshold: 0.2 });
+gameListObs.observe(listEl);
+
+/* ═══════════════════════════════════════════════════
+   COVERS BAR — 17.78%
+═══════════════════════════════════════════════════ */
+const coversObs = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting) {
+    document.getElementById('covers-fill').style.width = '17.78%';
+    coversObs.disconnect();
+  }
+}, { threshold: 0.4 });
+coversObs.observe(document.getElementById('covers-track'));
+</script>
+
+</body>
+</html>
