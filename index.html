@@ -42,6 +42,26 @@ body {
   --color-lara:   #ffffff;
   --pixel:        'Press Start 2P', monospace;
   --vt:           'VT323', monospace;
+
+  /* ── ESCALA TIPOGRÁFICA UNIFICADA — 6 tamaños en total ──
+     1. --fs-titulo:    TÍTULO DE APERTURA — "EL PERSONAJE INVISIBLE" (el más grande, impacta desde el inicio)
+     2. --fs-capitulo:  TÍTULOS DE CAPÍTULO/SECCIÓN — Cap.1/2/3, epílogo, frases de alto impacto
+     3. --fs-subtitulo: ETIQUETAS "CAPÍTULO 0X", nombres/arquetipos de tarjetas, subtítulos
+     4. --fs-texto:     TEXTO NORMAL — cuerpo de párrafos, descripciones, recuadro de arquetipo
+     5. --fs-etiqueta:  etiquetas menores / tags de UI
+     6. --fs-micro:     detalles decorativos mínimos (HUD, parpadeos, esquinas)               */
+  --fs-titulo:    clamp(46px, 7vw, 76px);
+  --fs-capitulo:  clamp(22px, 3.8vw, 30px);
+  --fs-subtitulo: clamp(17px, 1.8vw, 20px);
+  --fs-texto:     clamp(19px, 1.9vw, 24px);
+  --fs-etiqueta:  17px;
+  --fs-micro:     7px;
+
+  /* colores de texto unificados, con contraste garantizado sobre el fondo casi negro */
+  --text-titulo:    var(--cyan-bright);
+  --text-subtitulo: var(--cyan-bright);
+  --text-cuerpo:    rgba(174,220,226,0.82);
+  --text-etiqueta:  rgba(174,220,226,0.6);
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -171,7 +191,7 @@ body {
 /* OFFICER / label */
 #title-label {
   font-family: var(--pixel);
-  font-size: 6px;
+  font-size: var(--fs-micro);
   color: var(--cyan-dim);
   letter-spacing: 0.3em;
   margin-bottom: 8px;
@@ -188,19 +208,19 @@ body {
   margin-bottom: 36px;
 }
 .line1 {
-  font-size: clamp(20px, 3.8vw, 48px);
+  font-size: calc(var(--fs-titulo) * 0.6);
   color: var(--cyan);
   text-shadow: 0 0 8px var(--cyan), 0 0 24px var(--cyan-glow);
   letter-spacing: 0.3em;
 }
 .line2 {
-  font-size: clamp(32px, 6.5vw, 82px);
+  font-size: var(--fs-titulo);
   color: var(--cyan-bright);
   text-shadow: 0 0 12px var(--cyan-bright), 0 0 35px rgba(174,232,240,0.3);
   letter-spacing: 0.15em;
 }
 .line3 {
-  font-size: clamp(24px, 5vw, 62px);
+  font-size: calc(var(--fs-titulo) * 0.78);
   color: var(--cyan-dim);
   text-shadow: 0 0 8px rgba(58,122,133,0.5);
   letter-spacing: 0.12em;
@@ -224,7 +244,7 @@ body {
 }
 .credit-by {
   font-family: var(--pixel);
-  font-size: 10px;
+  font-size: var(--fs-etiqueta);
   letter-spacing: 0.4em;
   color: var(--cyan-dim);
 }
@@ -235,7 +255,7 @@ body {
   justify-content: center;
   gap: 8px 20px;
   font-family: var(--vt);
-  font-size: clamp(17px, 2.4vw, 26px);
+  font-size: var(--fs-subtitulo);
   letter-spacing: 0.18em;
 }
 .cname {
@@ -261,7 +281,7 @@ body {
 /* scroll hint */
 #title-scroll-hint {
   position: absolute;
-  bottom: 32px;
+  bottom: 12px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
@@ -274,22 +294,22 @@ body {
   font-family: var(--pixel);
   font-size: 10px;
   letter-spacing: 0.35em;
-  color: rgba(126,200,212,0.28);
+  color: rgba(126,200,212,0.5);
   animation: pulse-label 2s ease-in-out infinite;
 }
-@keyframes pulse-label { 0%,100%{opacity:0.28;} 50%{opacity:0.65;} }
+@keyframes pulse-label { 0%,100%{opacity:0.48;} 50%{opacity:0.85;} }
 .sh-chevrons { display:flex; flex-direction:column; gap:3px; align-items:center; }
 .sh-chevrons span {
   display: block;
   width: 8px; height: 8px;
-  border-right: 1.5px solid rgba(126,200,212,0.3);
+  border-right: 1.5px solid rgba(126,200,212,0.5);
   border-bottom: 1.5px solid rgba(126,200,212,0.3);
   transform: rotate(45deg);
   animation: fade-down 1.3s ease infinite;
 }
 .sh-chevrons span:nth-child(2) { animation-delay:0.2s; }
 .sh-chevrons span:nth-child(3) { animation-delay:0.4s; }
-@keyframes fade-down { 0%,100%{opacity:0.1;} 50%{opacity:0.6;} }
+@keyframes fade-down { 0%,100%{opacity:0.3;} 50%{opacity:0.8;} }
 
 /* ═══════════════════════════════════════════════════════
    PANTALLA 2 — STICKY SCENE
@@ -343,34 +363,20 @@ body {
   z-index: 20;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  height: 32px;
+  justify-content: center;
+  padding: 10px 20px;
+  min-height: 32px;
   border-bottom: 1px solid var(--border);
   background: rgba(6,13,15,0.95);
   flex-shrink: 0;
 }
-#top-hud .hud-left {
-  font-family: var(--pixel);
-  font-size: 5px;
-  color: var(--cyan-dim);
-  letter-spacing: 0.12em;
-  line-height: 2;
-  text-shadow: 0 0 6px var(--cyan-glow);
-}
-.hud-sub { color: rgba(126,200,212,0.22); }
 #top-hud .hud-center {
-  font-family: var(--pixel);
-  font-size: 7.5px;
-  letter-spacing: 0.22em;
+  font-family: var(--vt);
+  font-size: var(--fs-subtitulo);
+  letter-spacing: 0.14em;
   color: var(--cyan);
   text-shadow: 0 0 10px var(--cyan), 0 0 20px var(--cyan-glow);
-}
-#top-hud .hud-right {
-  font-family: var(--vt);
-  font-size: 15px;
-  color: rgba(126,200,212,0.35);
-  letter-spacing: 0.15em;
+  text-align: center;
 }
 @keyframes blink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
 .blink { animation: blink 1s infinite; color: var(--cyan-dim); }
@@ -381,9 +387,9 @@ body {
   position: relative;
   z-index: 10;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  padding: 8px 28px 4px;
+  padding: 4px 12px 2px;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: none;
@@ -431,10 +437,10 @@ body {
 
 .char-card .card-label {
   position: absolute;
-  bottom: -15px;
+  bottom: -17px;
   left: 50%; transform: translateX(-50%);
   font-family: var(--pixel);
-  font-size: 4px;
+  font-size: 7px;
   letter-spacing: 0.04em;
   white-space: nowrap;
   color: transparent;
@@ -462,7 +468,7 @@ body {
   position: absolute;
   top: 2px; right: 2px;
   font-family: var(--pixel);
-  font-size: 4px;
+  font-size: 6px;
   color: rgba(126,200,212,0.18);
   transition: color 0.4s ease;
 }
@@ -491,12 +497,12 @@ body {
     inset 0 0 12px rgba(232,244,246,0.05);
 }
 .char-card.lit-samus::before, .char-card.lit-samus::after { opacity:1; }
-.char-card.lit-samus .sh { fill: #1a2830 !important; }
+.char-card.lit-samus .sh { fill: #c29b00 !important; }
 .char-card.lit-samus .dt { opacity:1 !important; fill: #c0d8dc !important; }
 .char-card.lit-samus .sk { opacity:1 !important; fill: #e0eff2 !important; }
 .char-card.lit-samus .hi { opacity:1 !important; fill: #ffffff !important; }
 .char-card.lit-samus .ac { opacity:1 !important; fill: #8aaeb5 !important; }
-.char-card.lit-samus .card-label { color: var(--color-female); font-size: 5px; }
+.char-card.lit-samus .card-label { color: var(--color-female); font-size: 8px; }
 
 /* female lara: mismo blanco */
 .char-card.lit-lara {
@@ -520,12 +526,12 @@ body {
   opacity: 1;
 }
 .char-card.lit-lara::before, .char-card.lit-lara::after { opacity:1; border-color:var(--color-lara); }
-.char-card.lit-lara .sh { fill: #1a2830 !important; }
+.char-card.lit-lara .sh { fill: #c29b00 !important; }
 .char-card.lit-lara .dt { opacity:1 !important; fill: #d8edf0 !important; }
 .char-card.lit-lara .sk { opacity:1 !important; fill: #eef7f9 !important; }
 .char-card.lit-lara .hi { opacity:1 !important; fill: #ffffff !important; }
 .char-card.lit-lara .ac { opacity:1 !important; fill: #8aaeb5 !important; }
-.char-card.lit-lara .card-label { color: var(--color-lara); font-size: 5px; }
+.char-card.lit-lara .card-label { color: var(--color-lara); font-size: 8px; }
 
 .char-card.zoomed { transform: scale(1.3); z-index: 30; }
 .char-card.dimmed { opacity: 0.07; filter: saturate(0); }
@@ -590,7 +596,7 @@ body {
 #dialog-content { flex:1; display:flex; flex-direction:column; gap:3px; }
 #dialog-speaker {
   font-family: var(--vt);
-  font-size: 18px;
+  font-size: var(--fs-etiqueta);
   color: var(--cyan);
   letter-spacing: 0.35em;
   text-transform: uppercase;
@@ -599,7 +605,7 @@ body {
 }
 #dialog-text {
   font-family: var(--vt);
-  font-size: 21px;
+  font-size: var(--fs-texto);
   line-height: 1.3;
   color: var(--cyan);
   letter-spacing: 0.03em;
@@ -650,8 +656,8 @@ body {
 .stat-dot { width:6px; height:6px; border-radius:0; flex-shrink:0; }
 .stat-dot.m { background:var(--cyan); box-shadow:0 0 5px var(--cyan-glow); }
 .stat-dot.f { background:var(--color-female); box-shadow:0 0 5px rgba(232,244,246,0.4); }
-.stat-num { min-width:22px; text-align:right; color:rgba(126,200,212,0.6); }
-.stat-lbl { color:rgba(126,200,212,0.3); font-size:12px; }
+.stat-num { min-width:22px; text-align:right; color:rgba(174,220,226,0.75); }
+.stat-lbl { color:rgba(174,220,226,0.5); font-size:12px; }
 
 #scroll-hint { display:none; }
 
@@ -696,27 +702,27 @@ body {
 }
 .pc-status {
   font-family: var(--pixel);
-  font-size: 6px;
-  letter-spacing: 0.35em;
-  color: rgba(126,200,212,0.35);
+  font-size: var(--fs-etiqueta);
+  letter-spacing: 0.2em;
+  color: rgba(174,220,226,0.55);
   border-left: 2px solid rgba(126,200,212,0.25);
   padding-left: 14px;
-  line-height: 2.2;
+  line-height: 2;
 }
 .pc-status span { display: block; }
-.pc-status .ok { color: rgba(126,200,212,0.65); }
+.pc-status .ok { color: var(--cyan-bright); }
 .pc-headline {
   font-family: var(--pixel);
-  font-size: clamp(9px, 1.8vw, 15px);
+  font-size: var(--fs-capitulo);
   color: var(--cyan-bright);
-  letter-spacing: 0.18em;
-  line-height: 1.9;
+  letter-spacing: 0.06em;
+  line-height: 1.5;
   text-shadow: 0 0 14px var(--cyan-glow), 0 0 40px rgba(126,200,212,0.1);
 }
 .pc-sub {
   font-family: var(--vt);
-  font-size: clamp(22px, 3vw, 30px);
-  color: rgba(126,200,212,0.55);
+  font-size: var(--fs-texto);
+  color: rgba(174,220,226,0.8);
   letter-spacing: 0.04em;
   line-height: 1.5;
   border-top: 1px solid rgba(126,200,212,0.12);
@@ -823,24 +829,26 @@ body {
 .pb-block::after  { bottom:-1px; right:-1px; border-bottom:1px solid rgba(126,200,212,0.2); border-right:1px solid rgba(126,200,212,0.2); }
 
 .pb-eyebrow {
-  font-family: var(--pixel);
-  font-size: 5.5px;
-  letter-spacing: 0.35em;
-  color: var(--cyan-dim);
+  font-family: var(--vt);
+  font-size: var(--fs-subtitulo);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--cyan-bright);
+  text-shadow: 0 0 12px var(--cyan-glow);
 }
 .pb-title {
   font-family: var(--pixel);
-  font-size: clamp(8px, 1.6vw, 13px);
-  letter-spacing: 0.15em;
+  font-size: var(--fs-capitulo);
+  letter-spacing: 0.08em;
   color: var(--cyan-bright);
-  line-height: 1.8;
+  line-height: 1.5;
   text-shadow: 0 0 10px var(--cyan-glow);
 }
 .pb-body {
   font-family: var(--vt);
-  font-size: 21px;
+  font-size: var(--fs-texto);
   line-height: 1.6;
-  color: var(--cyan-dim);
+  color: var(--text-cuerpo);
   letter-spacing: 0.03em;
 }
 
@@ -932,19 +940,28 @@ body {
 }
 .cap1-eyebrow {
   font-family: var(--pixel);
-  font-size: 5.5px;
-  letter-spacing: 0.3em;
-  color: var(--cyan-dim);
+  font-size: var(--fs-etiqueta);
+  letter-spacing: 0.24em;
+  color: var(--text-etiqueta);
   display: block;
   margin-bottom: 12px;
 }
 .cap1-h1 {
   font-family: var(--pixel);
-  font-size: clamp(10px, 2vw, 16px);
-  letter-spacing: 0.2em;
-  color: var(--cyan);
+  font-size: var(--fs-capitulo);
+  letter-spacing: 0.1em;
+  color: var(--text-titulo);
   text-shadow: 0 0 12px var(--cyan-glow);
-  line-height: 1.6;
+  line-height: 1.5;
+}
+.cap1-scroll-hint {
+  text-align: center;
+  font-family: var(--pixel);
+  font-size: 6px;
+  letter-spacing: 0.2em;
+  color: rgba(126,200,212,0.4);
+  margin-top: 14px;
+  animation: blink 1.4s step-end infinite;
 }
 
 /* scrollytelling layout */
@@ -990,32 +1007,59 @@ body {
 .char-frame::before { top:-2px; left:-1px; border-top:2px solid var(--cyan); border-left:2px solid var(--cyan); }
 .char-frame::after  { bottom:-1px; right:-1px; border-bottom:1px solid rgba(126,200,212,0.2); border-right:1px solid rgba(126,200,212,0.2); }
 
+.char-frame .scan {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  top: 0;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  animation: scan-line 3s linear infinite;
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 3;
+}
+
 .char-frame svg,
 .char-frame img {
-  position: absolute !important; /* Se despegan del flujo y se superponen en el mismo eje */
+  position: absolute !important;
   top: 50% !important;
   left: 50% !important;
   width: 140px;
   height: 186px;
   object-fit: contain;
   opacity: 0;
-  
-  
-  transform: translate(-50%, -50%) translateY(10px) scale(0.95);
-  
-  transition: opacity 0.7s ease, transform 0.7s ease;
-  filter: drop-shadow(0 0 14px var(--cyan));
+  transform: translate(-50%, -50%) scale(1.06);
+  filter: blur(9px) drop-shadow(0 0 14px var(--cyan));
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(.2,.8,.2,1), filter 0.7s ease;
 }
 .char-frame svg.active,
 .char-frame img.active {
   opacity: 1 !important;
-  /* Mantiene el translate(-50%, -50%) del centrado y resetea solo la animación */
-  transform: translate(-53%, -50%) translateY(0) scale(1) !important;
+  transform: translate(-50%, -50%) scale(1) !important;
+  filter: blur(0px) drop-shadow(0 0 14px var(--cyan)) !important;
 }
 .char-frame svg.female-active,
 .char-frame img.female-active {
-  filter: drop-shadow(0 0 18px rgba(232,244,246,0.7)) !important;
+  filter: blur(0px) drop-shadow(0 0 18px rgba(232,244,246,0.7)) !important;
 }
+
+/* transición gamer: glitch + chromatic split al cambiar de personaje */
+.char-frame.glitching { animation: frame-glitch 0.4s steps(3, end); }
+@keyframes frame-glitch {
+  0%   { filter:none; }
+  15%  { filter: hue-rotate(25deg) saturate(1.6) brightness(1.2); transform: translateX(-2px); }
+  30%  { filter: hue-rotate(-20deg) saturate(1.4); transform: translateX(2px); }
+  45%  { filter: brightness(1.6); transform: translateX(-1px); }
+  60%  { filter: hue-rotate(15deg); transform: translateX(1px); }
+  100% { filter:none; transform: translateX(0); }
+}
+.char-frame.glitching::after {
+  content:''; position:absolute; inset:0; z-index:4; pointer-events:none;
+  background: repeating-linear-gradient(0deg, rgba(126,200,212,0.12) 0px, transparent 1px, transparent 3px);
+  animation: frame-flicker 0.4s steps(3, end);
+}
+@keyframes frame-flicker { 0%,100%{opacity:0;} 30%,60%{opacity:1;} }
 
 .frame-label {
   position: absolute;
@@ -1023,60 +1067,12 @@ body {
   left: 50%;
   transform: translateX(-50%);
   font-family: var(--pixel);
-  font-size: 5px;
-  letter-spacing: 0.2em;
+  font-size: clamp(10px, 1.1vw, 13px);
+  letter-spacing: 0.12em;
   color: rgba(126,200,212,0.45);
   white-space: nowrap;
-}
-.frame-year {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-family: var(--vt);
-  font-size: 14px;
-  color: rgba(126,200,212,0.3);
-  letter-spacing: 0.1em;
-}
-
-/* scan animation on active frame */
-.char-frame::after {
-  content: '';
-  position: absolute;
-  left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-  animation: scan-line 3s linear infinite;
-  opacity: 0.25;
-  bottom: auto;
-  top: 0;
-  border: none;
-}
-@keyframes scan-line {
-  0%   { top: 0;    opacity: 0; }
-  5%   { opacity: 0.25; }
-  95%  { opacity: 0.15; }
-  100% { top: 100%; opacity: 0; }
-}
-
-.frame-hud {
-  width: 220px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 12px;
-  padding: 0 4px;
-}
-.frame-hud-label {
-  font-family: var(--pixel);
-  font-size: 4.5px;
-  color: rgba(126,200,212,0.3);
-  letter-spacing: 0.15em;
-}
-.frame-hud-status {
-  font-family: var(--pixel);
-  font-size: 4.5px;
-  color: rgba(126,200,212,0.5);
-  animation: blink 1.2s step-end infinite;
+  max-width: 92%;
+  z-index: 3;
 }
 
 /* RIGHT: scrollable text */
@@ -1098,33 +1094,37 @@ body {
 }
 .c1-node.active { opacity: 1; }
 
-.c1-year {
+.c1-year-big {
   font-family: var(--pixel);
-  font-size: 7px;
-  color: var(--cyan-dim);
-  letter-spacing: 0.3em;
+  font-size: var(--fs-subtitulo);
+  line-height: 1;
+  color: var(--cyan-bright);
+  text-shadow: 4px 4px 0 var(--cyan-dark), 0 0 34px var(--cyan-glow);
+  letter-spacing: 0.02em;
 }
-.c1-slash {
-  font-family: var(--pixel);
-  font-size: 6px;
-  color: rgba(126,200,212,0.2);
-  letter-spacing: 0.25em;
+.c1-year-big.female { color: var(--color-female); text-shadow: 4px 4px 0 #1a2830, 0 0 34px rgba(232,244,246,0.35); }
+.c1-credit {
+  font-family: var(--vt);
+  font-size: var(--fs-texto);
+  color: rgba(174,232,240,0.7);
+  letter-spacing: 0.04em;
   display: block;
-  margin-top: 4px;
+  margin-top: 6px;
 }
+
 .c1-title {
   font-family: var(--pixel);
-  font-size: clamp(8px, 1.5vw, 12px);
+  font-size: var(--fs-subtitulo);
   color: var(--cyan-bright);
-  letter-spacing: 0.14em;
-  line-height: 1.8;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
   text-shadow: 0 0 10px var(--cyan-glow);
 }
 .c1-title.female { color: var(--color-female); text-shadow: 0 0 10px rgba(232,244,246,0.4); }
 
 .c1-quote {
   font-family: var(--vt);
-  font-size: 22px;
+  font-size: var(--fs-texto);
   color: var(--cyan);
   letter-spacing: 0.05em;
   line-height: 1.4;
@@ -1140,9 +1140,9 @@ body {
 
 .c1-body {
   font-family: var(--vt);
-  font-size: 20px;
+  font-size: var(--fs-texto);
   line-height: 1.65;
-  color: rgba(126,200,212,0.52);
+  color: var(--text-cuerpo);
   letter-spacing: 0.03em;
 }
 .c1-body p { margin-bottom: 12px; }
@@ -1150,13 +1150,23 @@ body {
 
 .c1-tag {
   display: inline-block;
-  font-family: var(--pixel);
-  font-size: 4.5px;
-  letter-spacing: 0.18em;
-  color: var(--cyan-dim);
-  border: 1px solid rgba(126,200,212,0.2);
-  padding: 4px 8px;
-  margin-top: 8px;
+  font-family: var(--vt);
+  font-weight: 700;
+  font-size: var(--fs-texto);
+  letter-spacing: 0.03em;
+  color: #ffcf5c;
+  background: rgba(255,180,40,0.1);
+  border: 1px solid rgba(255,180,40,0.55);
+  padding: 8px 14px;
+  margin-top: 10px;
+  line-height: 1.4;
+  text-shadow: 0 0 8px rgba(255,180,40,0.45);
+}
+
+@media (max-width: 900px) {
+  #cap1-scroll-wrap { flex-direction: column; }
+  #cap1-sticky { position: relative; width: 100%; height: auto; padding: 40px 20px; }
+  .c1-node { min-height: auto; padding: 50px 24px; }
 }
 
 
@@ -1300,27 +1310,24 @@ body {
 }
 .c2-cover-tag {
   font-family: var(--vt);
-  font-size: 20px;
+  font-size: var(--fs-subtitulo);
   letter-spacing: 0.25em;
-  color: rgba(126,200,212,0.45);
+  color: var(--cyan-bright);
+  text-shadow: 0 0 12px var(--cyan-glow);
   text-transform: uppercase;
 }
 .c2-cover-title {
   font-family: var(--pixel);
-  font-size: clamp(16px, 4vw, 42px);
-  letter-spacing: 0.12em;
-  line-height: 1.2;
-  color: #fff;
-  text-shadow:
-    -2px -2px 0 rgba(0,229,255,0.5),
-     2px  2px 0 rgba(255,40,80,0.5),
-     0 0 30px rgba(126,200,212,0.25),
-     0 0 60px rgba(255,40,80,0.1);
+  font-size: var(--fs-capitulo);
+  letter-spacing: 0.1em;
+  line-height: 1.5;
+  color: var(--text-titulo);
+  text-shadow: 0 0 12px var(--cyan-glow);
 }
 .c2-cover-subtitle {
   font-family: var(--pixel);
-  font-size: clamp(6px, 1.2vw, 9px);
-  letter-spacing: 0.28em;
+  font-size: var(--fs-subtitulo);
+  letter-spacing: 0.22em;
   color: #00e5ff;
   text-shadow: 0 0 10px rgba(0,229,255,0.5);
   margin-top: 4px;
@@ -1332,8 +1339,8 @@ body {
 }
 .c2-cover-intro {
   font-family: var(--vt);
-  font-size: clamp(17px, 2.2vw, 22px);
-  color: rgba(126,200,212,0.45);
+  font-size: var(--fs-texto);
+  color: rgba(174,220,226,0.7);
   line-height: 1.65;
   letter-spacing: 0.03em;
   max-width: 680px;
@@ -1377,23 +1384,24 @@ body {
 }
 .c2-sec-head {
   font-family: var(--pixel);
-  font-size: 6px;
-  letter-spacing: 0.3em;
-  color: var(--cyan-dim);
+  font-size: var(--fs-subtitulo);
+  letter-spacing: 0.16em;
+  color: var(--cyan-bright);
   padding-bottom: 16px;
   border-bottom: 1px solid rgba(126,200,212,0.1);
+  line-height: 1.6;
 }
 .c2-body {
   font-family: var(--vt);
-  font-size: 22px;
-  color: rgba(126,200,212,0.55);
+  font-size: var(--fs-texto);
+  color: var(--text-cuerpo);
   line-height: 1.6;
   letter-spacing: 0.03em;
 }
 .c2-body-close {
   font-family: var(--vt);
-  font-size: 20px;
-  color: rgba(126,200,212,0.4);
+  font-size: var(--fs-texto);
+  color: rgba(174,220,226,0.65);
   line-height: 1.6;
   letter-spacing: 0.03em;
   border-top: 1px solid rgba(126,200,212,0.08);
@@ -1405,12 +1413,13 @@ body {
   border: 1px solid rgba(212,168,32,0.4);
   border-left: 3px solid #d4a820;
   background: rgba(212,168,32,0.04);
-  padding: 20px 24px;
+  padding: 26px 28px;
   font-family: var(--vt);
-  font-size: 26px;
+  font-size: var(--fs-subtitulo);
+  font-weight: bold;
   color: #d4a820;
   letter-spacing: 0.04em;
-  line-height: 1.4;
+  line-height: 1.3;
   text-shadow: 0 0 12px rgba(212,168,32,0.25);
   position: relative;
 }
@@ -1457,7 +1466,7 @@ body {
 }
 .c2-card-meta {
   font-family: var(--pixel);
-  font-size: 4.5px;
+  font-size: clamp(10px, 1.2vw, 13px);
   color: var(--cyan-dim);
   letter-spacing: 0.12em;
   line-height: 1.9;
@@ -1515,13 +1524,13 @@ body {
   width: 0;
   transition: width 1.4s cubic-bezier(.2,.8,.3,1);
   z-index: 0;
-  opacity: 0.07;
+  opacity: 0.18;
 }
 .game-row-rank {
   position: relative;
   z-index: 2;
   font-family: var(--pixel);
-  font-size: 5px;
+  font-size: clamp(10px, 1.2vw, 13px);
   color: rgba(126,200,212,0.25);
   width: 20px;
   flex-shrink: 0;
@@ -1539,7 +1548,7 @@ body {
   position: relative;
   z-index: 2;
   font-family: var(--pixel);
-  font-size: 5px;
+  font-size: clamp(10px, 1.2vw, 13px);
   color: rgba(126,200,212,0.25);
   letter-spacing: 0.1em;
 }
@@ -1548,13 +1557,13 @@ body {
   z-index: 2;
   font-family: var(--pixel);
   font-size: 12px;
-  min-width: 28px;
+  min-width: 58px;
   text-align: right;
   flex-shrink: 0;
 }
 .score-green  { color: #4cff80; text-shadow: 0 0 8px rgba(76,255,128,0.4); }
 .score-cyan   { color: var(--cyan); text-shadow: 0 0 8px var(--cyan-glow); }
-.score-amber  { color: #d4a820; text-shadow: 0 0 8px rgba(212,168,32,0.35); }
+.score-yellow { color: #f5c400; text-shadow: 0 0 8px rgba(245,196,0,0.4); }
 
 /* covers bar */
 #covers-bar-wrap {
@@ -1636,33 +1645,164 @@ body {
   position: relative;
   z-index: 2;
   font-family: var(--pixel);
-  font-size: clamp(9px, 2vw, 16px);
-  letter-spacing: 0.16em;
-  line-height: 2;
+  font-size: var(--fs-capitulo);
+  letter-spacing: 0.06em;
+  line-height: 1.5;
   color: rgba(255,40,80,0.85);
   text-shadow:
     0 0 12px rgba(255,40,80,0.4),
     0 0 40px rgba(255,40,80,0.15);
-  max-width: 760px;
+  max-width: 820px;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
+.c2q-main.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+.c2q-main.revealed.glitch {
+  animation: mg-title-glitch 0.4s steps(4);
+}
+.c2q-link {
+  position: relative;
+  z-index: 2;
+  width: 1px;
+  height: 0;
+  background: linear-gradient(180deg, rgba(255,40,80,0.7), rgba(245,196,0,0.85));
+  transition: height 0.7s ease;
+}
+.c2q-link.revealed { height: 44px; }
 .c2q-answer {
   position: relative;
   z-index: 2;
-  border: 1px solid rgba(255,40,80,0.25);
-  border-left: 3px solid rgba(255,40,80,0.6);
-  padding: 24px 32px;
-  background: rgba(255,40,80,0.03);
+  border: 1px solid rgba(245,196,0,0.28);
+  border-left: 3px solid rgba(245,196,0,0.85);
+  padding: 26px 34px;
+  background: rgba(245,196,0,0.05);
   max-width: 640px;
   width: 100%;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
 }
+.c2q-answer.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+.c2q-answer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -60%;
+  width: 40%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.9s ease;
+}
+.c2q-answer.revealed::before { left: 130%; transition-delay: 0.3s; }
 .c2q-answer p {
   font-family: var(--vt);
-  font-size: clamp(20px, 3vw, 28px);
-  color: rgba(255,40,80,0.65);
+  font-size: var(--fs-texto);
+  color: rgba(255,224,150,0.88);
   line-height: 1.5;
   letter-spacing: 0.04em;
 }
+.c2q-answer p .tag {
+  color: rgba(255,205,60,1);
+  text-shadow: 0 0 8px rgba(255,196,0,0.45);
+}
 
+/* ═══════════════════════════════════════════════════════
+   TITLE GLITCH — detalle interactivo en portada
+═══════════════════════════════════════════════════════ */
+.title-glitchable { cursor: pointer; }
+.title-glitch { animation: mg-title-glitch 0.4s steps(3); }
+@keyframes mg-title-glitch {
+  0%   { filter: none; transform: translateX(0); }
+  25%  { filter: hue-rotate(90deg) brightness(1.6); transform: translateX(-3px); }
+  50%  { filter: hue-rotate(-90deg) brightness(1.3); transform: translateX(3px); }
+  75%  { filter: hue-rotate(45deg); transform: translateX(-1px); }
+  100% { filter: none; transform: translateX(0); }
+}
+
+/* ═══════════════════════════════════════════════════════
+   MINIJUEGOS — bloque compartido
+═══════════════════════════════════════════════════════ */
+.mg-inner { position: relative; z-index: 2; max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+.mg-head { display: flex; flex-direction: column; gap: 12px; text-align: center; align-items: center; }
+.mg-eyebrow {
+  font-family: var(--pixel); font-size: var(--fs-subtitulo); letter-spacing: 0.2em;
+  color: #00e5ff; text-shadow: 0 0 10px rgba(0,229,255,0.4);
+}
+.mg-title {
+  font-family: var(--pixel); font-size: var(--fs-texto); letter-spacing: 0.1em;
+  color: var(--cyan-bright); text-shadow: 0 0 10px var(--cyan-glow); line-height: 1.6;
+}
+.mg-sub {
+  font-family: var(--vt); font-size: var(--fs-texto); color: var(--text-cuerpo);
+  max-width: 640px; line-height: 1.55;
+}
+
+/* ── MINIJUEGO 2: CALIBRÁ EL SENSOR ── */
+.mg2-track-wrap { display: flex; flex-direction: column; gap: 10px; align-items: center; width: 100%; }
+.mg2-scale {
+  display: flex; justify-content: space-between; width: 100%; max-width: 640px;
+  font-family: var(--pixel); font-size: 5px; color: rgba(126,200,212,0.3); letter-spacing: 0.1em;
+}
+.mg2-track {
+  position: relative; width: 100%; max-width: 640px; height: 34px;
+  background: rgba(20,35,40,0.6); border: 1px solid rgba(126,200,212,0.35); overflow: hidden;
+}
+.mg2-track::before {
+  content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(90deg,transparent,transparent 9%,rgba(126,200,212,0.08) 9%,rgba(126,200,212,0.08) 9.3%);
+  pointer-events: none;
+}
+.mg2-marker {
+  position: absolute; top: 0; bottom: 0; width: 4px; background: var(--cyan-bright);
+  box-shadow: 0 0 10px var(--cyan-bright), 0 0 24px var(--cyan-glow); left: 0%;
+}
+.mg2-target {
+  position: absolute; top: 0; bottom: 0; width: 2px; background: rgba(255,80,100,0.9);
+  box-shadow: 0 0 10px rgba(255,80,100,0.6); display: none;
+}
+.mg2-target::after {
+  content: 'REAL'; position: absolute; bottom: -16px; left: 50%; transform: translateX(-50%);
+  font-family: var(--pixel); font-size: 4.5px; color: rgba(255,80,100,0.8); white-space: nowrap;
+}
+.mg2-btn {
+  font-family: var(--pixel); font-size: 8px; letter-spacing: 0.15em; color: var(--bg); background: var(--cyan-bright);
+  border: none; padding: 12px 28px; cursor: pointer; margin-top: 8px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease; box-shadow: 0 0 14px var(--cyan-glow);
+}
+.mg2-btn:hover { transform: translateY(-2px); box-shadow: 0 0 20px var(--cyan-bright); }
+.mg2-btn:active { transform: translateY(0); }
+.mg2-result {
+  text-align: center; font-family: var(--vt); font-size: 20px; color: var(--cyan-bright); line-height: 1.6;
+  border-top: 1px solid rgba(126,200,212,0.12); padding-top: 20px; width: 100%; max-width: 640px; margin: 0 auto;
+  display: none;
+}
+.mg2-result .mg2-score {
+  font-family: var(--pixel); font-size: 12px; color: #4cff80; letter-spacing: 0.1em;
+  display: block; margin-bottom: 8px; text-shadow: 0 0 10px rgba(76,255,128,0.4);
+}
+
+/* reveal transicionado tras el minijuego del sensor */
+.mg2-reveal {
+  width: 100%; margin: 0;
+  max-height: 0; overflow: hidden;
+  opacity: 0; transform: translateY(18px);
+  transition: opacity 0.9s ease, transform 0.9s ease, max-height 0.9s ease, margin 0.9s ease, padding 0.9s ease, border-color 0.9s ease;
+  border-top: 1px solid transparent; padding-top: 0;
+}
+.mg2-reveal.visible {
+  opacity: 1; transform: translateY(0);
+  max-height: 1200px;
+  margin: 40px 0 0;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255,80,100,0.2);
+}
 </style>
 </head>
 <body>
@@ -1681,7 +1821,7 @@ body {
     <!-- barra top -->
     <div id="title-topbar">
       <div class="topbar-org">
-        <span class="kanji">警察</span>VISUALIZACIÓN DE DATOS
+        <span class="kanji"></span>VISUALIZACIÓN DE DATOS
       </div>
       <div class="topbar-signal">
         ENTREGA FINAL
@@ -1692,7 +1832,7 @@ body {
     </div>
 
     <!-- HEADING PRINCIPAL -->
-    <h1 id="title-heading">
+    <h1 id="title-heading" class="title-glitchable" title="Tocá para interferencia">
       <span class="line1">EL</span>
       <span class="line2">PERSONAJE</span>
       <span class="line3">INVISIBLE</span>
@@ -1724,18 +1864,21 @@ body {
   </div>
 </section>
 
+<script>
+  document.getElementById('title-heading').addEventListener('click', function () {
+    this.classList.remove('title-glitch');
+    void this.offsetWidth; /* reinicia la animación */
+    this.classList.add('title-glitch');
+  });
+</script>
+
 <!-- ══ PANTALLA 2: STICKY SCENE ══════════════════════ -->
 <div id="sticky-scene">
   <div id="bg-layer"></div>
   <div id="vignette"></div>
 
   <div id="top-hud">
-    <div class="hud-left">
-      PRÓLOGO<br>
-      <span class="hud-sub">EL PERSONAJE INVISIBLE</span>
-    </div>
-    <div class="hud-center">SELECT CHARACTER</div>
-    <div class="hud-right">1985 — 2015 <span class="blink">█</span></div>
+    <div class="hud-center">PRÓLOGO: EL PERSONAJE INVISIBLE</div>
   </div>
 
   <div id="char-grid-wrap">
@@ -1765,6 +1908,9 @@ body {
   <div class="step" data-step="6"></div>
   <div class="step" data-step="7"></div>
   <div class="step" data-step="8"></div>
+  <div class="step" data-step="9"></div>
+  <div class="step" data-step="10"></div>
+  <div class="step" data-step="11"></div>
 </div>
 
 <div id="scroll-hint"></div>
@@ -1799,17 +1945,13 @@ body {
 
   <div id="parallax-content">
     <div class="pb-block" id="pb-intro">
-      <span class="pb-eyebrow">// CAPÍTULO 1: EL MAPA DE ARQUETIPOS</span>
-      <span class="pb-title">PARA ENTENDER EL PRESENTE DE LA INDUSTRIA,<br>ES IMPERATIVO MAPEAR LAS ESTRUCTURAS Y ROLES<br>HISTÓRICOS QUE CONFINARON A LAS PROTAGONISTAS.</span>
+      <span class="pb-eyebrow">CAPÍTULO 01 · EL MAPA DE ARQUETIPOS</span>
+      <span class="c2-sec-head">ASÍ SE DISTRIBUYEN LOS PROTAGONISTAS EL DÍA DE HOY</span>
       <p class="pb-body">
-        La evolución no fue lineal: fue una constante tensión entre el diseño comercial y la presión cultural. Cada arquetipo que encontrarás a continuación no es solo un personaje — es una categoría, un molde que la industria repitió durante años.
+        Esta es la proporción de quinientos videojuegos entre 1985 y 2020 según el tipo de protagonista principal: masculino, femenino, múltiple o personalizable. Los datos muestran quiénes ocupan con mayor frecuencia el rol central en las historias.
       </p>
       <div class="pc-divider"></div>
       <div class="pb-pictogram" id="ratio-pictogram">
-        <div class="pb-pictogram-label">
-          // DATA VISUAL: DISTRIBUCIÓN DE PROTAGONISTAS (1985–2020)<br>
-          MUESTRA: 500 JUEGOS · FUENTE: IGDB / GFG REPORT
-        </div>
 
         <!-- CONTENEDOR RESPONSIVO PARA TU EMBED DE FLOURISH -->
         <div class="flourish-embed" style="width: 100%; min-height: 300px; position: relative; background: transparent; overflow: hidden;">
@@ -1822,7 +1964,7 @@ body {
           </iframe>
         </div>
 
-        <div style="font-family:var(--vt);font-size:17px;color:rgba(126,200,212,0.35);letter-spacing:0.05em;text-align:center;margin-top:8px">
+        <div style="font-family:var(--vt);font-size:var(--fs-texto);color:rgba(174,220,226,0.6);letter-spacing:0.05em;text-align:center;margin-top:8px">
           De cada 10 protagonistas, menos de 2 son mujeres. Esa es la línea de base.
         </div>
       </div>
@@ -1834,8 +1976,7 @@ body {
 <section id="cap1-section">
 
   <div id="cap1-header">
-    <span class="cap1-eyebrow">CAPÍTULO 1</span>
-    <h2 class="cap1-h1">LA EVOLUCIÓN CRONOLÓGICA DEL PERSONAJE FEMENINO</h2>
+    <h2 class="c2-sec-head">¿CÓMO FUE LA EVOLUCIÓN CRONOLÓGICA DEL PERSONAJE FEMENINO?</h2>
   </div>
 
   <div id="cap1-scroll-wrap">
@@ -1843,6 +1984,7 @@ body {
     <!-- IZQUIERDA: frame sticky con personaje activo -->
     <div id="cap1-sticky">
       <div class="char-frame" id="char-display">
+        <div class="scan"></div>
         <!-- Peach SVG (default) -->
         <img id="svg-peach" src="assets/peachEncerrada.png" 
           loading="eager" decoding="sync"
@@ -1863,12 +2005,7 @@ body {
           loading="eager" decoding="sync"
           style="object-position: 60% center;">
 
-        <div class="frame-year" id="frame-year">1985</div>
         <div class="frame-label" id="frame-label">PRINCESS PEACH</div>
-      </div>
-      <div class="frame-hud">
-        <span class="frame-hud-label">// RENDER MODE: DITHER</span>
-        <span class="frame-hud-status">LOCKED ON ██</span>
       </div>
     </div>
 
@@ -1876,79 +2013,71 @@ body {
     <div id="cap1-text-col">
 
       <!-- NODE 1: Peach 1985 -->
-      <div class="c1-node active" data-char="peach" data-year="1985" data-label="PRINCESS PEACH">
-        <div>
-          <div class="c1-year">1985 // EL PREMIO</div>
-          <span class="c1-slash">Super Mario Bros. — Nintendo</span>
-        </div>
-        <h3 class="c1-title female">PRINCESS PEACH — LA PRINCESA ENCERRADA</h3>
+      <div class="c1-node active" data-char="peach">
+        <div class="c1-year-big female">1985</div>
+        <h3 class="c1-title female">PRINCESS PEACH: LA PRINCESA ENCERRADA</h3>
+        <span class="c1-credit">Juego: Super Mario Bros. Nintendo</span>
         <blockquote class="c1-quote female">
-          "THANK YOU MARIO! BUT OUR PRINCESS IS IN ANOTHER CASTLE."
+          "¡GRACIAS MARIO! PERO LA PRINCESA ESTÁ EN OTRO CASTILLO."
         </blockquote>
         <div class="c1-body">
-          <p>En 1985, el personaje femenino más influyente de la historia de los videojuegos no tenía agencia. No tomaba decisiones. No actuaba. Existía como el horizonte del deseo masculino: siempre un castillo más lejos, siempre a rescatar.</p>
-          <p>Peach no era un personaje — era una función narrativa. El motor que ponía a Mario en movimiento sin necesitar moverse ella misma. Su ausencia era el plot. Su presencia, la recompensa.</p>
-          <p>Este patrón — la "Damsel in Distress" — no fue inventado por Nintendo. Fue importado directamente de siglos de narrativa patriarcal y codificado en el lenguaje interactivo más nuevo del mundo.</p>
-          <p>Lo que se jugaba no era solo un videojuego. Se jugaba, sin saberlo, una norma cultural.</p>
+          <p>En 1985, el personaje femenino más influyente de la historia de los videojuegos no tenía agencia. Es decir, no tomaba decisiones y no actuaba. Existía como el horizonte del deseo masculino: siempre en un castillo más lejos, siempre a rescatar.</p>
+          <p>Peach no era un personaje: era una función narrativa. El motor que ponía a Mario en movimiento sin necesitar moverse ella misma. Su ausencia era el punto de partida de la historia y su presencia, la recompensa.</p>
+          <p>Este patrón, conocido como "Damsel in Distress" o la damisela en apuros, no fue inventado por Nintendo. Fue tomado directamente de siglos de una narrativa patriarcal y codificado en el lenguaje interactivo más nuevo del mundo: los videojuegos.</p>
+          <p>No se jugaba solo un videojuego. Sin saberlo, también se fortalecía un modelo cultural.</p>
         </div>
-        <span class="c1-tag">ARQUETIPO: DAMSEL IN DISTRESS · SIN AGENCIA · ROL PASIVO</span>
+        <span class="c1-tag">ARQUETIPO: DAMSEL IN DISTRESS, SIN AGENCIA, ROL PASIVO</span>
       </div>
 
       <!-- NODE 2: Lara 1996 -->
-      <div class="c1-node" data-char="lara" data-year="1996" data-label="LARA CROFT">
-        <div>
-          <div class="c1-year">1996 // ACCIÓN E HIPERSEXUALIZACIÓN</div>
-          <span class="c1-slash">Tomb Raider — Core Design / Eidos</span>
-        </div>
-        <h3 class="c1-title female">LARA CROFT — LA REVOLUCIÓN Y LA MIRADA</h3>
+      <div class="c1-node" data-char="lara">
+        <div class="c1-year-big female">1996</div>
+        <h3 class="c1-title female">LARA CROFT: UNA REVOLUCIÓN AGRIDULCE</h3>
+        <span class="c1-credit">Juego: Tomb Raider. Core Design / Eidos</span>
         <blockquote class="c1-quote female">
-          "I'M LARA CROFT. I CAN HANDLE IT."
+          "LOS SACRIFICIOS LOS DECIDES TÚ. LAS PÉRDIDAS LAS DECIDEN POR TI."
         </blockquote>
         <div class="c1-body">
-          <p>Once años después de Peach, Lara Croft rompió el molde — y creó uno nuevo. Era protagonista, arqueóloga, acróbata y asesina. Tomaba decisiones. Sobrevivía. Ganaba.</p>
-          <p>Pero su cuerpo fue diseñado para la mirada masculina: proporciones imposibles, ropa mínima, movimientos sexualizados. El jugador controlaba a una mujer poderosa mientras la industria la convertía en objeto de marketing.</p>
-          <p>La paradoja de Lara Croft es la paradoja de la representación superficial: puedes tener una protagonista y seguir objectificándola. La agencia mecánica no equivale a la dignidad narrativa.</p>
+          <p>Once años después de Peach, Lara Croft rompió por fin el molde y creó uno nuevo. No solo era la protagonista: también era arqueóloga, acróbata y asesina. Tomaba decisiones, y sobrevivía, y ganaba.</p>
+          <p>Pero su cuerpo parecía haber sido diseñado para la mirada masculina. Su primer diseño tenía proporciones imposibles. Las sucesivas versiones del personaje suavizaron algunos rasgos, pero mantuvieron un vestuario limitado y muchos de sus movimientos continuaron siendo sexualizados.  El jugador si controlaba a una mujer poderosa pero, al mismo tiempo, la industria la convertía en objeto de marketing.</p>
+          <p>La paradoja de Lara Croft es la paradoja de la representación superficial: puedes tener una protagonista y seguir objetificándola.</p>
           <p>Aun así, Lara abrió una puerta. Demostró que las mujeres podían vender videojuegos. El problema era el precio que cobraban por esa demostración.</p>
         </div>
-        <span class="c1-tag">ARQUETIPO: PROTAGONISTA SEXUALIZADA · AGENCIA MECÁNICA · OBJETO VISUAL</span>
+        <span class="c1-tag">ARQUETIPO: PROTAGONISTA SEXUALIZADA, AGENCIA MECÁNICA, OBJETO VISUAL</span>
       </div>
 
-      <!-- NODE 3: Zelda/Sheik 2002 -->
-      <div class="c1-node" data-char="zelda" data-year="2002" data-label="ZELDA / SHEIK">
-        <div>
-          <div class="c1-year">2002 // AGENCIA OCULTA</div>
-          <span class="c1-slash">The Legend of Zelda: Ocarina of Time — Nintendo</span>
-        </div>
-        <h3 class="c1-title" style="color:var(--cyan)">ZELDA / SHEIK — LA IDENTIDAD COMO ESTRATEGIA</h3>
-        <blockquote class="c1-quote" style="color:var(--cyan);border-left-color:var(--cyan)">
-          "AS SHEIK, I COULD MOVE FREELY. AS ZELDA, I WAS ALWAYS THE TARGET."
+      <!-- NODE 3: Zelda/Sheik 1998 -->
+      <div class="c1-node" data-char="zelda">
+        <div class="c1-year-big female">1998</div>
+        <h3 class="c1-title female">ZELDA / SHEIK: LA IDENTIDAD COMO ESTRATEGIA</h3>
+        <span class="c1-credit">Juego: The Legend of Zelda: Ocarina of Time. Nintendo</span>
+        <blockquote class="c1-quote female">
+          "COMO SHEIK PODÍA MOVERME CON LIBERTAD. COMO ZELDA, SIEMPRE ERA EL OBJETIVO."
         </blockquote>
         <div class="c1-body">
-          <p>Zelda encontró una solución radical a la trampa del personaje femenino: dejar de ser femenina en apariencia. Como Sheik — andrógina, misteriosa, tácticamente brillante — podía operar en el mundo sin ser reducida a su género.</p>
-          <p>Es un análisis incómodo: ¿por qué el único camino hacia el poder era el camuflaje? ¿Por qué la identidad femenina tenía que esconderse para ser tomada en serio?</p>
+          <p>Zelda encontró una solución radical a la trampa del personaje femenino: dejar de ser femenina en apariencia. Como Sheik era andrógina, misteriosa y tácticamente brillante: podía operar en el mundo sin ser reducida a su género.</p>
+          <p>Así, el análisis resulta incómodo: ¿por qué el único camino hacia el poder era el camuflaje? ¿Por qué la identidad femenina tenía que esconderse para ser tomada en serio?</p>
           <p>La saga de Zelda repitió este patrón durante décadas: la princesa cautiva que en secreto lo sabe todo, que actúa en las sombras, que guía al héroe sin poder serlo.</p>
-          <p>La agencia oculta es agencia a medias. Y a medias no alcanza.</p>
+          <p>Mientras el poder deba ocultarse, nunca será un poder completo. Y eso no alcanza.</p>
         </div>
-        <span class="c1-tag">ARQUETIPO: DISFRAZ DE GÉNERO · AGENCIA ENCUBIERTA · PODER SUBORDINADO</span>
+        <span class="c1-tag">ARQUETIPO: DISFRAZ DE GÉNERO, AGENCIA ENCUBIERTA, PODER SUBORDINADO</span>
       </div>
 
       <!-- NODE 4: Ellie 2013 -->
-      <div class="c1-node" data-char="ellie" data-year="2013" data-label="ELLIE">
-        <div>
-          <div class="c1-year">2013 // REALISMO TRIDIMENSIONAL</div>
-          <span class="c1-slash">The Last of Us — Naughty Dog / Sony</span>
-        </div>
-        <h3 class="c1-title female">ELLIE — LA COMPLEJIDAD COMO NORMA</h3>
+      <div class="c1-node" data-char="ellie">
+        <div class="c1-year-big female">2013</div>
+        <h3 class="c1-title female">ELLIE: LA COMPLEJIDAD COMO NORMA</h3>
+        <span class="c1-credit">Juego: The Last of Us. Naughty Dog / Sony</span>
         <blockquote class="c1-quote female">
-          "I'M NOT HER, YOU KNOW. I NEVER WILL BE."
+          "NO SOY ELLA, LO SABES. NUNCA LO VOY A SER."
         </blockquote>
         <div class="c1-body">
-          <p>Ellie no es heroína porque sea fuerte. Es heroína porque es humana. Tiene miedo. Falla. Se equivoca moralmente. Ama de maneras que la destruyen. Mata cuando no quiere. Sobrevive cuando no sabe por qué.</p>
-          <p>The Last of Us marcó un punto de inflexión: demostró que un personaje femenino no necesitaba ser deseable ni perfecto ni simbólico para ser protagonista. Solo necesitaba ser real.</p>
+          <p>Ellie no es la heroína porque sea fuerte. Es la heroína porque es humana. Tiene miedo, y falla, y se equivoca moralmente, y ama de maneras que la destruyen. Ella mata cuando no quiere y sobrevive cuando ni siquiera sabe por qué.</p>
+          <p>The Last of Us marcó un punto de inflexión: demostró que un personaje femenino no necesitaba ser deseable visualmente, ni perfecto, ni simbólico para ser protagonista. Solo necesitaba ser verosímil. Necesitaba ser real.</p>
           <p>La desvinculación de la gratificación visual fue total: el diseño de Ellie fue deliberadamente no sexualizado. Su cuerpo existía para sobrevivir, no para ser mirado.</p>
-          <p>De Peach a Ellie hay 28 años. Es mucho tiempo para un cambio que debería haber sido obvio desde el principio.</p>
+          <p>De Peach a Ellie hay 28 años. Es mucho tiempo para un cambio que debería haber sido evidente desde el principio.</p>
         </div>
-        <span class="c1-tag">ARQUETIPO: PROTAGONISTA COMPLEJA · TRAUMA REAL · DISEÑO NO SEXUALIZADO</span>
+        <span class="c1-tag">ARQUETIPO: PROTAGONISTA COMPLEJA, TRAUMA REAL, DISEÑO NO SEXUALIZADO</span>
       </div>
 
     </div><!-- /cap1-text-col -->
@@ -2557,6 +2686,34 @@ orderedRoster.forEach((char, i) => {
 });
 
 /* ══════════════════════════════════════════════
+   TAMAÑO DINÁMICO DEL MOSAICO
+   Agranda las tarjetas para que el grid ocupe
+   exactamente el espacio disponible arriba del
+   cuadro del narrador (antes quedaba chico y
+   sobraba espacio vacío).
+══════════════════════════════════════════════ */
+function sizeCharGrid() {
+  const wrap = document.getElementById('char-grid-wrap');
+  if (!wrap || !grid) return;
+  const rows = 4, cols = 10, rowGap = 3, colGap = 4;
+  const cs = getComputedStyle(wrap);
+  const availH = wrap.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+  const availW = wrap.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+
+  // ancho de grilla necesario para que la altura llene availH
+  const cardHFromHeight = (availH - (rows - 1) * rowGap) / rows;
+  const cardWFromHeight = cardHFromHeight * 3 / 4;
+  let gridWidth = cardWFromHeight * cols + (cols - 1) * colGap;
+
+  if (gridWidth > availW) gridWidth = availW; // si no entra, se limita por ancho
+
+  grid.style.maxWidth = 'none';
+  grid.style.width = Math.max(gridWidth, 0) + 'px';
+}
+sizeCharGrid();
+window.addEventListener('resize', sizeCharGrid);
+
+/* ══════════════════════════════════════════════
    UNLOCK ANIMATION
 ══════════════════════════════════════════════ */
 function unlockCard(card, isFemale, id) {
@@ -2599,6 +2756,27 @@ function unlockRange(startIdx, endIdx) {
 ══════════════════════════════════════════════ */
 let typeTimer = null;
 let currentText = '';
+let tickAudioCtx = null;
+
+function playTickSound() {
+  if (!tickAudioCtx) {
+    tickAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (tickAudioCtx.state === 'suspended') {
+    tickAudioCtx.resume();
+  }
+  const ctx = tickAudioCtx;
+  const oscillator = ctx.createOscillator();
+  const gainNode = ctx.createGain();
+  oscillator.connect(gainNode);
+  gainNode.connect(ctx.destination);
+  oscillator.type = 'square';
+  oscillator.frequency.setValueAtTime(480, ctx.currentTime);
+  gainNode.gain.setValueAtTime(0.04, ctx.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.04);
+  oscillator.start(ctx.currentTime);
+  oscillator.stop(ctx.currentTime + 0.04);
+}
 
 function typeText(text, highlight, onDone) {
   const el = document.getElementById('dialog-text');
@@ -2608,6 +2786,7 @@ function typeText(text, highlight, onDone) {
   let i = 0;
   typeTimer = setInterval(() => {
     el.textContent += text[i];
+    playTickSound();
     i++;
     if (i >= text.length) {
       clearInterval(typeTimer);
@@ -2627,22 +2806,22 @@ let femalesZoomed = false;
 
 const steps = {
   0: () => {
-    typeText('Durante años, el héroe de los videojuegos tenía una apariencia bastante definida.');
+    typeText('Durante años, el “héroe” en los videojuegos tuvo una apariencia bastante definida.');
   },
   1: () => {
-    typeText('Mario. Link. Snake. Kratos.');
+    typeText('Por ejemplo: Mario, Link, Snake, Kratos.');
     unlockRange(0, 14);
   },
   2: () => {
-    typeText('La lista parecía interminable.');
+    typeText('Una lista interminable de héroes con similitudes.');
     unlockRange(14, 32);
   },
   3: () => {
-    typeText('Podías recorrerlos uno por uno...');
+    typeText('Se los puede recorrer uno por uno...');
     unlockRange(32, 48);
   },
   4: () => {
-    typeText('... y sentir que todos compartían algo.');
+    typeText('... y después de un tiempo sentir que hay algo extraño.');
     // Light remaining males
     cards.forEach((c, i) => {
       if (c.char.g === 'm' && !c.el.classList.contains('lit-m')) {
@@ -2651,32 +2830,41 @@ const steps = {
     });
   },
   5: () => {
-    typeText('Las mujeres existían.', false, () => {
-      setTimeout(() => typeText('Pero encontrarlas no era tan sencillo.', false), 1200);
-    });
+    typeText('Las heroínas existían, si.');
   },
   6: () => {
+    typeText('Pero encontrarlas no era fácil.');
+  },
+  7: () => {
     if (samusRevealed) return;
     samusRevealed = true;
     const samusCard = cards.find(c => c.char.id === 'samus');
     if (samusCard) {
-      samusCard.el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+      const wrap = document.getElementById('char-grid-wrap');
+      if (wrap) {
+        const targetTop = samusCard.el.offsetTop - (wrap.clientHeight / 2) + (samusCard.el.offsetHeight / 2);
+        wrap.scrollTo({ top: targetTop, behavior: 'smooth' });
+      }
       setTimeout(() => unlockCard(samusCard.el, true, 'samus'), 300);
     }
-    setTimeout(() => typeText('SAMUS ARAN. Metroid, 1986.', true), 800);
-    setTimeout(() => typeText('La primera. Casi la única.', true), 2800);
+    typeText('Por ejemplo: Samus Aran en Metroid.', true);
   },
-  7: () => {
+  8: () => {
+    typeText('Ella fue la primera, y casi la única.', true);
+  },
+  9: () => {
     if (laraRevealed) return;
     laraRevealed = true;
     const laraCard = cards.find(c => c.char.id === 'lara');
     if (laraCard) {
       setTimeout(() => unlockCard(laraCard.el, true, 'lara'), 200);
     }
-    setTimeout(() => typeText('LARA CROFT. Tomb Raider, 1996.', true), 600);
-    setTimeout(() => typeText('Una más. Entre cincuenta.', true), 2400);
+    typeText('Luego: Lara Croft en Tomb Raider.', true);
   },
-  8: () => {
+  10: () => {
+    typeText('Una más. Entre treinta.', true);
+  },
+  11: () => {
     if (!femalesZoomed) {
       femalesZoomed = true;
       cards.forEach(c => {
@@ -2685,8 +2873,7 @@ const steps = {
         else c.el.classList.add('zoomed');
       });
     }
-    setTimeout(() => typeText('A veces había que buscarlas entre cientos de héroes.', true), 200);
-    
+    typeText('A las heroínas había que buscarlas entre cientos de héroes masculinos.', true);
   },
 };
 
@@ -2753,10 +2940,10 @@ document.querySelectorAll('.pb-block').forEach(b => pbObs.observe(b));
    CAP1 SCROLLYTELLING — Intersection Observer
 ═══════════════════════════════════════════════════ */
 const charMap = {
-  peach: { svgId: 'svg-peach', year: '1985', label: 'PRINCESS PEACH', female: true },
-  lara:  { svgId: 'svg-lara',  year: '1996', label: 'LARA CROFT',     female: true },
-  zelda: { svgId: 'svg-zelda', year: '2002', label: 'ZELDA / SHEIK',  female: false },
-  ellie: { svgId: 'svg-ellie', year: '2013', label: 'ELLIE',          female: true },
+  peach: { svgId: 'svg-peach', label: 'PRINCESS PEACH', female: true  },
+  lara:  { svgId: 'svg-lara',  label: 'LARA CROFT',     female: true  },
+  zelda: { svgId: 'svg-zelda', label: 'ZELDA / SHEIK',  female: false },
+  ellie: { svgId: 'svg-ellie', label: 'ELLIE',          female: true  },
 };
 
 let currentChar = null;
@@ -2767,28 +2954,28 @@ function activateChar(key) {
   const cfg = charMap[key];
   if (!cfg) return;
 
-  // fade out all girls pngs
+  const frame = document.getElementById('char-display');
+  frame.classList.remove('glitching');
+  void frame.offsetWidth;
+  frame.classList.add('glitching');
+
   document.querySelectorAll('#char-display svg, #char-display img').forEach(svg => {
     svg.classList.remove('active', 'female-active');
   });
-  // fade in target
   setTimeout(() => {
     const target = document.getElementById(cfg.svgId);
     if (target) {
       target.classList.add('active');
       if (cfg.female) target.classList.add('female-active');
     }
-    document.getElementById('frame-year').textContent  = cfg.year;
     document.getElementById('frame-label').textContent = cfg.label;
-  }, 80);
+  }, 120);
 }
 
 const nodeObs = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting && e.intersectionRatio > 0.3) {
-      // deactivate all
       document.querySelectorAll('.c1-node').forEach(n => n.classList.remove('active'));
-      // activate this one
       e.target.classList.add('active');
       activateChar(e.target.dataset.char);
     }
@@ -2798,8 +2985,8 @@ const nodeObs = new IntersectionObserver((entries) => {
 document.querySelectorAll('.c1-node').forEach(n => nodeObs.observe(n));
 
 /* patch step 8 to also prepare prolog-close */
-const _origStep8 = steps[8];
-steps[8] = () => {
+const _origStep8 = steps[11];
+steps[11] = () => {
   _origStep8();
   // after a delay, allow prolog-close to be seen
   setTimeout(() => {
@@ -2813,42 +3000,502 @@ steps[8] = () => {
 <!-- ══════════════════════════════════════════════════════
      CAP2 BRIDGE — TRANSICIÓN DESDE CAP1
 ══════════════════════════════════════════════════════ -->
-<div id="cap2-bridge">
-  <div id="cap2-bridge-sticky">
-    <div class="cap2-bridge-bg"></div>
-    <div class="cap2-bridge-text" id="cap2-bridge-txt">
-      <div class="cap2-bridge-label">
-        <span style="color:rgba(126,200,212,0.6)">▶ CAPÍTULO 1 — COMPLETADO</span>
-        <span>CARGANDO MÓDULO DE ANÁLISIS ··· OK</span>
-        <span>DATASET: METACRITIC 2000–2024 ··· LISTO</span>
-      </div>
-      <div class="cap2-bridge-headline">
-        LOS ARQUETIPOS FUERON EL PUNTO DE PARTIDA.<br>
-        AHORA LLEGAN LOS DATOS.
-      </div>
-      <div class="cap2-bridge-sub">
-        La industria construyó sus decisiones sobre una creencia.
-        <em> Los datos estuvieron siempre ahí para refutarla.</em>
+
+
+<!-- ══════════════════════════════════════════════════════
+     SCROLL VIDEO — El Avatar de Cristal
+     Video sticky + tarjetas de texto con parallax
+    
+══════════════════════════════════════════════════════ -->
+
+<style>
+/* ── VIDEO STICKY ── */
+#sv-scene {
+  position: relative;
+}
+#sv-video-sticky {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 1;
+}
+#sv-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* viñeta lateral — deja espacio para las cards */
+#sv-video-sticky::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(6,13,15,0.94) 0%,
+    rgba(6,13,15,0.5)  18%,
+    transparent        36%,
+    transparent        64%,
+    rgba(6,13,15,0.5)  82%,
+    rgba(6,13,15,0.94) 100%
+  );
+}
+/* viñeta vertical */
+#sv-video-sticky::after {
+  content: '';
+  position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(6,13,15,0.75) 0%,
+    transparent        16%,
+    transparent        84%,
+    rgba(6,13,15,0.75) 100%
+  );
+}
+/* barra de progreso */
+#sv-progress {
+  position: absolute;
+  bottom: 0; left: 0;
+  height: 2px; width: 0%;
+  background: linear-gradient(90deg, var(--cyan-dim), var(--cyan-bright));
+  box-shadow: 0 0 8px var(--cyan-glow);
+  z-index: 10;
+  transition: width 0.04s linear;
+}
+/* HUD superior */
+#sv-hud {
+  position: absolute;
+  top: 18px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 10; pointer-events: none;
+  text-align: center;
+  font-family: var(--pixel);
+  font-size: 5px; letter-spacing: 0.25em;
+  color: rgba(126,200,212,0.28); line-height: 2.2;
+}
+#sv-hud-char {
+  font-size: 8px;
+  color: var(--cyan-bright);
+  display: block;
+  text-shadow: 0 0 12px var(--cyan-glow);
+  letter-spacing: 0.12em;
+  transition: opacity 0.4s;
+}
+
+/* ── SCROLL OUTER ──
+   Ajustá height según tu video:
+     ~30s → 400vh   ~60s → 600vh   ~2min → 900vh   ~3min → 1200vh
+   El actual está en 900vh para ~2 min de video.
+*/
+#sv-outer {
+  position: relative;
+  z-index: 2;
+
+  height: 900vh;
+}
+
+/* ── CARDS LAYER — sticky sobre el scroll ── */
+#sv-cards {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* card base */
+.sv-card {
+  position: absolute;
+  width: clamp(230px, 28vw, 320px);
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.sv-card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.sv-card.left  { left:  clamp(16px, 3vw, 40px); }
+.sv-card.right { right: clamp(16px, 3vw, 40px); }
+
+/* inner con estética del proyecto */
+.sv-card-inner {
+  background: rgba(6,13,15,0.9);
+  border: 1px solid var(--border);
+  padding: 14px 16px;
+  position: relative;
+  backdrop-filter: blur(10px);
+}
+/* pixel corners izquierda */
+.sv-card.left  .sv-card-inner { border-left:  2px solid var(--c, var(--cyan-dim)); }
+.sv-card.right .sv-card-inner { border-right: 2px solid var(--c, var(--cyan-dim)); }
+
+.sv-card.left .sv-card-inner::before {
+  content: ''; position: absolute; top: -1px; left: -2px;
+  width: 9px; height: 9px;
+  border-top:  2px solid var(--c, var(--cyan));
+  border-left: 2px solid var(--c, var(--cyan));
+}
+.sv-card.left .sv-card-inner::after {
+  content: ''; position: absolute; bottom: -1px; right: -1px;
+  width: 8px; height: 8px;
+  border-bottom: 1px solid var(--border);
+  border-right:  1px solid var(--border);
+}
+.sv-card.right .sv-card-inner::before {
+  content: ''; position: absolute; top: -1px; right: -2px;
+  width: 9px; height: 9px;
+  border-top:   2px solid var(--c, var(--cyan));
+  border-right: 2px solid var(--c, var(--cyan));
+}
+.sv-card.right .sv-card-inner::after {
+  content: ''; position: absolute; bottom: -1px; left: -1px;
+  width: 8px; height: 8px;
+  border-bottom: 1px solid var(--border);
+  border-left:   1px solid var(--border);
+}
+.sv-tag   { font-family:var(--vt); font-size:var(--fs-etiqueta); letter-spacing:.14em; color:var(--text-etiqueta); display:block; margin-bottom:9px; line-height:1.6; }
+.sv-year  { font-family:var(--pixel); font-size:var(--fs-subtitulo); color:var(--c,var(--cyan)); display:block; letter-spacing:.1em; line-height:1.4; margin-bottom:6px; text-shadow:0 0 10px var(--cg,var(--cyan-glow)); }
+.sv-title { font-family:var(--pixel); font-size:var(--fs-subtitulo); color:var(--text-subtitulo); letter-spacing:.05em; display:block; margin-bottom:6px; line-height:1.4; }
+.sv-body  { font-family:var(--vt); font-size:var(--fs-texto); color:var(--text-cuerpo); line-height:1.4; letter-spacing:.02em; }
+
+/* ── SECTION HEADER que aparece antes del video ── */
+#sv-intro {
+  position: relative;
+  z-index: 10;
+  background: var(--bg);
+  min-height: 60vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 80px 32px;
+  overflow: hidden;
+  border-top: 1px solid rgba(126,200,212,0.06);
+}
+#sv-intro::after {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.42) 2px,rgba(0,0,0,.42) 4px);
+  z-index: 0;
+}
+.sv-intro-inner {
+  position: relative; z-index: 2;
+  max-width: 680px; text-align: center;
+  display: flex; flex-direction: column; gap: 24px;
+}
+.sv-intro-eyebrow {
+  font-family: var(--pixel); font-size: var(--fs-etiqueta);
+  letter-spacing: .24em; color: var(--text-etiqueta);
+}
+.sv-intro-title {
+  font-family: var(--pixel);
+  font-size: var(--fs-capitulo);
+  color: var(--cyan-bright); letter-spacing: .06em;
+  line-height: 1.5; text-shadow: 0 0 12px var(--cyan-glow);
+}
+.sv-intro-rule {
+  width: 220px; height: 1px; margin: 0 auto;
+  background: linear-gradient(90deg, transparent, var(--border-bright), transparent);
+}
+.sv-intro-sub {
+  font-family: var(--vt); font-size: var(--fs-texto);
+  color: var(--text-cuerpo); line-height: 1.6; letter-spacing: .03em;
+}
+.sv-scroll-cue {
+  font-family: var(--pixel); font-size: 5px;
+  letter-spacing: .3em; color: rgba(126,200,212,.2);
+  animation: blink 1.4s step-end infinite;
+}
+</style>
+
+<!-- intro antes del video -->
+<div id="sv-intro">
+  <div class="sv-intro-inner">
+    <span class="sv-intro-title">
+      SE DIJO.<br>
+      SE MOSTRÓ.<br>
+      AHORA MÍRALO CON TUS PROPIOS OJOS.
+    </span>
+    <div class="sv-intro-rule"></div>
+    <span class="sv-intro-sub">
+      Así representaron al hombre en los videojuegos<br>
+      y así representaron a la mujer.
+    </span>
+  </div>
+</div>
+
+<!-- ══ SCROLL VIDEO SCENE wrapper ══ -->
+<div id="sv-scene">
+
+<!-- video sticky -->
+<div id="sv-video-sticky">
+  <video id="sv-video" src="assets/personajes360.mp4" muted playsinline preload="auto"></video>
+  <div id="sv-hud">
+    <span id="sv-hud-char">LEON S. KENNEDY</span>
+  </div>
+  <div id="sv-progress"></div>
+</div>
+
+<!-- scroll outer: las cards viven acá -->
+<div id="sv-outer">
+  <div id="sv-cards">
+
+    <!-- ══ LEON S. KENNEDY — RE4 Remake 2023 ══
+         Segmento: 0% – 20% del video          -->
+
+    <div class="sv-card left"
+         data-at="0.02" data-hide="0.14"
+         data-char="LEON S. KENNEDY"
+         style="--c:rgba(126,200,212,0.85);--cg:rgba(126,200,212,0.2);top:20%">
+      <div class="sv-card-inner">
+        <span class="sv-tag">JUEGO: RESIDENT EVIL 4</span>
+        <span class="sv-year">LEON</span>
+        <span class="sv-title">EL VALIENTE</span>
+        <div class="sv-body">
+          El que todo lo resuelve.<br>
+          El héroe sin defectos.
+        </div>
       </div>
     </div>
+
+    <div class="sv-card right"
+         data-at="0.08" data-hide="0.20"
+         data-char="LEON S. KENNEDY"
+         style="--c:rgba(100,180,210,0.8);--cg:rgba(100,180,210,0.18);top:55%">
+      <div class="sv-card-inner">
+        <span class="sv-title">PATRÓN GUÍA</span>
+        <span class="sv-year">"ASI DEBE VERSE"</span>
+        <div class="sv-body">
+          Por ello repitieron esta fórmula sin cuestionarla.
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ CHRIS REDFIELD — RE Village 2021 ══
+         Segmento: 20% – 40% del video         -->
+
+    <div class="sv-card left"
+         data-at="0.21" data-hide="0.33"
+         data-char="CHRIS REDFIELD"
+         style="--c:rgba(80,160,200,0.85);--cg:rgba(80,160,200,0.2);top:20%">
+      <div class="sv-card-inner">
+        <span class="sv-tag">JUEGO: RE VILLAGE</span>
+        <span class="sv-year">CHRIS</span>
+        <span class="sv-title">EL FUERTE</span>
+        <div class="sv-body">
+          El que no necesita ayuda.<br>
+          El que nunca tiene dudas.
+        </div>
+      </div>
+    </div>
+
+    <div class="sv-card right"
+         data-at="0.29" data-hide="0.40"
+         data-char="CHRIS REDFIELD"
+         style="--c:rgba(80,160,200,0.75);--cg:rgba(80,160,200,0.16);top:55%">
+      <div class="sv-card-inner">
+        <span class="sv-title">LA FÓRMULA</span>
+        <span class="sv-year">LA MISMA</span>
+        <span class="sv-title">QUE CON LEON</span>
+        <div class="sv-body">
+          Un juego distinto, pero con el mismo arquetipo y la misma lógica de siempre.
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ADA WONG — RE4 Remake 2023 ══
+         Segmento: 40% – 60% del video   -->
+
+    <div class="sv-card left"
+         data-at="0.41" data-hide="0.53"
+         data-char="ADA WONG"
+         style="--c:rgba(220,70,70,0.9);--cg:rgba(220,70,70,0.2);top:20%">
+      <div class="sv-card-inner">
+        <span class="sv-tag">SAGA RESIDENT EVIL</span>
+        <span class="sv-year">ADA</span>
+        <span class="sv-title">LA DESLEAL</span>
+        <div class="sv-body">
+          Usaron un adjetivo negativo para un personaje con moralidad gris. A ella la marcaron: manipuladora.
+        </div>
+      </div>
+    </div>
+
+    <div class="sv-card right"
+         data-at="0.49" data-hide="0.60"
+         data-char="ADA WONG"
+         style="--c:rgba(220,70,70,0.8);--cg:rgba(220,70,70,0.18);top:55%">
+      <div class="sv-card-inner">
+        <span class="sv-title">EL CAMBIO: UN ROL</span> <span class="sv-year">SECUNDARIO</span>
+        <div class="sv-body">
+          Hasta que en el RE4 Remake le dieron mayor protagonismo y el juego fue un éxito.
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ JILL VALENTINE — RE3 Remake 2020 ══
+         Segmento: 60% – 80% del video          -->
+
+    <div class="sv-card left"
+         data-at="0.61" data-hide="0.73"
+         data-char="JILL VALENTINE"
+         style="--c:rgba(100,180,240,0.9);--cg:rgba(100,180,240,0.2);top:20%">
+      <div class="sv-card-inner">
+        <span class="sv-tag">JUEGO: RESIDENT EVIL 3 </span>
+        <span class="sv-year">JILL</span>
+        <span class="sv-title">LA VALIENTE</span>
+        <div class="sv-body">
+          Sobrevivió a Raccoon City<br>
+          demostrando un gran coraje<br>
+          y mucha tenacidad.
+        </div>
+      </div>
+    </div>
+
+    <div class="sv-card right"
+         data-at="0.69" data-hide="0.80"
+         data-char="JILL VALENTINE"
+         style="--c:rgba(100,180,240,0.8);--cg:rgba(100,180,240,0.18);top:55%">
+      <div class="sv-card-inner">
+        <span class="sv-title">SU ROL:</span> <span class="sv-year">TENACIDAD,</span> <span class="sv-title">NO DAMISELA</span>
+        <div class="sv-body">
+          No se limitó a esperar que alguien la fuera a buscar. Eso también es valentía.
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ELLIE NIÑA — TLOU Parte I 2022 ══
+         Segmento: 80% – 90% del video          -->
+
+    <div class="sv-card left"
+         data-at="0.81" data-hide="0.90"
+         data-char="ELLIE · 2013"
+         style="--c:rgba(120,210,120,0.9);--cg:rgba(120,210,120,0.2);top:20%">
+      <div class="sv-card-inner">
+        <span class="sv-tag">JUEGO: THE LAST OF US PART I</span>
+        <span class="sv-year">ELLIE</span>
+        <span class="sv-title">LA HUMANA</span>
+        <div class="sv-body">
+          Puede fracasar. Puede equivocarse. Y a pesar de los errores, sigue luchando.
+        </div>
+      </div>
+    </div>
+
+    <div class="sv-card right"
+         data-at="0.84" data-hide="0.90"
+         data-char="ELLIE · 2013"
+         style="--c:rgba(120,210,120,0.8);--cg:rgba(120,210,120,0.18);top:55%">
+      <div class="sv-card-inner">
+        <span class="sv-title">SU DEBILIDAD ES SU</span>
+        <span class="sv-year">FORTALEZA</span>
+        <div class="sv-body">
+          Sus sentimientos son reales. No llegó solo para ser protagonista, sino para ser la mejor.
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ELLIE ADULTA — TLOU Parte II 2020 ══
+         Segmento: 90% – 100% del video          -->
+
+    <div class="sv-card left"
+         data-at="0.91" data-hide="1.01"
+         data-char="ELLIE · 2023"
+         style="--c:rgba(174,232,240,0.95);--cg:rgba(174,232,240,0.22);top:20%">
+      <div class="sv-card-inner">
+        <span class="sv-tag">JUEGO: THE LAST OF US PART II</span>
+        <span class="sv-year">LA MISMA</span>
+        <span class="sv-title">AÑOS DESPUÉS</span>
+        <div class="sv-body">
+          Se le permitió crecer,<br>
+          cambiar, evolucionar.<br>
+          A pesar de todo, sigue siendo ella.
+        </div>
+      </div>
+    </div>
+
+    <div class="sv-card right"
+         data-at="0.94" data-hide="1.01"
+         data-char="ELLIE · 2023"
+         style="--c:rgba(174,232,240,0.9);--cg:rgba(174,232,240,0.2);top:55%">
+      <div class="sv-card-inner">
+        <span class="sv-title">SIEMPRE FUE COMPLEJA. HOY NO SE EXCUSA</span>
+        <div class="sv-body">
+          Esto es lo que distingue a un personaje complejo de un simple estereotipo.
+        </div>
+      </div>
+    </div>
+
   </div>
-  <div id="cap2-bridge-scroll"></div>
 </div>
+
+<script>
+(function() {
+  const video    = document.getElementById('sv-video');
+  const outer    = document.getElementById('sv-outer');
+  const progress = document.getElementById('sv-progress');
+  const hudChar  = document.getElementById('sv-hud-char');
+  const cards    = document.querySelectorAll('.sv-card');
+
+  function getProgress() {
+    const rect  = outer.getBoundingClientRect();
+    const total = outer.offsetHeight - window.innerHeight;
+    return Math.max(0, Math.min(1, -rect.top / total));
+  }
+
+  function onScroll() {
+    const p = getProgress();
+
+    // 1. scrubbing
+    if (video.readyState >= 1 && video.duration) {
+      const t = p * video.duration;
+      if (Math.abs(video.currentTime - t) > 0.05) video.currentTime = t;
+    }
+
+    // 2. barra
+    progress.style.width = (p * 100) + '%';
+
+    // 3. cards — mostrar/ocultar según data-at / data-hide
+    let activeChar = '';
+    cards.forEach(card => {
+      const at   = parseFloat(card.dataset.at);
+      const hide = parseFloat(card.dataset.hide || '1.1');
+      const show = p >= at && p < hide;
+      card.classList.toggle('show', show);
+      if (show && card.dataset.char) activeChar = card.dataset.char;
+    });
+
+    // 4. HUD — nombre del personaje activo
+    if (activeChar) {
+      hudChar.style.opacity = '1';
+      hudChar.textContent = activeChar;
+    }
+  }
+
+  // evitar reproducción automática
+  video.addEventListener('play',       () => video.pause());
+  video.addEventListener('timeupdate', () => { if (!video.paused) video.pause(); });
+  video.addEventListener('loadedmetadata', onScroll);
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  onScroll();
+})();
+</script>
+
+
+</div><!-- /sv-scene -->
 
 <!-- ══════════════════════════════════════════════════════
      CAP2 PORTADA — COVER
 ══════════════════════════════════════════════════════ -->
 <section id="cap2-cover">
   <div class="c2-cover-inner">
-    <div class="c2-cover-tag">CAPÍTULO 02 · DATOS &amp; MITOS</div>
+    <div class="c2-cover-tag">CAPÍTULO 02</div>
     <h2 class="c2-cover-title">¿LAS HEROÍNAS<br>FUNCIONAN?</h2>
     <div class="c2-cover-subtitle">USER SCORE · 2000—2024</div>
     <div class="c2-cover-rule"></div>
     <p class="c2-cover-intro">
-      Durante décadas, los pasillos de la industria repitieron un axioma comercial como si fuera una ley de la física. Una verdad manufacturada que dictó presupuestos, limitó creatividades y justificó la ausencia.<br><br>
-      <span style="color:rgba(126,200,212,0.35)">Iniciando escaneo de mitos corporativos...</span>
+      Durante décadas, los pasillos de la industria repitieron un axioma comercial como si fuera una ley de la física. Una verdad manufacturada que dictó presupuestos, limitó creatividades y justificó la ausencia.
     </p>
-    <div class="c2-press-start" onclick="document.getElementById('c2s01').scrollIntoView({behavior:'smooth'})">▼ PRESS START ▼</div>
   </div>
 </section>
 
@@ -2858,7 +3505,7 @@ steps[8] = () => {
     <div class="c2-sec-head">SEC_01 // LA CREENCIA INCUESTIONABLE</div>
     <p class="c2-body">Durante años existió una creencia casi incuestionable dentro de la industria:</p>
     <div class="c2-amber-box">
-      Los juegos protagonizados por mujeres venden menos.
+        LOS JUEGOS PROTAGONIZADOS POR MUJERES VENDEN MENOS.
     </div>
     <p class="c2-body-close">
       Era tan aceptada que afectó portadas, marketing y decisiones de desarrollo durante décadas. Pero los datos cuentan una historia distinta.
@@ -2872,20 +3519,20 @@ steps[8] = () => {
     <div class="c2-sec-head">SEC_02 // LOS NÚMEROS NO MIENTEN</div>
     <p class="c2-body">Los títulos con protagonistas femeninas se encuentran entre los mejor valorados de la última década.</p>
     <div class="c2-cards">
-      <div class="c2-card">
-        <div class="c2-card-score">88/100</div>
-        <div class="c2-card-meta">METACRITIC · 2021</div>
-        <div class="c2-card-game">Metroid Dread</div>
+      <div class="c2-card amber">
+        <div class="c2-card-score">97/100</div>
+        <div class="c2-card-meta">METACRITIC · 2002</div>
+        <div class="c2-card-game">Metroid Prime</div>
       </div>
-      <div class="c2-card">
-        <div class="c2-card-score">93/100</div>
-        <div class="c2-card-meta">METACRITIC · 2017</div>
-        <div class="c2-card-game">Horizon Zero Dawn</div>
-      </div>
-      <div class="c2-card">
+      <div class="c2-card amber">
         <div class="c2-card-score">93/100</div>
         <div class="c2-card-meta">METACRITIC · 2009</div>
         <div class="c2-card-game">Bayonetta</div>
+      </div>
+      <div class="c2-card amber">
+        <div class="c2-card-score">93/100</div>
+        <div class="c2-card-meta">METACRITIC · 2020</div>
+        <div class="c2-card-game">The Last of Us Parte II</div>
       </div>
     </div>
     
@@ -2904,68 +3551,290 @@ steps[8] = () => {
   </div>
 </div>
 
-<!-- SEC 04 -->
-<div class="c2-section" id="c2s03">
+<!-- ════ MINIJUEGO 2 — CALIBRÁ EL SENSOR ════ -->
+<div class="c2-section" id="mg2-sensor">
   <div class="c2-inner">
-    <div class="c2-sec-head">SEC_04 // USER SCORE POR EMPRESA · JUEGOS CON PROTAGONISTAS FEMENINAS</div>
-    <p class="c2-body">
-      La recepción del público no es uniforme. Al filtrar exclusivamente por títulos con liderazgo femenino, la valoración de los usuarios (User Score) revela curvas drásticamente distintas según el estudio de desarrollo detrás del proyecto.
-    </p>
-
-    <div class="pb-pictogram" id="metacritic-container" style="width: 100%; max-width: 900px; margin: 20px auto; box-sizing: border-box;">
-      
-      <div class="pb-pictogram-label" style="text-align: center; margin-bottom: 15px;">
-        
+    <div class="mg-head" style="align-items:flex-start;text-align:left;">
+      <span class="mg-eyebrow">MINIJUEGO // CALIBRÁ EL SENSOR</span>
+      <h3 class="mg-title">¿CUÁL CREÉS QUE ES EL % REAL?</h3>
+      <p class="mg-sub" style="text-align:left;max-width:100%;">
+        Antes de mostrarte el dato, probá tu instinto: ¿qué porcentaje de portadas de videojuegos muestran exclusivamente a una mujer protagonista? El marcador se mueve en loop constante: presioná STOP cuando creas que está sobre el número correcto.
+      </p>
+    </div>
+    <div class="mg2-track-wrap">
+      <div class="mg2-scale"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
+      <div class="mg2-track" id="mg2-track">
+        <div class="mg2-marker" id="mg2-marker"></div>
+        <div class="mg2-target" id="mg2-target"></div>
       </div>
-
-      <div class="flourish-embed" style="width: 100%; min-height: 500px; position: relative; background: transparent; overflow: hidden;">
-        
-        <iframe src="https://public.flourish.studio/visualisation/29429653/embed" 
-                frameborder="0" 
-                scrolling="no" 
-                style="width: 100%; height: 500px; display: block; border: none;" 
-                allowfullscreen>
-        </iframe>
-        
+      <button class="mg2-btn" id="mg2-btn">▶ STOP</button>
+      <div class="mg2-result" id="mg2-result"></div>
+    </div>
+    <div class="mg2-reveal" id="mg2-reveal">
+      <div class="c2-sec-head">SEC_05 // EL PROBLEMA DE LAS PORTADAS</div>
+      <p class="c2-body">Solo el <span style="color:rgba(255,80,100,0.85)">17,78%</span> de las portadas muestran exclusivamente a una mujer protagonista.</p>
+      <div id="covers-bar-wrap">
+        <div class="covers-track" id="covers-track-2">
+          <div class="covers-fill" id="covers-fill-2">
+            <span class="covers-fill-label">17,78%</span>
+          </div>
+          <span class="covers-remainder">82,22% — SIN PROTAGONISTA FEMENINA EXCLUSIVA</span>
+        </div>
+        <div class="covers-legend">
+          <span class="fem">■ Portada con solo protagonista</span>
+          <span>■ Resto de portadas</span>
+        </div>
       </div>
-
-    </div> 
-  </div> 
+      <p class="c2-body-close">
+        Los datos de calidad muestran que la heroína no es el problema. La resistencia a mostrarla en portada sí lo es.
+      </p>
+    </div>
+  </div>
 </div>
 
+<script>
+(() => {
+  const REAL_PCT   = 17.78;
+  const DURATION   = 1900; // ms por recorrido (ida o vuelta)
 
-<!-- SEC 05 -->
-<div class="c2-section" id="c2s05">
+  const track    = document.getElementById('mg2-track');
+  const marker   = document.getElementById('mg2-marker');
+  const target   = document.getElementById('mg2-target');
+  const btn      = document.getElementById('mg2-btn');
+  const resultEl = document.getElementById('mg2-result');
+  const revealEl = document.getElementById('mg2-reveal');
+
+  let rafId = null;
+  let startTime = null;
+  let running = false;
+  let stopped = false;
+
+  function currentPct(ts) {
+    const elapsed = (ts - startTime) % (DURATION * 2);
+    const t = elapsed < DURATION ? elapsed / DURATION : (DURATION * 2 - elapsed) / DURATION;
+    return t * 100;
+  }
+
+  function tick(ts) {
+    if (!running) return;
+    if (startTime === null) startTime = ts;
+    const pct = currentPct(ts);
+    marker.style.left = pct + '%';
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function startLoop() {
+    running = true;
+    startTime = null;
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function stopLoop() {
+    running = false;
+    if (rafId) cancelAnimationFrame(rafId);
+  }
+
+  function handleStop() {
+    if (stopped) return;
+    stopped = true;
+    stopLoop();
+
+    const markerRect = marker.getBoundingClientRect();
+    const trackRect   = track.getBoundingClientRect();
+    const guessPct = Math.max(0, Math.min(100, ((markerRect.left - trackRect.left) / trackRect.width) * 100));
+
+    target.style.left = REAL_PCT + '%';
+    target.style.display = 'block';
+
+    const diff = Math.abs(guessPct - REAL_PCT);
+    let tag;
+    if (diff <= 3)       tag = 'CALIBRACIÓN CASI PERFECTA';
+    else if (diff <= 8)  tag = 'CALIBRACIÓN ACEPTABLE';
+    else if (diff <= 15) tag = 'DESVÍO NOTABLE';
+    else                 tag = 'EL SENSOR ESTABA MUY DESCALIBRADO';
+
+    resultEl.innerHTML = `<span class="mg2-score">TU MARCA: ${guessPct.toFixed(1).replace('.', ',')}% · ${tag}</span>La distancia entre lo que imaginamos y lo que muestran los datos también es parte del problema.`;
+    resultEl.style.display = 'block';
+
+    btn.textContent = '✓ SENSOR CALIBRADO';
+    btn.disabled = true;
+
+    requestAnimationFrame(() => {
+      revealEl.classList.add('visible');
+      const fill = document.getElementById('covers-fill-2');
+      if (fill) setTimeout(() => { fill.style.width = '17.78%'; }, 200);
+    });
+  }
+
+  btn.addEventListener('click', handleStop);
+  startLoop();
+})();
+</script>
+
+<!-- ════ TEXTO CONECTIVO ════ -->
+<div class="c2-section" id="c2s-conectivo">
   <div class="c2-inner">
-    <div class="c2-sec-head">SEC_05 // EL PROBLEMA DE LAS PORTADAS</div>
-    <p class="c2-body">Solo el <span style="color:rgba(255,80,100,0.8)">17.78%</span> de las portadas muestran exclusivamente a una mujer protagonista.</p>
-    <div id="covers-bar-wrap">
-      <div class="covers-track" id="covers-track">
-        <div class="covers-fill" id="covers-fill">
-          <span class="covers-fill-label">♀ 17.78%</span>
-        </div>
-        <span class="covers-remainder">82.22% — SIN PROTAGONISTA FEMENINA EXCLUSIVA</span>
+    <div class="c2-sec-head">SEC_04 // ¿QUÉ OCURRE CUANDO LAS MUJERES SÍ APARECEN EN LA PORTADA?</div>
+    <p class="c2-body">¿La escasa representación es igual en todos los géneros? Analizamos el rol femenino en cada uno — protagonista, coprotagonista o ninguno.</p>
+  </div>
+</div>
+
+<!-- ════ PAC-MAN CHART ════ -->
+<div class="c2-section" id="c2s-pacman">
+  <div class="c2-inner">
+    <!-- laberinto clickeable -->
+    <div id="maze-area" style="cursor:pointer;margin-bottom:24px;" title="Tocá para activar">
+      <div id="maze-dots">
+        <div class="maze-dot"></div><div class="maze-dot"></div><div class="maze-dot"></div>
+        <div class="maze-dot"></div><div class="maze-dot"></div><div class="maze-dot"></div>
+        <div class="maze-dot"></div><div class="maze-dot"></div><div class="maze-dot"></div>
+        <div class="maze-dot"></div><div class="maze-dot"></div><div class="maze-dot"></div>
+        <div class="maze-dot"></div><div class="maze-dot"></div><div class="maze-dot"></div>
+        <div class="maze-dot"></div><div class="maze-dot"></div><div class="maze-dot"></div>
       </div>
-      <div class="covers-legend">
-        <span class="fem">■ Portada con solo protagonista ♀</span>
-        <span>■ Resto de portadas</span>
+      <div id="pellet"></div>
+      <div id="runner"><canvas id="runner-canvas" width="32" height="32"></canvas></div>
+    </div>
+    <div id="pac-click-hint">[ TOCÁ A PAC-MAN PARA ACTIVAR ]</div>
+
+    <!-- géneros -->
+    <div id="genres">
+      <div class="genre-block" data-prot="27.9" data-coprot="1.6" data-none="70.5">
+        <div class="genre-name">ACTION</div>
+        <div class="chart-wrapper"><canvas class="pixel-canvas" width="32" height="32"></canvas></div>
+        <div class="ghosts-row"></div>
+        <div class="genre-stats">
+          <div class="stat-row"><div class="stat-dot" style="background:#f5c400"></div><span class="stat-pct" style="color:#f5c400">27.9%</span><span class="stat-lbl">protagonista</span></div>
+          <div class="stat-row"><div class="stat-dot" style="background:#7ec8d4"></div><span class="stat-pct" style="color:#7ec8d4">1.6%</span><span class="stat-lbl">co-prot.</span></div>
+          <div class="stat-row"><div class="stat-dot" style="background:#2a5060"></div><span class="stat-pct" style="color:rgba(126,200,212,.4)">70.5%</span><span class="stat-lbl">sin rol</span></div>
+        </div>
+      </div>
+      <div class="genre-block" data-prot="9.8" data-coprot="0" data-none="90.2">
+        <div class="genre-name">ADVENTURE</div>
+        <div class="chart-wrapper"><canvas class="pixel-canvas" width="32" height="32"></canvas></div>
+        <div class="ghosts-row"></div>
+        <div class="genre-stats">
+          <div class="stat-row"><div class="stat-dot" style="background:#f5c400"></div><span class="stat-pct" style="color:#f5c400">9.8%</span><span class="stat-lbl">protagonista</span></div>
+          <div class="stat-row"><div class="stat-dot" style="background:#7ec8d4"></div><span class="stat-pct" style="color:#7ec8d4">0%</span><span class="stat-lbl">co-prot.</span></div>
+          <div class="stat-row"><div class="stat-dot" style="background:#2a5060"></div><span class="stat-pct" style="color:rgba(126,200,212,.4)">90.2%</span><span class="stat-lbl">sin rol</span></div>
+        </div>
+      </div>
+      <div class="genre-block" data-prot="14.6" data-coprot="10.3" data-none="75.1">
+        <div class="genre-name">RPG</div>
+        <div class="chart-wrapper"><canvas class="pixel-canvas" width="32" height="32"></canvas></div>
+        <div class="ghosts-row"></div>
+        <div class="genre-stats">
+          <div class="stat-row"><div class="stat-dot" style="background:#f5c400"></div><span class="stat-pct" style="color:#f5c400">14.6%</span><span class="stat-lbl">protagonista</span></div>
+          <div class="stat-row"><div class="stat-dot" style="background:#7ec8d4"></div><span class="stat-pct" style="color:#7ec8d4">10.3%</span><span class="stat-lbl">co-prot.</span></div>
+          <div class="stat-row"><div class="stat-dot" style="background:#2a5060"></div><span class="stat-pct" style="color:rgba(126,200,212,.4)">75.1%</span><span class="stat-lbl">sin rol</span></div>
+        </div>
+      </div>
+      <div class="genre-block" data-prot="6.7" data-coprot="46.7" data-none="46.6">
+        <div class="genre-name">STRATEGY</div>
+        <div class="chart-wrapper"><canvas class="pixel-canvas" width="32" height="32"></canvas></div>
+        <div class="ghosts-row"></div>
+        <div class="genre-stats">
+          <div class="stat-row"><div class="stat-dot" style="background:#f5c400"></div><span class="stat-pct" style="color:#f5c400">6.7%</span><span class="stat-lbl">protagonista</span></div>
+          <div class="stat-row"><div class="stat-dot" style="background:#7ec8d4"></div><span class="stat-pct" style="color:#7ec8d4">46.7%</span><span class="stat-lbl">co-prot.</span></div>
+          <div class="stat-row"><div class="stat-dot" style="background:#2a5060"></div><span class="stat-pct" style="color:rgba(126,200,212,.4)">46.6%</span><span class="stat-lbl">sin rol</span></div>
+        </div>
       </div>
     </div>
-    <p class="c2-body-close">
-      Los datos de calidad muestran que la heroína no es el problema. La resistencia a mostrarla en portada sí lo es.
-    </p>
+
+    <!-- leyenda: 3 fantasmas de referencia -->
+    <div id="legend" style="margin-top:24px;">
+      <div class="legend-item"><canvas class="legend-ghost-canvas" id="lg-prot" data-color="#f5c400" width="16" height="16"></canvas>PROTAGONISTA</div>
+      <div class="legend-item"><canvas class="legend-ghost-canvas" id="lg-coprot" data-color="#7ec8d4" width="16" height="16"></canvas>CO-PROTAGONISTA</div>
+      <div class="legend-item"><canvas class="legend-ghost-canvas" id="lg-none" data-color="#162830" width="16" height="16"></canvas>SIN ROL PROTAGÓNICO</div>
+    </div>
+    <p class="c2-body-close">La representación femenina depende del género del juego — y hasta cuando aparece, rara vez lidera la historia.</p>
+  </div>
+</div>
+
+<!-- ════ TÍTULO USER SCORE ════ -->
+<div class="c2-section" id="c2s-uscore-title">
+  <div class="c2-inner">
+    <div class="c2-sec-head">SEC_05 // ¿INFLUYÓ ESTA REPRESENTACIÓN EN LA VALORACIÓN DE LOS JUGADORES?</div>
+  </div>
+</div>
+
+<!-- ════ GRÁFICO LÍNEAS USER SCORE ════ -->
+<div class="c2-section" id="c2s-uscore" style="padding-bottom:40px;">
+  <div class="c2-inner" style="max-width:100%;">
+    <div id="uscore-wrap">
+      <div id="uscore-card">
+        <div class="corner tl"></div><div class="corner tr"></div>
+        <div class="corner bl"></div><div class="corner br"></div>
+        <span class="eyebrow">TENDENCIA HISTÓRICA · 1996—2020</span>
+        <h2 style="font-family:var(--pixel);font-size:var(--fs-subtitulo);color:var(--cyan-bright);letter-spacing:.06em;line-height:1.5;margin:14px 0 10px;text-shadow:0 0 12px var(--cyan-glow);">USER SCORE PROMEDIO SEGÚN GÉNERO EN JUEGOS CON PROTAGONISTAS FEMENINAS</h2>
+        <p style="font-family:'VT323',monospace;font-size:var(--fs-texto);color:rgba(174,232,240,.82);margin:0 0 20px;line-height:1.5;max-width:660px;">Aventura, Acción y RPG: tres géneros, tres curvas de recepción del público a lo largo de 24 años. Pasá el cursor sobre el gráfico para escanear un año puntual, o apagá una línea desde la leyenda.</p>
+        <div class="legend" id="uscore-legend"></div>
+        <div class="chart-shell" style="position:relative;">
+          <svg id="uscore-chart" viewBox="0 0 980 460" preserveAspectRatio="xMidYMid meet" style="width:100%;height:auto;display:block;overflow:visible;"></svg>
+          <div class="tooltip" id="uscore-tooltip"></div>
+        </div>
+        <p class="c2-body-close" style="margin-top:20px;">Las tres curvas se mueven casi igual. La baja representación femenina no se explica por una peor recepción del público — sino por decisiones de la industria.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ CAPÍTULO 3 COVER ════ -->
+<section id="cap3-cover" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:80px 40px;position:relative;z-index:2;background:var(--bg);border-top:1px solid rgba(126,200,212,0.08);overflow:hidden;">
+  <div style="position:relative;z-index:2;max-width:720px;text-align:center;">
+    <div style="font-family:var(--vt);font-size:var(--fs-subtitulo);letter-spacing:.25em;text-transform:uppercase;color:var(--cyan-bright);text-shadow:0 0 12px var(--cyan-glow);display:block;margin-bottom:18px;">CAPÍTULO 03</div>
+    <h2 style="font-family:'Press Start 2P',monospace;font-size:var(--fs-capitulo);color:var(--text-titulo);letter-spacing:.1em;line-height:1.5;text-shadow:0 0 16px var(--cyan-glow);margin-bottom:24px;">EL CÓDIGO FUENTE:<br>¿QUIÉN ESTÁ DETRÁS<br>DE LA INDUSTRIA?</h2>
+    <div style="width:min(320px,80vw);height:1px;background:linear-gradient(90deg,transparent,rgba(126,200,212,.6),transparent);margin:0 auto 24px;"></div>
+    <p style="font-family:'VT323',monospace;font-size:var(--fs-texto);color:rgba(174,220,226,.82);line-height:1.6;letter-spacing:.03em;">Ya vimos los roles en pantalla y la reacción del público. ¿Qué pasa dentro de los estudios? A continuación, las calificaciones filtradas por empresa.</p>
+  </div>
+</section>
+
+<!-- ════ CAP3 SEC01 — USER SCORE POR EMPRESA ════ -->
+<div class="c2-section" id="c3s01">
+  <div class="c2-inner">
+    <div class="c2-sec-head">USER SCORE POR EMPRESA · JUEGOS CON PROTAGONISTAS FEMENINAS</div>
+    <p class="c2-body">Filtrando solo por títulos con liderazgo femenino, la valoración cambia drásticamente según el estudio detrás del proyecto.</p>
+    <div style="width:100%;max-width:900px;margin:20px auto;position:relative;border:1px solid var(--border);background:var(--bg-panel);padding:14px;box-shadow:0 0 24px rgba(126,200,212,0.06);">
+      <div style="position:absolute;top:-1px;left:-1px;width:10px;height:10px;border-top:2px solid var(--cyan);border-left:2px solid var(--cyan);"></div>
+      <div style="position:absolute;top:-1px;right:-1px;width:10px;height:10px;border-top:2px solid var(--cyan);border-right:2px solid var(--cyan);"></div>
+      <div style="position:absolute;bottom:-1px;left:-1px;width:10px;height:10px;border-bottom:2px solid var(--cyan);border-left:2px solid var(--cyan);"></div>
+      <div style="position:absolute;bottom:-1px;right:-1px;width:10px;height:10px;border-bottom:2px solid var(--cyan);border-right:2px solid var(--cyan);"></div>
+      <iframe src="https://public.flourish.studio/visualisation/29429653/embed" frameborder="0" scrolling="no" style="width:100%;height:500px;display:block;border:none;" allowfullscreen></iframe>
+    </div>
   </div>
 </div>
 
 <!-- SEC 06: LA PREGUNTA -->
 <div id="cap2-question">
-  <p class="c2q-main">
+  <p class="c2q-main" id="c2q-main">
     LA PREGUNTA YA NO ES SI LAS HEROÍNAS FUNCIONAN.
   </p>
-  <div class="c2q-answer">
-    <p>La pregunta es por qué seguimos actuando como si no funcionaran.</p>
+  <div class="c2q-link" id="c2q-link"></div>
+  <div class="c2q-answer" id="c2q-answer">
+    <p>La pregunta es por qué seguimos actuando como si el miedo, la costumbre o el marketing <span class="tag">todavía fueran motivo suficiente</span>.</p>
   </div>
 </div>
+
+<script>
+(() => {
+  const wrap = document.getElementById('cap2-question');
+  const main = document.getElementById('c2q-main');
+  const link = document.getElementById('c2q-link');
+  const answer = document.getElementById('c2q-answer');
+  if (!wrap || !main || !link || !answer) return;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      main.classList.add('revealed');
+      setTimeout(() => main.classList.add('glitch'), 750);
+      setTimeout(() => link.classList.add('revealed'), 700);
+      setTimeout(() => answer.classList.add('revealed'), 1350);
+      obs.disconnect();
+    });
+  }, { threshold: 0.4 });
+  obs.observe(wrap);
+})();
+</script>
 
 
 <script>
@@ -2979,22 +3848,24 @@ const cap2BridgeObs = new IntersectionObserver((entries) => {
     }
   });
 }, { threshold: 0.2 });
-cap2BridgeObs.observe(document.getElementById('cap2-bridge'));
+const cap2BridgeEl = document.getElementById('cap2-bridge');
+if (cap2BridgeEl) cap2BridgeObs.observe(cap2BridgeEl);
 
 /* ═══════════════════════════════════════════════════
    GAME LIST — render dinámico
 ═══════════════════════════════════════════════════ */
 const games = [
-  { name:'Metroid Dread',              year:2021, score:88, color:'green'  },
-  { name:'Bayonetta',                  year:2009, score:93, color:'green'  },
-  { name:'The Last of Us Parte II',    year:2020, score:93, color:'green'  },
-  { name:'Horizon Zero Dawn',          year:2017, score:89, color:'cyan'   },
-  { name:'Tomb Raider',                year:2013, score:86, color:'cyan'   },
-  { name:'Alien: Isolation',           year:2014, score:79, color:'amber'  },
-  { name:'Resident Evil 3 Remake',     year:2020, score:79, color:'amber'  },
+  { name:'Metroid Prime',              year:2002, score:97, color:'cyan' },
+  { name:'Bayonetta',                  year:2009, score:93, color:'cyan' },
+  { name:'The Last of Us Parte II',    year:2020, score:93, color:'cyan' },
+  { name:'Horizon Zero Dawn',          year:2017, score:89, color:'cyan' },
+  { name:'Tomb Raider',                year:2013, score:86, color:'cyan' },
+  { name:'Alien: Isolation',           year:2014, score:79, color:'cyan' },
+  { name:'Resident Evil 3 Remake',     year:2020, score:79, color:'cyan' },
 ];
 
-const bgColors = { green:'rgba(76,255,128,1)', cyan:'rgba(126,200,212,1)', amber:'rgba(212,168,32,1)' };
+/* verde, celeste de Pac-Man (co-prot.) y amarillo de Pac-Man */
+const bgColors = { green:'rgba(76,255,128,1)', cyan:'rgba(126,200,212,1)', yellow:'rgba(245,196,0,1)' };
 const listEl = document.getElementById('game-list');
 
 games.forEach((g, i) => {
@@ -3006,7 +3877,7 @@ games.forEach((g, i) => {
     <div class="game-row-rank">${String(i+1).padStart(2,'0')}</div>
     <div class="game-row-name">${g.name}</div>
     <div class="game-row-year">${g.year}</div>
-    <div class="game-row-score score-${g.color}">${g.score}</div>
+    <div class="game-row-score score-${g.color}">${g.score}/100</div>
   `;
   listEl.appendChild(row);
 });
@@ -3024,16 +3895,1080 @@ const gameListObs = new IntersectionObserver((entries) => {
 }, { threshold: 0.2 });
 gameListObs.observe(listEl);
 
-/* ═══════════════════════════════════════════════════
-   COVERS BAR — 17.78%
-═══════════════════════════════════════════════════ */
-const coversObs = new IntersectionObserver((entries) => {
-  if (entries[0].isIntersecting) {
-    document.getElementById('covers-fill').style.width = '17.78%';
-    coversObs.disconnect();
+</script>
+
+
+<!-- ══════════════════════════════════════════════════════
+     EPÍLOGO — LA CAÍDA DEL HÉROE POR DEFECTO
+══════════════════════════════════════════════════════ -->
+<style>
+/* ═══════════════════════════════════════════════════════
+   EPÍLOGO — LA CAÍDA DEL HÉROE POR DEFECTO
+═══════════════════════════════════════════════════════ */
+#epilogue-section {
+  position: relative;
+  z-index: 20;
+  background: var(--bg);
+  padding: 80px 40px;
+  border-top: 1px solid rgba(126,200,212,0.15);
+}
+#mario-stage-container {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  height: 250px;
+  background: #000;
+  border: 4px double var(--cyan);
+  margin: 40px auto 0;
+  overflow: hidden;
+}
+#game-over-text {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--pixel);
+  font-size: 16px;
+  color: #fff;
+  text-shadow: 2px 2px #ff2850;
+  opacity: 0;
+  z-index: 10;
+}
+.mario-floor {
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 24px;
+  background: repeating-linear-gradient(90deg, #503010, #503010 8px, #301000 8px, #301000 16px);
+  border-top: 4px solid #805020;
+}
+.mario-castle {
+  position: absolute;
+  bottom: 24px; right: 40px;
+  width: 64px; height: 64px;
+  background: #404040;
+  border: 4px solid #202020;
+}
+.mario-castle::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 20px;
+  width: 16px; height: 24px;
+  background: #000;
+}
+.mario-pole {
+  position: absolute;
+  bottom: 24px; left: 180px;
+  width: 4px; height: 160px;
+  background: #aaa;
+}
+.mario-flag {
+  position: absolute;
+  top: 30px; left: 142px;
+  width: 38px; height: 24px;
+  background: var(--color-female, #e8f4f6);
+  border: 2px solid #fff;
+}
+.running-heroine {
+  position: absolute;
+  bottom: 24px; left: -40px;
+  width: 24px; height: 38px;
+  background: transparent;
+  pointer-events: none;
+}
+.running-heroine::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 6px;
+  width: 2px; height: 2px;
+  background: #ff80a0;
+  box-shadow:
+    2px 0 #ff80a0, 4px 0 #ff80a0,
+    0 2px #ff80a0, 2px 2px #ff80a0, 4px 2px #ff80a0,
+    2px 4px #ff80a0,
+    0 6px #ff80a0, 2px 6px #ffffff, 4px 6px #ff80a0,
+    -2px 8px #ff80a0, 0 8px #ff80a0, 2px 8px #ff80a0, 4px 8px #ff80a0, 6px 8px #ff80a0,
+    -2px 10px #ff80a0, 0 10px #ff80a0, 2px 10px #ff80a0, 4px 10px #ff80a0, 6px 10px #ff80a0,
+    -2px 12px #ff80a0, 0 12px #ff80a0, 2px 12px #ff80a0, 4px 12px #ff80a0, 6px 12px #ff80a0,
+    -2px 14px #ff80a0, 0 14px #ff80a0, 2px 14px #ff80a0, 4px 14px #ff80a0, 6px 14px #ff80a0,
+    -2px 16px #ff80a0, 0 16px #ff80a0, 4px 16px #ff80a0, 6px 16px #ff80a0,
+    -2px 18px #ff80a0, 6px 18px #ff80a0,
+    -2px 20px #ff80a0, 6px 20px #ff80a0,
+    -4px 22px #ff80a0, -2px 22px #ff80a0, 6px 22px #ff80a0, 8px 22px #ff80a0,
+    -4px 24px #ffffff, 8px 24px #ffffff,
+    -4px 26px #ffffff, 8px 26px #ffffff,
+    -4px 28px #ffffff, 8px 28px #ffffff,
+    -6px 30px #ffffff, 10px 30px #ffffff,
+    -6px 32px #ffffff, 10px 32px #ffffff;
+}
+@keyframes flagDrop  { 100% { top: 136px; } }
+@keyframes runnerWalk {
+  0%   { left: -40px; }
+  40%  { left: 165px; bottom: 24px; }
+  70%  { left: 165px; bottom: 24px; }
+  100% { left: 610px; bottom: 24px; opacity: 0; }
+}
+@keyframes revealGameOver { 100% { opacity: 1; } }
+
+#mario-stage-container.start-anim .mario-flag     { animation: flagDrop       1.5s 1.5s forwards linear; }
+#mario-stage-container.start-anim .running-heroine { animation: runnerWalk     5s   forwards linear; }
+#mario-stage-container.start-anim #game-over-text  { animation: revealGameOver 0.5s 5.2s forwards; }
+
+.epilogue-hud {
+  font-family: var(--vt);
+  font-size: var(--fs-subtitulo);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--cyan-bright);
+  text-shadow: 0 0 12px var(--cyan-glow);
+  display: block;
+  text-align: center;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+/* ════ PAC-MAN CHART CSS ════ */
+
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+
+
+
+
+
+/* ══ CHART SECTION (estática, sin scroll-jacking) ══ */
+#chart-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 32px;
+}
+
+/* ── HEADER ── */
+.section-eyebrow {
+  font-family:'Press Start 2P',monospace; font-size:5px;
+  letter-spacing:.32em; color:var(--cyan-dim);
+  display:block; margin-bottom:14px; text-align:center;
+}
+.section-title {
+  font-family:'Press Start 2P',monospace;
+  font-size:clamp(8px,1.5vw,12px);
+  color:var(--cyan-bright); letter-spacing:.12em;
+  line-height:1.9; display:block; text-align:center;
+  text-shadow:0 0 12px var(--cyan-glow); margin-bottom:8px;
+}
+.section-sub {
+  font-family:'VT323',monospace; font-size:clamp(16px,2vw,20px);
+  color:rgba(126,200,212,.45); display:block;
+  text-align:center; margin-bottom:20px; letter-spacing:.04em;
+}
+.section-rule {
+  width:100%; height:1px; margin-bottom:20px;
+  background:linear-gradient(90deg,transparent,var(--border),transparent);
+}
+
+/* ── LEYENDA ── */
+#legend {
+  display:flex; gap:28px; flex-wrap:wrap;
+  align-items:center; justify-content:center;
+  margin-bottom:18px; padding:10px 18px;
+  border:1px solid var(--border);
+  background:rgba(126,200,212,.02);
+  position:relative;
+}
+#legend::before {
+  position:absolute; top:-8px; left:16px;
+  font-family:'Press Start 2P',monospace; font-size:4px;
+  letter-spacing:.2em; color:var(--cyan-dim);
+  background:#060d0f; padding:0 8px;
+}
+.legend-item {
+  display:flex; align-items:center; gap:8px;
+  font-family:var(--vt); font-size: clamp(10px, 1.9vw, 24px);
+  letter-spacing:.1em; color:rgba(126,200,212,.55);
+}
+.legend-ghost-canvas { width:22px; height:22px; image-rendering:pixelated; }
+
+/* ── MAZE / TRACK ── */
+#maze-area {
+  position:relative; width:100%; height:72px;
+  background:#000;
+  border:3px solid #0033cc;
+  box-shadow:0 0 14px rgba(0,51,204,.4), inset 0 0 20px rgba(0,0,0,.8);
+  margin-bottom:14px; overflow:hidden;
+  cursor:pointer;
+  transition:box-shadow .25s ease;
+}
+#maze-area:hover {
+  box-shadow:0 0 22px rgba(0,51,204,.7), inset 0 0 20px rgba(0,0,0,.8);
+}
+/* paredes interiores decorativas estilo laberinto */
+#maze-area::before {
+  content:''; position:absolute;
+  left:15%; width:12%; height:40%;
+  border:3px solid #0033cc; border-top:none;
+  top:0;
+}
+#maze-area::after {
+  content:''; position:absolute;
+  right:22%; width:10%; height:40%;
+  border:3px solid #0033cc; border-bottom:none;
+  bottom:0;
+}
+
+/* puntitos del laberinto */
+#maze-dots {
+  position:absolute; top:50%; left:0; right:0;
+  transform:translateY(-50%);
+  display:flex; align-items:center;
+  padding:0 5%;
+  gap:0;
+  pointer-events:none;
+}
+.maze-dot {
+  width:5px; height:5px; border-radius:50%;
+  background:rgba(255,184,174,.35);
+  flex-shrink:0;
+  margin: 0 calc((90% / 18));
+}
+.maze-dot.eaten-dot { background:transparent; }
+
+/* pastilla grande (power pellet) */
+#pellet {
+  position:absolute;
+  right:12%;
+  top:50%; transform:translateY(-50%);
+  width:18px; height:18px; border-radius:50%;
+  background:radial-gradient(circle at 38% 38%,#fff 0%,#f5e060 40%,#d4a820 100%);
+  box-shadow:0 0 10px rgba(245,224,96,.8), 0 0 22px rgba(245,224,96,.3);
+  animation:pellet-pulse 1s ease-in-out infinite;
+  transition:transform .2s ease, opacity .2s ease;
+  z-index:5;
+}
+@keyframes pellet-pulse {
+  0%,100%{box-shadow:0 0 10px rgba(245,224,96,.8),0 0 22px rgba(245,224,96,.3);}
+  50%    {box-shadow:0 0 18px rgba(245,224,96,1),  0 0 36px rgba(245,224,96,.5);}
+}
+#pellet.eaten {
+  transform:translateY(-50%) scale(0);
+  opacity:0;
+  animation:none;
+}
+
+/* Pac-Man corredor */
+#runner {
+  position:absolute;
+  top:50%; transform:translateY(-50%);
+  left:5%;
+  width:44px; height:44px;
+  z-index:10;
+  will-change:left;
+  cursor:pointer;
+}
+#runner-canvas {
+  width:100%; height:100%;
+  image-rendering:pixelated; display:block;
+}
+#runner::after {
+  content:'';
+  position:absolute; inset:-6px;
+  border-radius:50%;
+  box-shadow:0 0 0 2px rgba(245,196,0,.4);
+  animation:runner-pulse 1.5s ease-in-out infinite;
+  pointer-events:none;
+}
+#runner.running::after { animation:none; opacity:0; }
+@keyframes runner-pulse {
+  0%,100% { opacity:.5; transform:scale(1); }
+  50%     { opacity:0;  transform:scale(1.4); }
+}
+
+/* ── GÉNEROS ── */
+#genres {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  gap:20px 16px; width:100%;
+}
+@media(max-width:700px){ #genres{grid-template-columns:repeat(2,1fr);} }
+
+.genre-block {
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  transform:scale(1);
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1), border-color .3s ease, background .3s ease;
+  border:1px solid rgba(126,200,212,.12);
+  padding:12px 8px;
+}
+.genre-block.activated {
+  transform:scale(1.03);
+  border-color:rgba(126,200,212,.35);
+  background:rgba(126,200,212,.04);
+}
+.genre-name {
+  font-family:var(--vt); font-size:var(--fs-texto);
+  letter-spacing:.14em; color:var(--cyan);
+  text-shadow:0 0 8px var(--cyan-glow);
+}
+.chart-wrapper {
+  width:clamp(90px,12vw,130px);
+  aspect-ratio:1; position:relative;
+}
+.pixel-canvas {
+  width:100%; height:100%; display:block;
+  image-rendering:pixelated;
+}
+.genre-stats { width:100%; display:flex; flex-direction:column; gap:5px; }
+.stat-row    { display:flex; align-items:center; gap:6px; }
+.stat-ghost-canvas { width:13px; height:13px; image-rendering:pixelated; display:block; flex-shrink:0; }
+.stat-pct    { font-family:var(--vt); font-size: clamp(15px, 1.9vw, 24px); min-width:30px; text-align:right; }
+.stat-lbl    { font-family:var(--vt); font-size: clamp(15px, 1.9vw, 24px); color:rgba(174,220,226,.65); }
+
+/* hint clic */
+#click-hint {
+  margin-top:4px; margin-bottom:18px;
+  font-family:'Press Start 2P',monospace; font-size:4.5px;
+  letter-spacing:.24em; color:rgba(126,200,212,.32);
+  animation:blink 1.6s step-end infinite; white-space:nowrap;
+  text-align:center;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* ── PAC-MAN CLICK HINT ── */
+#pac-click-hint {
+  text-align:center; margin:-8px 0 18px;
+  font-family:'Press Start 2P',monospace; font-size:7px; letter-spacing:.22em;
+  color:rgba(126,200,212,.45); animation:blink 1.2s step-end infinite;
+  pointer-events:none; transition:opacity .3s ease;
+}
+
+/* ════ USER SCORE CHART CSS ════ */
+
+  
+  
+  
+  #uscore-wrap{ position:relative; width:100%; max-width:820px; margin:0 auto; }
+  #uscore-card{
+    position:relative; background:var(--bg-card); border:1px solid rgba(126,200,212,0.25);
+    padding:40px 36px 34px; overflow:hidden;
   }
-}, { threshold: 0.4 });
-coversObs.observe(document.getElementById('covers-track'));
+  .corner{ position:absolute; width:14px; height:14px; border:2px solid var(--cyan); z-index:2; }
+  .corner.tl{ top:-1px; left:-1px; border-right:none; border-bottom:none; }
+  .corner.tr{ top:-1px; right:-1px; border-left:none; border-bottom:none; }
+  .corner.bl{ bottom:-1px; left:-1px; border-right:none; border-top:none; }
+  .corner.br{ bottom:-1px; right:-1px; border-left:none; border-top:none; }
+
+  .eyebrow{
+    position:relative; z-index:2; display:block; font-family:var(--pixel); font-size:var(--fs-etiqueta);
+    letter-spacing:0.3em; color:var(--cyan-dim);
+  }
+  h1{
+    position:relative; z-index:2; font-family:var(--pixel); font-size:clamp(13px,2.2vw,19px);
+    line-height:1.7; color:var(--cyan-bright); text-shadow:0 0 12px var(--cyan-glow);
+    margin:14px 0 10px; letter-spacing:0.02em;
+  }
+  .sub{
+    position:relative; z-index:2; font-family:var(--vt); font-size:19px; line-height:1.5;
+    color:rgba(174,232,240,0.7); max-width:660px; margin:0 0 26px;
+  }
+
+  .chart-shell{ position:relative; z-index:2; }
+  svg{ width:100%; height:auto; display:block; overflow:visible; }
+  .gridline{ stroke:rgba(126,200,212,0.14); stroke-width:1; }
+  .gridline.zero{ stroke:rgba(126,200,212,0.28); }
+  .axis-label{ font-family:var(--pixel); font-size:10px; fill:var(--cyan-bright); letter-spacing:0.03em; }
+  .axis-label.x{ fill:rgba(174,232,240,0.65); font-size:9px; }
+  .y-axis-title{ font-family:var(--pixel); font-size:11px; fill:var(--cyan-bright); letter-spacing:0.1em; }
+
+  .area-fill{ display:none; }
+  .line-path{ fill:none; stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round; }
+  .line-glow{ fill:none; stroke-width:9; stroke-linecap:round; stroke-linejoin:round; opacity:0.4; }
+  .dim{ opacity:0.1 !important; }
+
+  .comet{ fill:none; stroke-linecap:round; opacity:0.95; }
+
+  .pt{ transition:r 0.15s ease, opacity 0.2s ease; }
+  .end-ring{ fill:none; stroke-width:1.4; opacity:0; }
+
+  .scanline{ stroke:rgba(232,244,246,0.55); stroke-width:1; stroke-dasharray:2 3; pointer-events:none; opacity:0; transition:opacity 0.15s ease; }
+
+  .tooltip{
+    position:absolute; z-index:5; pointer-events:none; opacity:0; transition:opacity 0.15s ease;
+    background:rgba(4,9,11,0.94); border:1px solid rgba(126,200,212,0.4);
+    padding:10px 12px; font-family:var(--pixel); font-size:7px; line-height:2; letter-spacing:0.05em;
+    white-space:nowrap; box-shadow:0 0 20px rgba(0,0,0,0.5);
+  }
+  .tooltip .tt-year{ color:var(--cyan-bright); display:block; margin-bottom:4px; font-size:8px; }
+  .tooltip .tt-row{ display:flex; justify-content:space-between; gap:14px; }
+  .tooltip .sw{ display:inline-block; width:7px; height:7px; margin-right:6px; vertical-align:middle; }
+
+  .legend{
+    position:relative; z-index:2; display:flex; flex-wrap:wrap; gap:10px; margin-bottom:22px;
+  }
+  .leg-btn{
+    font-family:var(--pixel); font-size:6.5px; letter-spacing:0.1em; color:var(--cyan);
+    background:rgba(0,0,0,0.25); border:1px solid rgba(126,200,212,0.25);
+    padding:9px 12px; cursor:pointer; display:flex; align-items:center; gap:8px;
+    transition:transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, opacity 0.2s ease;
+  }
+  .leg-btn:hover{ transform:translateY(-2px); }
+  .leg-btn .dot{ width:8px; height:8px; border-radius:50%; box-shadow:0 0 8px currentColor; }
+  .leg-btn.off{ opacity:0.35; }
+
+  /* ── corredora que acompaña el trazo de las líneas al dibujarse ── */
+  .genre-icon{ pointer-events:none; }
+
+  /* ── ANOTACIÓN DE DATOS — callout que marca la caída conjunta ── */
+  .chart-annotation{ opacity:0; transition:opacity 0.9s ease; }
+  .chart-annotation.visible{ opacity:1; }
+  .annotation-guide{ stroke:rgba(255,120,80,0.55); stroke-width:1.4; stroke-dasharray:4 4; }
+  .annotation-tag{ fill:rgba(6,13,15,0.92); stroke:rgba(255,120,80,0.55); stroke-width:1; }
+  .annotation-label{ font-family:var(--pixel); font-size:6.5px; fill:#ffb090; letter-spacing:0.04em; }
+
+</style>
+
+<!-- ══ EPÍLOGO: LA CAÍDA DEL HÉROE POR DEFECTO ════════════ -->
+<section id="epilogue-section">
+  <div class="c2-inner">
+    <div class="epilogue-hud">EPÍLOGO</div>
+
+    <h2 class="cap1-h1" style="text-align:center;margin-bottom:8px;">La caída del héroe por defecto</h2>
+
+    <div class="c2-body">
+      <p style="margin-top:16px;color:var(--cyan-bright);">El gran cambio no es que aparecieran más protagonistas mujeres. Es que desapareció la idea de que solo existe una forma válida de protagonizar una historia.</p>
+    </div>
+
+    <div style="display:flex;flex-direction:column;align-items:center;gap:6px;margin:32px 0;">
+      <span id="epilogue-stat" style="font-family:var(--pixel);font-size:clamp(40px,6vw,64px);color:var(--cyan-bright);text-shadow:0 0 20px var(--cyan-glow);line-height:1;">0%</span>
+      <span style="font-family:'VT323',monospace;font-size:var(--fs-texto);color:rgba(174,220,226,.75);text-align:center;max-width:480px;">de los videojuegos hoy incorporan temas de género, diversidad o discriminación. No porque se volvieron más políticos — sino más humanos.</span>
+    </div>
+
+    <div class="c2-body">
+      <p style="color:var(--cyan-bright);">No es la victoria de un género sobre otro. Es la victoria de la variedad sobre la repetición.</p>
+    </div>
+
+    <!-- Stage Mario -->
+    <div id="mario-stage-container">
+      <div id="game-over-text">FIN</div>
+      <div class="mario-flag"></div>
+      <div class="mario-pole"></div>
+      <div class="running-heroine"></div>
+      <div class="mario-castle"></div>
+      <div class="mario-floor"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+/* ── Epílogo: contador animado del ~50% ── */
+(() => {
+  const statEl = document.getElementById('epilogue-stat');
+  if (!statEl) return;
+  const TARGET = 50;
+  const DUR = 1400;
+  const statObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const t0 = performance.now();
+      function step(now) {
+        const p = Math.min(1, (now - t0) / DUR);
+        const eased = 1 - Math.pow(1 - p, 3);
+        statEl.textContent = (p < 1 ? '~' : '~') + Math.round(eased * TARGET) + '%';
+        if (p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+      statObs.disconnect();
+    });
+  }, { threshold: 0.4 });
+  statObs.observe(statEl);
+})();
+
+/* ── Mario stage observer ── */
+const stageContainer = document.getElementById('mario-stage-container');
+const marioObs = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting) {
+    stageContainer.classList.add('start-anim');
+    marioObs.disconnect();
+  }
+}, { threshold: 0.3 });
+marioObs.observe(stageContainer);
+</script>
+
+
+<script>
+/* ════ PAC-MAN CHART JS ════ */
+
+/* ══════════════════════════════════════
+   PIXEL GHOST — dibuja en canvas 16×16
+══════════════════════════════════════ */
+function drawPixelGhost(canvas, color, vulnerable) {
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0,0,W,H);
+
+  const c = vulnerable ? '#1a22cc' : color;
+  const eyeW = vulnerable ? '#1a22cc' : '#fff';
+  const pupW = vulnerable ? '#aabbff' : '#000088';
+
+  // Cuerpo — matriz de píxeles simplificada escalada al tamaño del canvas
+  const s = W / 8; // escala
+
+  ctx.fillStyle = c;
+  // cabeza redondeada superior
+  ctx.fillRect(2*s, 0,   4*s, s);
+  ctx.fillRect(s,   s,   6*s, s);
+  ctx.fillRect(0,   2*s, 8*s, 4*s);
+  // cuerpo inferior
+  ctx.fillRect(0,   6*s, 8*s, s);
+  // pies (3 ondas)
+  ctx.fillRect(0,   7*s, 2*s, s);
+  ctx.fillRect(3*s, 7*s, 2*s, s);
+  ctx.fillRect(6*s, 7*s, 2*s, s);
+
+  // ojos blancos
+  ctx.fillStyle = eyeW;
+  ctx.fillRect(s,   2*s, 2*s, 2*s);
+  ctx.fillRect(5*s, 2*s, 2*s, 2*s);
+
+  // pupilas
+  ctx.fillStyle = pupW;
+  ctx.fillRect(2*s,   3*s, s, s);
+  ctx.fillRect(6*s,   3*s, s, s);
+}
+
+/* ── Leyenda ── */
+drawPixelGhost(document.getElementById('lg-prot'),   '#f5c400', false);
+drawPixelGhost(document.getElementById('lg-coprot'), '#7ec8d4', false);
+drawPixelGhost(document.getElementById('lg-none'),   '#162830', false);
+
+/* ══════════════════════════════════════
+   PIXEL PACMAN PIE CHART — canvas 32×32
+   image-rendering: pixelated lo escala retro
+══════════════════════════════════════ */
+function isInArc(px, py, cx, cy, r, aStart, aEnd) {
+  const dx = px - cx, dy = py - cy;
+  if (dx*dx + dy*dy > r*r) return false;
+  let a = Math.atan2(dy, dx);
+  if (a < 0) a += Math.PI * 2;
+  if (aStart <= aEnd) return a >= aStart && a <= aEnd;
+  return a >= aStart || a <= aEnd;
+}
+
+function drawPixelPacman(canvas, prot, coprot, none, mouthOpen) {
+  const ctx  = canvas.getContext('2d');
+  const size = canvas.width; // 32
+  ctx.clearRect(0,0,size,size);
+
+  const cx = size/2 - 0.5;
+  const cy = size/2 - 0.5;
+  const r  = size/2 - 0.5;
+  const m  = mouthOpen ? 0.48 : 0.06;
+  const total = prot + coprot + none || 100;
+
+  const aP_start = m;
+  const aP_end   = aP_start + (prot/total) * (Math.PI*2 - m*2);
+  const aC_start = aP_end;
+  const aC_end   = aC_start + (coprot/total) * (Math.PI*2 - m*2);
+  const aN_start = aC_end;
+  const aN_end   = Math.PI*2 - m;
+
+  for (let x=0; x<size; x++) {
+    for (let y=0; y<size; y++) {
+      const px = x + 0.5, py = y + 0.5;
+      if (prot  > 0 && isInArc(px,py,cx,cy,r, aP_start, aP_end))
+        { ctx.fillStyle='#f5c400'; ctx.fillRect(x,y,1,1); }
+      else if (coprot > 0 && isInArc(px,py,cx,cy,r, aC_start, aC_end))
+        { ctx.fillStyle='#7ec8d4'; ctx.fillRect(x,y,1,1); }
+      else if (none   > 0 && isInArc(px,py,cx,cy,r, aN_start, aN_end))
+        { ctx.fillStyle='#11252e'; ctx.fillRect(x,y,1,1); }
+    }
+  }
+  // ojo
+  ctx.fillStyle = '#000';
+  ctx.fillRect(Math.round(cx+3), Math.round(cy-7), 2, 2);
+}
+
+/* ══════════════════════════════════════
+   PAC-MAN CORREDOR — canvas 32×32
+══════════════════════════════════════ */
+function drawRunner(ctx, size, mouthFrac) {
+  ctx.clearRect(0,0,size,size);
+  const cx = size/2 - 0.5, cy = size/2 - 0.5, r = size/2 - 1;
+  const m  = mouthFrac * 0.55;
+
+  ctx.fillStyle = '#f5c400';
+  ctx.shadowBlur  = 6; ctx.shadowColor = 'rgba(245,196,0,.7)';
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.arc(cx, cy, r, m, Math.PI*2 - m);
+  ctx.closePath();
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  ctx.fillStyle = '#000';
+  ctx.fillRect(Math.round(cx+2), Math.round(cy-6), 2, 2);
+}
+
+/* ══════════════════════════════════════
+   INIT BLOQUES
+══════════════════════════════════════ */
+const blocks = document.querySelectorAll('.genre-block');
+
+blocks.forEach(block => {
+  const p = parseFloat(block.dataset.prot);
+  const c = parseFloat(block.dataset.coprot);
+  const n = parseFloat(block.dataset.none);
+
+  drawPixelPacman(block.querySelector('.pixel-canvas'), p, c, n, false);
+});
+
+/* ══════════════════════════════════════
+   RUNNER INIT
+══════════════════════════════════════ */
+const runnerEl  = document.getElementById('runner');
+const runnerCv  = document.getElementById('runner-canvas');
+const rCtx      = runnerCv.getContext('2d');
+const RSIZE     = runnerCv.width;
+
+let chompPhase = 0;
+let chompRAF   = null;
+
+function startChomp() {
+  if (chompRAF) return;
+  function loop() {
+    chompPhase = (chompPhase + 0.08) % (Math.PI * 2);
+    const mf = (Math.sin(chompPhase) + 1) / 2; // 0→1 suave
+    drawRunner(rCtx, RSIZE, mf);
+    chompRAF = requestAnimationFrame(loop);
+  }
+  loop();
+}
+function stopChomp() {
+  cancelAnimationFrame(chompRAF);
+  chompRAF = null;
+}
+
+startChomp();
+
+/* ══════════════════════════════════════
+   DOTS DEL LABERINTO — se van comiendo
+══════════════════════════════════════ */
+const dots      = Array.from(document.querySelectorAll('.maze-dot'));
+const pelletEl  = document.getElementById('pellet');
+
+/* ══════════════════════════════════════
+   ESTADO
+══════════════════════════════════════ */
+let pelletEaten    = false;
+let vuln_timeout   = null;
+let chompFlashRAF  = null;
+let isRunning      = false;
+
+/* ══════════════════════════════════════
+   CLICK HANDLER — activa la corrida
+══════════════════════════════════════ */
+const mazeArea = document.getElementById('maze-area');
+
+runnerEl.addEventListener('click', runAnimation);
+mazeArea.addEventListener('click', runAnimation);
+
+function runAnimation() {
+  if (isRunning) return;
+  isRunning = true;
+  runnerEl.classList.add('running');
+
+  const duration = 1900; // ms que dura la corrida
+  const start = performance.now();
+  let pelletTriggered = false;
+
+  function step(now) {
+    const elapsed = now - start;
+    const pct = Math.min(1, elapsed / duration);
+
+    // Posición del runner: va del 5% al 82% de ancho del laberinto
+    const x = 5 + pct * 77;
+    runnerEl.style.left = x + '%';
+
+    // Comer puntitos según avance
+    const dotThreshold = Math.floor(pct * dots.length * 1.1);
+    dots.forEach((d,i) => {
+      d.classList.toggle('eaten-dot', i < dotThreshold);
+    });
+
+    // ── COME LA PASTILLA ──
+    if (pct >= 0.88 && !pelletTriggered) {
+      pelletTriggered = true;
+      pelletEaten = true;
+      pelletEl.classList.add('eaten');
+      triggerPowerUp();
+    }
+
+    if (pct < 1) {
+      requestAnimationFrame(step);
+    } else {
+      // deja ver el power-up un rato y después reinicia la escena
+      setTimeout(resetScene, 2800);
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+function resetScene() {
+  runnerEl.style.left = '5%';
+  runnerEl.classList.remove('running');
+  dots.forEach(d => d.classList.remove('eaten-dot'));
+  pelletEaten = false;
+  pelletEl.classList.remove('eaten');
+  revertPowerUp();
+  isRunning = false;
+}
+
+/* ══════════════════════════════════════
+   POWER UP — come la pastilla
+══════════════════════════════════════ */
+function triggerPowerUp() {
+  // Pac-Mans del chart abren la boca en cascada
+  blocks.forEach((block, i) => {
+    setTimeout(() => {
+      block.classList.add('activated');
+      const cv = block.querySelector('.pixel-canvas');
+      const p  = parseFloat(block.dataset.prot);
+      const c  = parseFloat(block.dataset.coprot);
+      const n  = parseFloat(block.dataset.none);
+
+      // Chomp animado en el pac-man del chart
+      let chomps = 0;
+      const iv = setInterval(() => {
+        drawPixelPacman(cv, p, c, n, chomps % 2 === 0);
+        if (++chomps >= 6) { clearInterval(iv); drawPixelPacman(cv,p,c,n,false); }
+      }, 100);
+
+    }, i * 70);
+  });
+
+  // Fantasmas vulnerables (los de la leyenda)
+  setTimeout(() => {
+    document.querySelectorAll('.legend-ghost-canvas').forEach(cv => {
+      drawPixelGhost(cv, cv.dataset.color, true);
+      cv.dataset.vuln = '1';
+    });
+    startVulnFlash();
+
+    // Vuelven a su color después de 2.2s
+    clearTimeout(vuln_timeout);
+    vuln_timeout = setTimeout(revertGhosts, 2200);
+  }, 350);
+}
+
+/* Flash de los fantasmas vulnerables */
+let vulnFlashState = false;
+let vulnFlashRAF   = null;
+
+function startVulnFlash() {
+  stopVulnFlash();
+  let last = 0;
+  function loop(t) {
+    if (t - last > 380) {
+      vulnFlashState = !vulnFlashState;
+      last = t;
+      document.querySelectorAll('.legend-ghost-canvas[data-vuln="1"]').forEach(cv => {
+        if (vulnFlashState) {
+          drawPixelGhost(cv, '#fff', false);
+        } else {
+          drawPixelGhost(cv, '#1a22cc', false);
+        }
+      });
+    }
+    vulnFlashRAF = requestAnimationFrame(loop);
+  }
+  vulnFlashRAF = requestAnimationFrame(loop);
+}
+
+function stopVulnFlash() {
+  if (vulnFlashRAF) cancelAnimationFrame(vulnFlashRAF);
+  vulnFlashRAF = null;
+}
+
+function revertGhosts() {
+  stopVulnFlash();
+  document.querySelectorAll('.legend-ghost-canvas').forEach(cv => {
+    delete cv.dataset.vuln;
+    drawPixelGhost(cv, cv.dataset.color, false);
+  });
+}
+
+function revertPowerUp() {
+  clearTimeout(vuln_timeout);
+  stopVulnFlash();
+  revertGhosts();
+  blocks.forEach(block => {
+    block.classList.remove('activated');
+    const cv = block.querySelector('.pixel-canvas');
+    const p  = parseFloat(block.dataset.prot);
+    const c  = parseFloat(block.dataset.coprot);
+    const n  = parseFloat(block.dataset.none);
+    drawPixelPacman(cv, p, c, n, false);
+  });
+}
+
+
+</script>
+
+<script>
+/* ════ USER SCORE LINE CHART JS ════ */
+(function() {
+
+const DATA = {
+  action: { label: 'ACCIÓN', hex: '#bbedfc', values: [
+    8.4,8.4,8.3,8.3,8.3, 8.3,8.4,8.8,8.7,6.3, 7.0,8.1,8.4,8.3,7.8, 7.8,7.9,8.2,7.6,7.5, 7.3,6.3,6.5,6.0,6.4
+  ]},
+  adventure: { label: 'AVENTURA', hex: '#1c38c7', values: [
+    8.4,8.3,8.1,8.0,8.1, 8.3,8.7,8.3,8.1,8.1, 7.6,8.0,7.7,7.8,7.9, 7.7,7.9,7.7,7.6,7.8, 7.1,7.4,7.0,6.0,6.2
+  ]},
+  rpg: { label: 'RPG', hex: '#2D8FD8', values: [
+    8.4,8.5,8.5,8.6,8.6, 8.6,8.5,8.0,7.8,7.9, 8.0,6.9,8.7,7.5,6.9, 7.9,7.4,7.8,7.9,8.0, 7.5,7.2,7.7,7.5,5.9
+  ]},
+};
+const YEARS = Array.from({length:25}, (_,i) => 1996+i);
+const YMIN = 0, YMAX = 10;
+
+const svgNS = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('uscore-chart');
+const W = 980, H = 460;
+const PAD = { top: 42, right: 30, bottom: 40, left: 52 };
+const plotW = W - PAD.left - PAD.right;
+const plotH = H - PAD.top - PAD.bottom;
+
+function xPix(i){ return PAD.left + (i/(YEARS.length-1)) * plotW; }
+function yPix(v){ return PAD.top + (1 - (v-YMIN)/(YMAX-YMIN)) * plotH; }
+
+function el(tag, attrs){
+  const e = document.createElementNS(svgNS, tag);
+  for(const k in attrs) e.setAttribute(k, attrs[k]);
+  return e;
+}
+function fmtEs(n){ return n.toFixed(1).replace('.', ','); }
+
+/* defs: glow filter */
+const defs = el('defs', {});
+svg.appendChild(defs);
+const glowFilter = el('filter', { id:'us-glow', x:'-60%', y:'-60%', width:'220%', height:'220%' });
+glowFilter.appendChild(el('feGaussianBlur', { stdDeviation:'3.4', result:'blur' }));
+defs.appendChild(glowFilter);
+const cometGlow = el('filter', { id:'us-cometGlow', x:'-100%', y:'-100%', width:'300%', height:'300%' });
+cometGlow.appendChild(el('feGaussianBlur', { stdDeviation:'2.2' }));
+defs.appendChild(cometGlow);
+
+/* gridlines + y-axis numbers (every integer) */
+for(let v=YMIN; v<=YMAX; v+=2){
+  const y = yPix(v);
+  svg.appendChild(el('line', { class:'gridline'+(v===YMIN?' zero':''), x1:PAD.left, x2:W-PAD.right, y1:y, y2:y }));
+  const t = el('text', { class:'axis-label', x:PAD.left-14, y:y+4, 'text-anchor':'end' });
+  t.textContent = v.toFixed(0);
+  svg.appendChild(t);
+}
+const yTitle = el('text', { class:'y-axis-title', x:PAD.left, y:20 });
+yTitle.textContent = 'USER SCORE';
+svg.appendChild(yTitle);
+
+YEARS.forEach((yr, i) => {
+  if(yr % 2 !== 0) return;
+  const t = el('text', { class:'axis-label x', x:xPix(i), y:H-PAD.bottom+18, 'text-anchor':'middle' });
+  t.textContent = yr;
+  svg.appendChild(t);
+});
+
+
+/* smooth path via catmull-rom -> bezier */
+function smoothPath(points){
+  if(points.length < 2) return '';
+  let d = `M ${points[0][0]} ${points[0][1]}`;
+  for(let i=0; i<points.length-1; i++){
+    const p0 = points[i===0 ? 0 : i-1];
+    const p1 = points[i];
+    const p2 = points[i+1];
+    const p3 = points[i+2 < points.length ? i+2 : i+1];
+    const cp1x = p1[0] + (p2[0]-p0[0])/6;
+    const cp1y = p1[1] + (p2[1]-p0[1])/6;
+    const cp2x = p2[0] - (p3[0]-p1[0])/6;
+    const cp2y = p2[1] - (p3[1]-p1[1])/6;
+    d += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2[0]} ${p2[1]}`;
+  }
+  return d;
+}
+
+function buildGenreIcon(key, hex){
+  const g = el('g', { class:'genre-icon' });
+  if(key === 'adventure'){
+    g.appendChild(el('circle', { cx:0, cy:0, r:7, fill:'none', stroke:hex, 'stroke-width':1.4 }));
+    g.appendChild(el('polygon', { points:'0,-6 1.8,0 0,6 -1.8,0', fill:hex }));
+    g.appendChild(el('circle', { cx:0, cy:0, r:1.1, fill:'#060d0f' }));
+  } else if(key === 'action'){
+    g.appendChild(el('polygon', { points:'1,-8 -3.5,1 -0.5,1 -2,8 4.5,-1 1,-1', fill:hex }));
+  } else if(key === 'rpg'){
+    g.appendChild(el('rect', { x:-6, y:-6, width:12, height:12, rx:2.4, fill:'none', stroke:hex, 'stroke-width':1.4 }));
+    [[-3,-3],[3,3],[3,-3],[-3,3],[0,0]].forEach(([px,py]) => {
+      g.appendChild(el('circle', { cx:px, cy:py, r:1.1, fill:hex }));
+    });
+  }
+  return g;
+}
+
+const series = {};
+const legendEl = document.getElementById('uscore-legend');
+
+Object.keys(DATA).forEach(key => {
+  const s = DATA[key];
+  const pts = s.values.map((v,i) => [xPix(i), yPix(v)]);
+  const d = smoothPath(pts);
+
+  const glow = el('path', { class:'line-path line-glow', d, stroke:s.hex, filter:'url(#us-glow)' });
+  const line = el('path', { class:'line-path', d, stroke:s.hex });
+  svg.appendChild(glow);
+  svg.appendChild(line);
+  const L = line.getTotalLength();
+  line.style.strokeDasharray = L;
+  line.style.strokeDashoffset = L;
+
+  /* ícono de género que viaja por la punta de la línea mientras se dibuja */
+  const icon = buildGenreIcon(key, s.hex);
+  icon.setAttribute('filter', 'url(#us-cometGlow)');
+  icon.style.opacity = 0;
+  svg.appendChild(icon);
+  const iconMotion = el('animateMotion', {
+    dur:'1.6s', fill:'freeze', calcMode:'spline', keyTimes:'0;1', keySplines:'0.25 0.1 0.25 1', path:d,
+  });
+  icon.appendChild(iconMotion);
+
+  const dots = pts.map((p) => {
+    const c = el('circle', { class:'pt', cx:p[0], cy:p[1], r:2.2, fill:s.hex, opacity:0 });
+    svg.appendChild(c);
+    return c;
+  });
+
+  /* "disparo" — segmento de luz que recorre la línea en loop, como un pulso viajando por un cable */
+  const cometLen = 46;
+  const comet = el('path', {
+    class:'comet', d, stroke:s.hex, 'stroke-width':4, filter:'url(#us-cometGlow)',
+    style:`stroke-dasharray:${cometLen} ${L}; stroke-dashoffset:${L}; opacity:0;`
+  });
+  svg.appendChild(comet);
+  const cometDur = Math.max(3.2, L / 260);
+
+  /* marcador pulsante en la punta de la línea */
+  const last = pts[pts.length-1];
+  const endDot = el('circle', { class:'pt', cx:last[0], cy:last[1], r:3.2, fill:s.hex, opacity:0 });
+  const endRing = el('circle', { class:'end-ring', cx:last[0], cy:last[1], r:4, stroke:s.hex });
+  const ringAnim1 = el('animate', { attributeName:'r', values:'4;13', dur:'1.8s', repeatCount:'indefinite' });
+  const ringAnim2 = el('animate', { attributeName:'opacity', values:'0.7;0', dur:'1.8s', repeatCount:'indefinite' });
+  endRing.appendChild(ringAnim1);
+  endRing.appendChild(ringAnim2);
+  svg.appendChild(endRing);
+  svg.appendChild(endDot);
+
+  series[key] = { ...s, pts, glow, line, comet, icon, dots, endDot, endRing, visible:true };
+
+  requestAnimationFrame(() => {
+    line.style.transition = 'stroke-dashoffset 1.6s ease';
+    line.style.strokeDashoffset = '0';
+    icon.style.transition = 'opacity 0.2s ease';
+    icon.style.opacity = 1;
+    setTimeout(() => {
+      icon.style.transition = 'opacity 0.35s ease';
+      icon.style.opacity = 0;
+      dots.forEach(dt => dt.style.opacity = 1);
+      endDot.style.opacity = 1;
+      endRing.style.opacity = 0.7;
+      comet.style.opacity = 1;
+      comet.style.transition = `stroke-dashoffset ${cometDur}s linear`;
+      comet.style.strokeDashoffset = -cometLen;
+      const loop = () => {
+        comet.style.transition = 'none';
+        comet.style.strokeDashoffset = L;
+        void comet.getBoundingClientRect();
+        comet.style.transition = `stroke-dashoffset ${cometDur}s linear`;
+        comet.style.strokeDashoffset = -cometLen;
+      };
+      comet.addEventListener('transitionend', loop);
+    }, 1600);
+  });
+
+  const btn = document.createElement('button');
+  btn.className = 'leg-btn';
+  btn.innerHTML = `<span class="dot" style="background:${s.hex}; color:${s.hex}"></span>${s.label}`;
+  btn.addEventListener('click', () => {
+    const sr = series[key];
+    sr.visible = !sr.visible;
+    btn.classList.toggle('off', !sr.visible);
+    [sr.glow, sr.line, sr.comet, sr.icon, sr.endDot, sr.endRing, ...sr.dots]
+      .forEach(node => node.classList.toggle('dim', !sr.visible));
+  });
+  legendEl.appendChild(btn);
+});
+
+/* ════ ANOTACIÓN — "acá empiezan a caer juntas" (2016) ════ */
+(function(){
+  const idx2016 = YEARS.indexOf(2016);
+  if(idx2016 === -1) return;
+  const gx = xPix(idx2016);
+  const g = el('g', { class:'chart-annotation' });
+  g.appendChild(el('line', { class:'annotation-guide', x1:gx, x2:gx, y1:PAD.top+4, y2:H-PAD.bottom }));
+  const tagW = 158, tagH = 30, tagX = Math.min(gx+8, W-PAD.right-tagW), tagY = PAD.top+2;
+  g.appendChild(el('rect', { class:'annotation-tag', x:tagX, y:tagY, width:tagW, height:tagH, rx:2 }));
+  const l1 = el('text', { class:'annotation-label', x:tagX+8, y:tagY+13 });
+  l1.textContent = '2016 →';
+  g.appendChild(l1);
+  const l2 = el('text', { class:'annotation-label', x:tagX+8, y:tagY+24 });
+  l2.textContent = 'LAS 3 CURVAS CAEN JUNTAS';
+  g.appendChild(l2);
+  svg.appendChild(g);
+
+  const annObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){ setTimeout(() => g.classList.add('visible'), 2200); annObs.disconnect(); }
+    });
+  }, { threshold: 0.35 });
+  annObs.observe(svg);
+})();
+
+/* hover scanline + tooltip */
+const scan = el('line', { class:'scanline', x1:0, x2:0, y1:PAD.top, y2:H-PAD.bottom });
+svg.appendChild(scan);
+const tooltip = document.getElementById('uscore-tooltip');
+const shell = document.querySelector('#uscore-card .chart-shell');
+
+function showAt(i){
+  const x = xPix(i);
+  scan.setAttribute('x1', x); scan.setAttribute('x2', x);
+  scan.style.opacity = 1;
+  const rows = Object.keys(DATA).map(key => {
+    const s = DATA[key];
+    return `<div class="tt-row"><span><span class="sw" style="background:${s.hex}"></span>${s.label}</span><span>${fmtEs(s.values[i])}</span></div>`;
+  }).join('');
+  tooltip.innerHTML = `<span class="tt-year">${YEARS[i]}</span>${rows}`;
+  tooltip.style.opacity = 1;
+  const svgRect = svg.getBoundingClientRect();
+  const shellRect = shell.getBoundingClientRect();
+  const scale = svgRect.width / W;
+  let left = (x*scale) + 14;
+  if(left + 150 > shellRect.width) left = (x*scale) - 150;
+  tooltip.style.left = left + 'px';
+  tooltip.style.top = (yPix(9)*scale) + 'px';
+}
+
+svg.addEventListener('mousemove', (ev) => {
+  const rect = svg.getBoundingClientRect();
+  const scale = W / rect.width;
+  const localX = (ev.clientX - rect.left) * scale;
+  let i = Math.round(((localX - PAD.left) / plotW) * (YEARS.length-1));
+  i = Math.max(0, Math.min(YEARS.length-1, i));
+  showAt(i);
+});
+svg.addEventListener('mouseleave', () => {
+  scan.style.opacity = 0;
+  tooltip.style.opacity = 0;
+});
+
+
+})();
 </script>
 
 </body>
